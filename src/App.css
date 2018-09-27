@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: center;  
 }
 
 .App-logo {
@@ -8,7 +8,7 @@
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #333333;
   height: 150px;
   padding: 20px;
   color: white;
@@ -28,10 +28,12 @@
 }
 
 .slider {
-  padding: 20px;  
+  padding-top: 45px; 
+  padding-bottom: 45px;
 }
 
 .sound-icon {
   padding-bottom: 10px;
   cursor: pointer;
+  
 }

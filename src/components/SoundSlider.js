@@ -15,7 +15,7 @@ export class SoundSlider extends Component {
         //this.url = require('./assets/sounds/bleu_whales.mp3')
 
         this.stream = new Audio(this.props.sound);
-        //this.stream.loop = true;
+        this.stream.loop = true;
         this.stream.preload = 'none';
         this.stream.volume = this.state.volume;
 
@@ -91,15 +91,16 @@ export class SoundSlider extends Component {
                     onChange={this.onSliderChange}
                     //defaultValue={0.7}
                     value={this.state.volume}
-                    trackStyle={{ height: 10 }}
-                    railStyle={{ height: 10 }}
+                    //trackStyle={{ height: 10 }}
+                    //railStyle={{ height: 10 }}
+                    trackStyle={{ backgroundColor: '#fff' }}
                     handleStyle={{
                         //borderColor: 'blue',
-                        height: 28,
-                        width: 28,
-                        marginLeft: -14,
-                        marginTop: -9,
-                        //backgroundColor: 'black',
+                        height: 24,
+                        width: 24,
+                        //marginLeft: -14,
+                        //marginTop: -9,
+                        marginTop: -11,                        
                     }}
                     style={{ visibility: this.state.isPlay ? 'visible' : 'hidden' }} />
 

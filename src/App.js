@@ -20,22 +20,22 @@ class App extends Component {
           <Row>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/deep-space.png')} sound={require('./assets/sounds/deep_space.ogg')} enabled={false} />
+              <SoundSlider src={require('./assets/icons/white/sailing-yacht.png')} sound={require('./assets/sounds/deep_space.mp3')} enabled={false} />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/bleu-whales.png')} sound={require('./assets/sounds/bleu_whales.mp3')} enabled={false} />
+              <SoundSlider src={require('./assets/icons/white/blue-whales.png')} sound={require('./assets/sounds/bleu_whales.mp3')} enabled={false} />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
           </Row>
           <Row>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/campfire.png')} sound={require('./assets/sounds/campfire.mp3')} enabled={true} />
+              <SoundSlider src={require('./assets/icons/white/campfire.png')} sound={require('./assets/sounds/campfire.mp3')} enabled={true} />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/farm.png')} sound={require('./assets/sounds/farm.ogg')} enabled={false} />
+              <SoundSlider src={require('./assets/icons/white/farm.png')} sound={require('./assets/sounds/farm.ogg')} enabled={false} />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
           </Row>
