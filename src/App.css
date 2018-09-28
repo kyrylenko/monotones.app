@@ -56,16 +56,13 @@ div.mute-div {
 }
 .mute-div img {
   width: 30px;
+  cursor: pointer;
   opacity: 0.5;
 }
-.mute-div {
-  position: fixed;
-  top: 40px;
-  right: 40px;
+.mute-div:hover > img {
+  opacity: 1;
 }
-.mute-div ul li {
-  display: inline-block;
-}
+
 img#master-volume-slider {
   width: 180px;
   opacity: 0.5;

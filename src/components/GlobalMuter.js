@@ -10,14 +10,11 @@ export class GlobalMuter extends Component {
     render() {
         return (
             <div className="mute-div">
-                <ul className="mute-header">
-                    <li onClick={() => this.clickHandler(this.props.isMuted)}>
-                        <img alt={this.props.isMuted ? "Unute" : "Mute"}
-                            src={this.props.isMuted ? require('../assets/icons/mute.png') : require('../assets/icons/unmute.png')}
-                            style={{ opacity: 0.5 }} title={this.props.isMuted ? "Unute" : "Mute"}>
-                        </img>
-                    </li>
-                </ul>
+                <img onClick={() => this.clickHandler(this.props.isMuted)}
+                    alt={this.props.isMuted ? "Unute" : "Mute"}
+                    src={this.props.isMuted ? require('../assets/icons/mute.png') : require('../assets/icons/unmute.png')}
+                    style={{ opacity: this.props.isMuted ? 1 : null }} title={this.props.isMuted ? "Unute" : "Mute"}>
+                </img>
             </div>
         );
     }
