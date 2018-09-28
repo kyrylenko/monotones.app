@@ -29,12 +29,12 @@ export class SoundSlider extends Component {
     }
 
     onSliderChange = (volume) => {
-        console.log("onSliderChange: ", volume);
+        //console.log("onSliderChange: ", volume);
         this.setState({ volume });
     }
 
     clickHandler = () => {
-        console.log("clickHandler: ");
+        //console.log("clickHandler: ");
         this.setState({ isPlay: !this.state.isPlay })
     }
 
@@ -65,7 +65,7 @@ export class SoundSlider extends Component {
         }
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         this.playPause();
     }
 
@@ -85,6 +85,7 @@ export class SoundSlider extends Component {
                     style={{ opacity: this.state.isPlay ? 1 : 0.5 }}
                     onClick={() => this.clickHandler()}>
                 </img>
+                {/* https://github.com/react-component/slider  http://react-component.github.io/slider/examples/slider.html*/}
                 <Slider
                     max={1}
                     step={0.01}
@@ -100,7 +101,7 @@ export class SoundSlider extends Component {
                         width: 24,
                         //marginLeft: -14,
                         //marginTop: -9,
-                        marginTop: -11,                        
+                        marginTop: -11,
                     }}
                     style={{ visibility: this.state.isPlay ? 'visible' : 'hidden' }} />
 
