@@ -12,7 +12,7 @@ class App extends Component {
   };
 
   mute(isMute) {
-    console.log("isMute: ", isMute)
+    //console.log("isMute: ", isMute)
     this.setState({ isMute });
   };
 

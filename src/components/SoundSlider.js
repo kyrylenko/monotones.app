@@ -10,22 +10,7 @@ export class SoundSlider extends Component {
         this.state = {
             isPlay: this.props.enabled,
             volume: 0.7
-        };
-        //this.url = 'http://streaming.tdiradio.com:8000/house.mp3'
-        //this.url = require('./assets/sounds/bleu_whales.mp3')
-
-        this.stream = new Audio(this.props.sound);
-        this.stream.loop = true;
-        this.stream.preload = 'none';
-        this.stream.volume = this.state.volume;
-
-        this.stream.addEventListener('timeupdate', function () {
-            var buffer = .44
-            if (this.currentTime > this.duration - buffer) {
-                this.currentTime = 0
-                this.play()
-            }
-        }, false);
+        };        
     }
 
     onSliderChange = (volume) => {
@@ -38,34 +23,49 @@ export class SoundSlider extends Component {
         this.setState({ isPlay: !this.state.isPlay })
     }
 
+    initSound = () => {
+        this.stream = new Audio(this.props.sound);
+        //this.stream.loop = true; 
+        //this.stream.autoplay = true;
+        this.stream.preload = 'none';
+        this.stream.volume = this.state.volume;
+
+        this.stream.addEventListener('timeupdate', function () {
+            var buffer = .44
+            if (this.currentTime > this.duration - buffer) {
+                this.currentTime = 0
+                this.play()
+            }
+        }, false);
+        //console.log(this.stream);
+    }
+
     play = () => {
-        console.log("play");
+        //console.log("will play ", this.props.sound);
         this.stream.play();
     }
 
     pause = () => {
-        console.log("pause");
+        //console.log("will pause: ", this.props.sound);
         this.stream.pause();
         this.stream.src = ''
         this.stream.load();
-
         this.stream = null;
+        this.initSound();
 
-        this.stream = new Audio();
-        this.stream.src = this.props.sound;
-        this.stream.preload = 'none';
-        this.stream.pause();
+        //this.stream.pause();        
     }
 
-    playPause() {
+    playPause = () => {
         if (this.state.isPlay && !this.props.mute) {
             this.play();
-        } else {
+        } else if (!this.stream.paused) {
             this.pause();
         }
     }
 
     componentDidMount() {
+        this.initSound();        
         this.playPause();
     }
 
