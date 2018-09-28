@@ -47,3 +47,27 @@
 .sound-icon:hover {
   opacity: 0.8;
 }
+
+/* MUTE */
+div.mute-div {
+  position: fixed;
+  top: 54px;
+  right: 45px;
+}
+.mute-div img {
+  width: 30px;
+  opacity: 0.5;
+}
+.mute-div {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+}
+.mute-div ul li {
+  display: inline-block;
+}
+img#master-volume-slider {
+  width: 180px;
+  opacity: 0.5;
+  padding-right: 15px;
+}

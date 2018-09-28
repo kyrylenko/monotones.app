@@ -1,17 +1,28 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'react-bootstrap'; //https://github.com/react-bootstrap/react-bootstrap
 import { SoundSlider } from './components/SoundSlider';
+import { GlobalMuter } from './components/GlobalMuter';
 
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
 
+  state = {
+    isMute: false
+  };
+
+  mute(isMute) {
+    console.log("isMute: ", isMute)
+    this.setState({ isMute });
+  };
 
   render() {
     return (
-
       <div className="App">
+
+        <GlobalMuter isMuted={this.state.isMute} mute={(m)=> this.mute(m)} />
+
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Monotones</h1>
@@ -20,11 +31,11 @@ class App extends Component {
           <Row>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/white/summer-day.png')} sound={require('./assets/sounds/summer_day.mp3')} enabled={false} title="Summer day" />
+              <SoundSlider mute={this.state.isMute} src={require('./assets/icons/white/summer-day.png')} sound={require('./assets/sounds/summer_day.mp3')} enabled={false} title="Summer day" />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
             <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-              <SoundSlider src={require('./assets/icons/white/summer-night.png')} sound={require('./assets/sounds/summer_night.mp3')} enabled={false} title="Summer night" />
+              <SoundSlider mute={this.state.isMute} src={require('./assets/icons/white/summer-night.png')} sound={require('./assets/sounds/summer_night.mp3')} enabled={false} title="Summer night" />
             </Col>
             <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
           </Row>
@@ -103,5 +114,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;

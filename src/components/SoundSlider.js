@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Slider, { Range } from 'rc-slider';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import '../App.css';
 
@@ -70,6 +70,10 @@ export class SoundSlider extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (this.props.mute) {
+            this.pause();
+            return;
+        }
         console.log("playPause, isPlay, this.stream.paused, volume ", this.state.isPlay, this.stream.paused, this.state.volume);
         this.stream.volume = this.state.volume;
 
