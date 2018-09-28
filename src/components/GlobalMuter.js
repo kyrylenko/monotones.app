@@ -3,23 +3,19 @@ import '../App.css';
 
 export class GlobalMuter extends Component {
 
-    muteClickHandler() {
-        this.props.mute(true);
-    };
-
-    unmuteClickHandler() {
-        this.props.mute(false);
+    clickHandler() {
+        this.props.mute(!this.props.isMuted);
     };
 
     render() {
         return (
             <div className="mute-div">
                 <ul className="mute-header">
-                    <li onClick={() => this.muteClickHandler()}>
-                        <img alt="Mute" src={require('../assets/icons/unmute.png')} style={{ opacity: 0.5, display: this.props.isMuted ? 'none': 'block' }} title="Mute"></img>
-                    </li>
-                    <li onClick={() => this.unmuteClickHandler()}>
-                        <img alt="Unmute" src={require('../assets/icons/mute.png')} style={{ opacity: 0.5, display: this.props.isMuted ? 'block' : 'none' }} title="Unmute"></img>
+                    <li onClick={() => this.clickHandler(this.props.isMuted)}>
+                        <img alt={this.props.isMuted ? "Unute" : "Mute"}
+                            src={this.props.isMuted ? require('../assets/icons/mute.png') : require('../assets/icons/unmute.png')}
+                            style={{ opacity: 0.5 }} title={this.props.isMuted ? "Unute" : "Mute"}>
+                        </img>
                     </li>
                 </ul>
             </div>
