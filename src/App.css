@@ -33,7 +33,17 @@
 }
 
 .sound-icon {
-  padding-bottom: 10px;
+  padding-bottom: 40px;
   cursor: pointer;
-  
+
+  -webkit-transition: opacity 0.1s ease-in-out;
+  -moz-transition: opacity 0.1s ease-in-out;
+  -ms-transition: opacity 0.1s ease-in-out;
+  -o-transition: opacity 0.1s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0.5;  
+}
+
+.sound-icon:hover {
+  opacity: 0.8;
 }

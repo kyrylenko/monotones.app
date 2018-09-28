@@ -81,8 +81,8 @@ export class SoundSlider extends Component {
     render() {
         return (
             <div className="slider">
-                <img alt="Rain" className="sound-icon" data-element="sound" data-name="rain" src={this.props.src} title="Rain"
-                    style={{ opacity: this.state.isPlay ? 1 : 0.5 }}
+                <img alt={this.props.title} className="sound-icon" src={this.props.src} title={this.props.title}
+                    style={{ opacity: this.state.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
                 {/* https://github.com/react-component/slider  http://react-component.github.io/slider/examples/slider.html*/}
