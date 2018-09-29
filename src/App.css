@@ -29,7 +29,7 @@
 
 .slider {
   padding-top: 45px; 
-  padding-bottom: 45px;
+  padding-bottom: 45px;  
 }
 
 .sound-icon {
@@ -61,10 +61,4 @@ div.mute-div {
 }
 .mute-div:hover > img {
   opacity: 1;
-}
-
-img#master-volume-slider {
-  width: 180px;
-  opacity: 0.5;
-  padding-right: 15px;
 }

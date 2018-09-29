@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GlobalMuter } from './components/GlobalMuter';
+import { GlobalPlayPause } from './components/GlobalPlayPause';
 import { RowsView } from './components/RowsView';
 
 import logo from './logo.svg';
@@ -8,27 +8,23 @@ import './App.css';
 class App extends Component {
 
   state = {
-    isMute: false
+    isGlobalPlay: false
   };
 
-  mute(isMute) {
-    //console.log("isMute: ", isMute)
-    this.setState({ isMute });
+  playPause(isGlobalPlay) {
+    //console.log("isGlobalPlay: ", isGlobalPlay)
+    this.setState({ isGlobalPlay });
   };
 
   render() {
     return (
       <div className="App">
-        <GlobalMuter isMuted={this.state.isMute} mute={(m) => this.mute(m)} />
+        <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} />
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Monotones</h1>
         </header>
-        <RowsView mute={this.state.isMute}/>
-
-        {/*<audio controls loop>
-          <source src={require('./assets/sounds/bleu_whales.mp3')} type="audio/ogg"></source>
-        </audio> */}
+        <RowsView isGlobalPlay={this.state.isGlobalPlay}/>
       </div>
     );
   }
