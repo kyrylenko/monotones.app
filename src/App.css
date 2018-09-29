@@ -48,17 +48,17 @@
   opacity: 0.8;
 }
 
-/* MUTE */
-div.mute-div {
+/* Play/Pause */
+div.play-div {
   position: fixed;
   top: 54px;
   right: 45px;
 }
-.mute-div img {
+.play-div img {
   width: 30px;
   cursor: pointer;
   opacity: 0.5;
 }
-.mute-div:hover > img {
+.play-div:hover > img {
   opacity: 1;
 }

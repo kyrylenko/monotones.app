@@ -9,7 +9,7 @@ export class GlobalPlayPause extends Component {
 
     render() {
         return (
-            <div className="mute-div">
+            <div className="play-div">
                 <img onClick={() => this.clickHandler(this.props.isGlobPlay)}
                     alt={this.props.isGlobPlay ? "Play" : "Pause"}
                     src={this.props.isGlobPlay ? require('../assets/icons/mute.png') : require('../assets/icons/unmute.png')}
