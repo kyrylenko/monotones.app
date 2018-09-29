@@ -8,7 +8,7 @@ export class SoundSlider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isPlay: this.props.enabled,
+            isPlay: this.props.isPlay,
             volume: 0.7
         };        
     }
@@ -57,7 +57,7 @@ export class SoundSlider extends Component {
     }
 
     playPause = () => {
-        if (this.state.isPlay && !this.props.isGlobalPlay) {
+        if (this.state.isPlay && this.props.isGlobalPlay) {
             this.play();
         } else if (!this.stream.paused) {
             this.pause();
@@ -71,10 +71,10 @@ export class SoundSlider extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         //console.log("playPause, isPlay, this.stream.paused, volume ", this.state.isPlay, this.stream.paused, this.state.volume);
-        //console.log("prevState.mute / this.state.mute: ", prevProps.mute, this.props.isGlobalPlay, this.props.title)
         this.stream.volume = this.state.volume;
 
-        if (prevState.isPlay !== this.state.isPlay || prevProps.mute !== this.props.isGlobalPlay) {
+        if (prevState.isPlay !== this.state.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
+            console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
             this.playPause();
         }
     }

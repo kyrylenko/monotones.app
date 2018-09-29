@@ -11,9 +11,9 @@ export class GlobalPlayPause extends Component {
         return (
             <div className="play-div">
                 <img onClick={() => this.clickHandler(this.props.isGlobPlay)}
-                    alt={this.props.isGlobPlay ? "Play" : "Pause"}
-                    src={this.props.isGlobPlay ? require('../assets/icons/mute.png') : require('../assets/icons/unmute.png')}
-                    style={{ opacity: this.props.isGlobPlay ? 1 : null }} title={this.props.isGlobPlay ? "Play" : "Pause"}>
+                    alt={this.props.isGlobPlay ? "Pause" : "Play"}
+                    src={this.props.isGlobPlay ? require('../assets/icons/unmute.png') : require('../assets/icons/mute.png')}
+                    style={{ opacity: this.props.isGlobPlay ? 1 : null }} title={this.props.isGlobPlay ? "Pause" : "Play"}>
                 </img>
             </div>
         );
