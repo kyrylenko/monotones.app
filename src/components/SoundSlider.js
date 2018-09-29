@@ -24,7 +24,7 @@ export class SoundSlider extends Component {
     }
 
     initSound = () => {
-        this.stream = new Audio(this.props.sound);
+        this.stream = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));
         //this.stream.loop = true; 
         //this.stream.autoplay = true;
         this.stream.preload = 'none';
@@ -41,12 +41,12 @@ export class SoundSlider extends Component {
     }
 
     play = () => {
-        //console.log("will play ", this.props.sound);
+        //console.log("will play ", this.props.id);
         this.stream.play();
     }
 
     pause = () => {
-        //console.log("will pause: ", this.props.sound);
+        //console.log("will pause: ", this.props.id);
         this.stream.pause();
         this.stream.src = ''
         this.stream.load();
@@ -74,7 +74,7 @@ export class SoundSlider extends Component {
         this.stream.volume = this.state.volume;
 
         if (prevState.isPlay !== this.state.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
-            console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
+            //console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
             this.playPause();
         }
     }
@@ -82,7 +82,7 @@ export class SoundSlider extends Component {
     render() {
         return (
             <div className="slider">
-                <img alt={this.props.title} className="sound-icon" src={this.props.src} title={this.props.title}
+                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.props.title}
                     style={{ opacity: this.state.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>

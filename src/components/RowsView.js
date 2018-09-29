@@ -11,77 +11,77 @@ export class RowsView extends Component {
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/summer_day.png')} sound={require('../assets/sounds/summer_day.mp3')} isPlay={false} title="Summer day" />
+                        <SoundSlider id={'summer_day'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Summer day" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/summer_night.png')} sound={require('../assets/sounds/summer_night.mp3')} isPlay={false} title="Summer night" />
+                        <SoundSlider id={'summer_night'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Summer night" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/thunderstorm.png')} sound={require('../assets/sounds/thunderstorm.mp3')} isPlay={false} title="Thunderstorm" />
+                        <SoundSlider id={'thunderstorm'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Thunderstorm" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/wind_chimes.png')} sound={require('../assets/sounds/wind_chimes.mp3')} isPlay={false} title="Wind chimes" />
+                        <SoundSlider id={'wind_chimes'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Wind chimes" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/sailing_yacht.png')} sound={require('../assets/sounds/sailing_yacht.mp3')} isPlay={false} title="Sailing yacht" />
+                        <SoundSlider id={'sailing_yacht'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Sailing yacht" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/blue_whales.png')} sound={require('../assets/sounds/bleu_whales.mp3')} isPlay={false} title="Bleu whales" />
+                        <SoundSlider id={'blue_whales'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Bleu whales" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/campfire.png')} sound={require('../assets/sounds/campfire.mp3')} isPlay={false} title="Campfire" />
+                        <SoundSlider id={'campfire'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Campfire" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/farm.png')} sound={require('../assets/sounds/farm.mp3')} isPlay={false} title="Farm" />
+                        <SoundSlider id={'farm'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Farm" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/deep_space.png')} sound={require('../assets/sounds/deep_space.mp3')} isPlay={false} title="Deep space" />
+                        <SoundSlider id={'deep_space'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Deep space" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/inside_train.png')} sound={require('../assets/sounds/inside_train.mp3')} isPlay={false} title="Inside train" />
+                        <SoundSlider id={'inside_train'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Inside train" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/river_stream.png')} sound={require('../assets/sounds/river_stream.mp3')} isPlay={false} title="River stream" />
+                        <SoundSlider id={'river_stream'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="River stream" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/seawaves.png')} sound={require('../assets/sounds/seawaves.mp3')} isPlay={false} title="Seawaves" />
+                        <SoundSlider id={'seawaves'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Seawaves" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/october_rain.png')} sound={require('../assets/sounds/october_rain.mp3')} isPlay={false} title="October rain" />
+                        <SoundSlider id={'october_rain'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="October rain" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider isGlobalPlay={this.props.isGlobalPlay} src={require('../assets/icons/white/paris_cafe.png')} sound={require('../assets/sounds/paris_cafe.mp3')} isPlay={false} title="Paris cafe" />
+                        <SoundSlider id={'paris_cafe'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} title="Paris cafe" />
                     </Col>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                 </Row>
