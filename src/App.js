@@ -1,35 +1,19 @@
 import React, { Component } from 'react';
-import { GlobalPlayPause } from './components/GlobalPlayPause';
-//import { RowsView } from './components/RowsView';
+import { Route } from 'react-router';
+import Layout from './Layout';
+import Home from './screens/Home';
+import About from './screens/About'
 
-import logo from './logo.svg';
-import './App.css';
-
-class App extends Component {
-
-  state = {
-    isGlobalPlay: true
-  };
-
-  playPause(isGlobalPlay) {
-    //console.log("isGlobalPlay: ", isGlobalPlay)
-    this.setState({ isGlobalPlay });
-  };
+export default class App extends Component {
+  displayName = App.name
 
   render() {
+    console.log('displayName ', App.name);
     return (
-      <div className="App">
-        <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} />
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Monotones</h1>
-        </header>
-        {this.props.children}
-        {/* <RowsView isGlobalPlay={this.state.isGlobalPlay}/> */}
-      </div>
+      <Layout>
+        <Route exact path='/' component={Home} />
+        <Route path='/about' component={About} />
+      </Layout>
     );
   }
 }
-
-
-export default App;
