@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'react-bootstrap'; //https://github.com/react-bootstrap/react-bootstrap
 import { SoundSlider } from '../components/SoundSlider';
+import { Link } from 'react-router-dom';
+
 import '../App.css';
 
 export class RowsView extends Component {
@@ -8,6 +10,7 @@ export class RowsView extends Component {
     render() {
         return (
             <Container>
+                <Link to='about' className='btn btn-primary'>About</Link>
                 <Row>
                     <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
                     <Col lg={3} md={3} sm={4} xs={6} className="text-center">

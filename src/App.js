@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GlobalPlayPause } from './components/GlobalPlayPause';
-import { RowsView } from './components/RowsView';
+//import { RowsView } from './components/RowsView';
 
 import logo from './logo.svg';
 import './App.css';
@@ -24,7 +24,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Monotones</h1>
         </header>
-        <RowsView isGlobalPlay={this.state.isGlobalPlay}/>
+        {this.props.children}
+        {/* <RowsView isGlobalPlay={this.state.isGlobalPlay}/> */}
       </div>
     );
   }
