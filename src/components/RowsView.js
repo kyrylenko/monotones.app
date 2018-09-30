@@ -8,6 +8,7 @@ import '../App.css';
 export class RowsView extends Component {
 
     render() {
+        console.log("RowsView this.props ", this.props);
         return (
             <Container>
                 <Link to='about' className='btn btn-primary'>About</Link>

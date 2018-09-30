@@ -19,7 +19,7 @@ export class SoundSlider extends Component {
     }
 
     clickHandler = () => {
-        //console.log("clickHandler: ");
+        console.log("clickHandler: ");
         this.setState({ isPlay: !this.state.isPlay })
     }
 
@@ -41,12 +41,12 @@ export class SoundSlider extends Component {
     }
 
     play = () => {
-        //console.log("will play ", this.props.id);
+        console.log("will play ", this.props.id);
         this.stream.play();
     }
 
     pause = () => {
-        //console.log("will pause: ", this.props.id);
+        console.log("will pause: ", this.props.id);
         this.stream.pause();
         this.stream.src = ''
         this.stream.load();
@@ -64,7 +64,8 @@ export class SoundSlider extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount() {  
+        //console.log("Slider props", this.props);      
         this.initSound();        
         this.playPause();
     }
@@ -74,7 +75,7 @@ export class SoundSlider extends Component {
         this.stream.volume = this.state.volume;
 
         if (prevState.isPlay !== this.state.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
-            //console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
+            console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
             this.playPause();
         }
     }
