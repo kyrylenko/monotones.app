@@ -27,8 +27,7 @@ class Home extends Component {
     }
 
     render() {
-
-        console.log("Home this.props ", this.props);
+        //console.log("Home this.props ", this.props);
         return (
             /* TODO Here should be a logic responsible for different views of sounds page  */
             <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={true} />

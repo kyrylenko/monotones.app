@@ -5,22 +5,22 @@ import '../App.css';
 
 export class SoundSlider extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isPlay: this.props.isPlay,
-            volume: this.props.volume || 0.3
-        };        
-    }
-
     onSliderChange = (volume) => {
         //console.log("onSliderChange: ", volume);
-        this.setState({ volume });
+        this.props.playPauseVolume({
+            id: this.props.id,
+            isPlay: this.props.isPlay,
+            volume
+        })
     }
 
     clickHandler = () => {
-        console.log("clickHandler: ");
-        this.setState({ isPlay: !this.state.isPlay })
+        //console.log("clickHandler: ");
+        this.props.playPauseVolume({
+            id: this.props.id,
+            isPlay: !this.props.isPlay,
+            volume: this.props.volume,
+        })
     }
 
     initSound = () => {
@@ -28,7 +28,7 @@ export class SoundSlider extends Component {
         //this.stream.loop = true; 
         //this.stream.autoplay = true;
         this.stream.preload = 'none';
-        this.stream.volume = this.state.volume;
+        this.stream.volume = this.props.volume;
 
         this.stream.addEventListener('timeupdate', function () {
             var buffer = .44
@@ -57,24 +57,23 @@ export class SoundSlider extends Component {
     }
 
     playPause = () => {
-        if (this.state.isPlay && this.props.isGlobalPlay) {
+        if (this.props.isPlay && this.props.isGlobalPlay) {
             this.play();
         } else if (!this.stream.paused) {
             this.pause();
         }
     }
 
-    componentDidMount() {              
-        this.initSound();        
+    componentDidMount() {
+        this.initSound();
         this.playPause();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        //console.log("playPause, isPlay, this.stream.paused, volume ", this.state.isPlay, this.stream.paused, this.state.volume);
-        this.stream.volume = this.state.volume;
+    componentDidUpdate(prevProps, prevState) {        
+        this.stream.volume = this.props.volume;
 
-        if (prevState.isPlay !== this.state.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
-            console.log("playPause, prevProps.isGlobalPlay/ this.props.isGlobalPlay", this.props.title, prevProps.isGlobalPlay, this.props.isGlobalPlay);
+        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
+            //console.log("prevProps.isGlobalPlay/ this.props.isGlobalPlay", prevProps.isGlobalPlay, this.props.isGlobalPlay);
             this.playPause();
         }
     }
@@ -83,7 +82,7 @@ export class SoundSlider extends Component {
         return (
             <div className="slider">
                 <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.props.title}
-                    style={{ opacity: this.state.isPlay ? 1 : null }}
+                    style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
                 {/* https://github.com/react-component/slider  http://react-component.github.io/slider/examples/slider.html*/}
@@ -92,7 +91,7 @@ export class SoundSlider extends Component {
                     step={0.01}
                     onChange={this.onSliderChange}
                     //defaultValue={0.7}
-                    value={this.state.volume}
+                    value={this.props.volume}
                     //trackStyle={{ height: 10 }}
                     //railStyle={{ height: 10 }}
                     trackStyle={{ backgroundColor: '#fff' }}
@@ -104,13 +103,7 @@ export class SoundSlider extends Component {
                         //marginTop: -9,
                         marginTop: -11,
                     }}
-                    style={{ visibility: this.state.isPlay ? 'visible' : 'hidden' }} />
-
-
-
-                {/*<div className="to-left ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-element="volume_slider" data-element-name="rain_slider" style={{ display: 'block' }}>
-                    <span className="ui-slider-handle ui-state-default ui-corner-all" style={{ flex: 0.6 }}></span>                    
-                </div> */}
+                    style={{ visibility: this.props.isPlay ? 'visible' : 'hidden' }} />
             </div>
         );
     }
