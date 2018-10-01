@@ -8,30 +8,30 @@ import soundIds from '../constants/soundIds';
 
 class Home extends Component {
 
-    sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
+    //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
 
-    componentDidMount() {
-        for (let s of this.sounds) {
-            let setting = this.props.sounds.find(x => x.id === s.id);
+    aggregateSounds = () => {
 
-            if (setting !== undefined) {
-                //console.log(setting);
-                s.isPlay = setting.isPlay;
-                s.volume = setting.volume;
-            }
-        }
-    }
+        let aggregate = Object.values(soundIds).map(x => {
+            let setting = this.props.sounds.find(s => s.id === x);
+            let hasSetting = setting !== undefined;
 
-    componentDidUpdate() {
+            return {
+                id: x,
+                isPlay: hasSetting ? setting.isPlay : false,
+                volume: hasSetting ? setting.volume : 0.1
+            };
+        });
 
+        return aggregate;
     }
 
     render() {
 
-        console.log("Home this.props.sounds ", this.props.sounds);
+        console.log("Home this.props ", this.props);
         return (
             /* TODO Here should be a logic responsible for different views of sounds page  */
-            <RowsView sounds={this.sounds} isGlobalPlay={true} />
+            <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={true} />
         );
     }
 };

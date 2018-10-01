@@ -64,8 +64,7 @@ export class SoundSlider extends Component {
         }
     }
 
-    componentDidMount() {  
-        console.log("Slider props", this.props);      
+    componentDidMount() {              
         this.initSound();        
         this.playPause();
     }
