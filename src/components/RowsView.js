@@ -7,88 +7,42 @@ import '../App.css';
 
 export class RowsView extends Component {
 
+    //isOdd(num) { return (num % 2) === 1; }
+
     render() {
-        console.log("RowsView this.props ", this.props);
+        console.log("RowsView sounds ", this.props.sounds);
+
+        let elements = [];
+
+        for (let i = 0; i < this.props.sounds.length - 1; i += 2) {
+            
+            let j = i + 1;
+            //console.log("i, id, isPlay ", i, this.props.sounds[i].id, this.props.sounds[i].isPlay);
+            //console.log("i, id, isPlay ", j, this.props.sounds[j].id, this.props.sounds[j].isPlay);
+            let sLeft = this.props.sounds[i];
+            let sRight = this.props.sounds[j];
+            console.log("sLeft: ", sLeft['isPlay']);
+            console.log("sRight ", sRight['isPlay']);
+
+            let row = <Row key={i}>
+                <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
+                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
+                    <SoundSlider id={sLeft.id} isGlobalPlay={this.props.isGlobalPlay} isPlay={sLeft.isPlay} volume={sLeft.volume} title={sLeft.id} />
+                </Col>
+                <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
+                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
+                    <SoundSlider id={sRight.id} isGlobalPlay={this.props.isGlobalPlay} isPlay={sRight.isPlay} volume={sRight.volume} title={sRight.id} />
+                </Col>
+                <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
+            </Row>;
+
+            elements.push(row);
+        }
+
         return (
             <Container>
                 <Link to='about' className='btn btn-primary'>About</Link>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'summer_day'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Summer day" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'summer_night'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Summer night" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'thunderstorm'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Thunderstorm" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'wind_chimes'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Wind chimes" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'sailing_yacht'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Sailing yacht" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'blue_whales'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Bleu whales" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'campfire'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Campfire" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'farm'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Farm" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'deep_space'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Deep space" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'inside_train'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Inside train" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'river_stream'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="River stream" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'seawaves'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Seawaves" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
-                <Row>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'october_rain'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="October rain" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                    <Col lg={3} md={3} sm={4} xs={6} className="text-center">
-                        <SoundSlider id={'paris_cafe'} isGlobalPlay={this.props.isGlobalPlay} isPlay={false} volume={0.7} title="Paris cafe" />
-                    </Col>
-                    <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                </Row>
+                {elements}
             </Container>
         );
     }

@@ -1,9 +1,11 @@
+import soundIds from '../constants/soundIds';
+
 export const PLAY_PAUSE_VOLUME = 'PLAY_PAUSE_VOLUME';
 
 const initialState = {
     sounds: [
-        { id: 'sailing_yacht', isPlay: true, volume: 0.3 },
-        { id: 'summer_day', isPlay: true, volume: 0.2 },
+        { id: soundIds.sailing_yacht, isPlay: true, volume: 0.3 },
+        { id: soundIds.summer_day, isPlay: true, volume: 0.2 },
     ]
 };
 

@@ -7,8 +7,7 @@ import About from './screens/About'
 export default class App extends Component {
   displayName = App.name
 
-  render() {
-    console.log('displayName ', App.name);
+  render() {    
     return (
       <Layout>
         <Route exact path='/' component={Home} />

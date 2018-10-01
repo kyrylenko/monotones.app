@@ -9,7 +9,7 @@ export class SoundSlider extends Component {
         super(props);
         this.state = {
             isPlay: this.props.isPlay,
-            volume: this.props.volume || 0.7
+            volume: this.props.volume || 0.3
         };        
     }
 
@@ -65,7 +65,7 @@ export class SoundSlider extends Component {
     }
 
     componentDidMount() {  
-        //console.log("Slider props", this.props);      
+        console.log("Slider props", this.props);      
         this.initSound();        
         this.playPause();
     }
