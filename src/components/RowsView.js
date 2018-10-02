@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'react-bootstrap'; //https://github.com/react-bootstrap/react-bootstrap
+import PropTypes from 'prop-types'
 import { SoundSlider } from '../components/SoundSlider';
 
 import '../App.css';
@@ -53,3 +54,9 @@ export class RowsView extends Component {
         );
     }
 }
+
+RowsView.propTypes = {
+    playPauseVolume: PropTypes.func.isRequired,
+    isGlobalPlay: PropTypes.bool.isRequired,
+    sounds: PropTypes.array.isRequired
+  }
