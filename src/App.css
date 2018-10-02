@@ -55,10 +55,9 @@ div.play-div {
   right: 45px;
 }
 .play-div img {
-  width: 30px;
-  cursor: pointer;
-  opacity: 0.5;
+  width: 45px;
+  cursor: pointer;  
 }
-.play-div:hover > img {
+/* .play-div:hover > img {
   opacity: 1;
-}
+} */

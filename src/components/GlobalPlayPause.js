@@ -12,7 +12,7 @@ export const GlobalPlayPause = (props) => {
         <div className="play-div">
             <img onClick={clickHandler}
                 alt={props.isGlobPlay ? "Pause" : "Play"}
-                src={props.isGlobPlay ? require('../assets/icons/unmute.png') : require('../assets/icons/mute.png')}
+                src={props.isGlobPlay ? require('../assets/icons/pause.png') : require('../assets/icons/play.png')}
                 style={{ opacity: props.isGlobPlay ? 1 : null }} title={props.isGlobPlay ? "Pause" : "Play"}>
             </img>
         </div>
