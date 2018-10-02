@@ -26,15 +26,13 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
-.slider {
-  padding-top: 45px; 
-  padding-bottom: 45px;  
-}
-
+/* SOUNDS */
 .sound-icon {
-  padding-bottom: 40px;
+  margin-bottom: 40px;
+  width: 90px;
+  height: 90px;
   cursor: pointer;
+
 
   -webkit-transition: opacity 0.1s ease-in-out;
   -moz-transition: opacity 0.1s ease-in-out;
@@ -44,11 +42,16 @@
   opacity: 0.5;  
 }
 
+.sounds-row{
+margin-top: 40px;
+height: 180 px;
+}
+
 .sound-icon:hover {
   opacity: 0.8;
 }
 
-/* Play/Pause */
+/* PLAY / PAUSE */
 div.play-div {
   position: fixed;
   top: 54px;
@@ -61,3 +64,10 @@ div.play-div {
 /* .play-div:hover > img {
   opacity: 1;
 } */
+
+@media (max-width: 768px) {
+  div.play-div{
+    top: auto;
+    bottom: 54px;
+  }
+}

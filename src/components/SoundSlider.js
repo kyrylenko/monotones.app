@@ -80,7 +80,7 @@ export class SoundSlider extends Component {
 
     render() {
         return (
-            <div className="slider">
+            <div>
                 <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.props.title}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>

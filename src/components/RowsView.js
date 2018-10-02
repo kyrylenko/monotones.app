@@ -20,9 +20,9 @@ export class RowsView extends Component {
             let sLeft = this.props.sounds[i];
             let sRight = this.props.sounds[j];
 
-            let row = <Row key={i}>
+            let row = <Row key={i} className="sounds-row">
                 <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
+                <Col lg={3} md={3} sm={4} className="text-center col-xs-6">
                     <SoundSlider
                         id={sLeft.id}
                         isGlobalPlay={this.props.isGlobalPlay}
@@ -32,7 +32,7 @@ export class RowsView extends Component {
                         playPauseVolume={this.props.playPauseVolume} />
                 </Col>
                 <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
+                <Col lg={3} md={3} sm={4} className="text-center col-xs-6">
                     <SoundSlider
                         id={sRight.id}
                         isGlobalPlay={this.props.isGlobalPlay}
