@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Container, Row } from 'react-bootstrap'; //https://github.com/react-bootstrap/react-bootstrap
 import { SoundSlider } from '../components/SoundSlider';
-import { Link } from 'react-router-dom';
 
 import '../App.css';
 
@@ -48,8 +47,7 @@ export class RowsView extends Component {
         }
 
         return (
-            <Container>
-                <Link to='about' className='btn btn-primary'>About</Link>
+            <Container>                            
                 {elements}
             </Container>
         );
