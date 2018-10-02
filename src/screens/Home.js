@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { RowsView } from '../components/RowsView';
+import { GlobalPlayPause } from '../components/GlobalPlayPause';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +10,14 @@ import soundIds from '../constants/soundIds';
 class Home extends Component {
 
     //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
+
+    state = {
+        isGlobalPlay: false
+    };
+
+    playPause(isGlobalPlay) {
+        this.setState({ isGlobalPlay });
+    };
 
     aggregateSounds = () => {
 
@@ -29,8 +38,11 @@ class Home extends Component {
     render() {
         //console.log("Home this.props ", this.props);
         return (
+            <div>
+                <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} />
+                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
+            </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
-            <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={true} />
         );
     }
 };
