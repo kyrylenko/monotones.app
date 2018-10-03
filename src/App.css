@@ -77,9 +77,9 @@ div.play-div {
 .footer-logo-welcome{
   /* background-color: rgb(138,220,179); */
   width: 100%;
-  -webkit-box-shadow: 0px -2px 0px 0px rgba(29, 29, 27, 0.05);
+/*   -webkit-box-shadow: 0px -2px 0px 0px rgba(29, 29, 27, 0.05);
   -moz-box-shadow:    0px -2px 0px 0px rgba(29, 29, 27, 0.05);
-  box-shadow:         0px -2px 0px 0px rgba(29, 29, 27, 0.05);
+  box-shadow:         0px -2px 0px 0px rgba(29, 29, 27, 0.05); */
   z-index: 1000;
 }
 
@@ -133,3 +133,12 @@ div.play-div {
   color: rgba(255,255,255, 1);
   text-decoration: none;
 }
+
+/*ABOUT*/
+.about-text {
+  font-size: 14px;
+  font-weight: 400;
+  /* text-align: left; */
+  color: rgb(255,255,255);
+}
+
