@@ -6,7 +6,8 @@ const initialState = {
     sounds: [
         { id: soundIds.sailing_yacht, isPlay: true, volume: 0.2 },
         { id: soundIds.summer_day, isPlay: true, volume: 0.2 },
-    ]
+    ],
+    lastUpdatedId: ''
 };
 
 export const actionCreators = {
@@ -23,7 +24,8 @@ export const reducer = (state, action) => {
         sounds = sounds.filter(s => s.id !== action.sound.id);
 
         sounds.push(action.sound);
-        return { ...state, sounds: sounds }
+
+        return { ...state, sounds: sounds, lastUpdatedId: action.sound.id }
     }
 
     return state;

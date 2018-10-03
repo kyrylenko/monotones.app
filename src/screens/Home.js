@@ -37,9 +37,11 @@ class Home extends Component {
 
     render() {
         //console.log("Home this.props ", this.props);
+        let ggg = this.state.isGlobalPlay ? null : this.props.lastUpdatedId;
+        console.log("Home ggg ", ggg);
         return (
             <div>
-                <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} />
+                <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId} />
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
