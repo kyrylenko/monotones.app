@@ -83,7 +83,7 @@ div.play-div {
   z-index: 1000;
 }
 
-#footer-logo-welcome-noisli {
+.footer-logo {
   /*text-align: left;*/
   height: 80px;
   line-height: 80px;
@@ -92,33 +92,33 @@ div.play-div {
   color: rgba(255,255,255,0.5)
 }
 
-#footer-logo-welcome-noisli a {
+.footer-logo a {
   text-decoration:none;
   color: rgba(255,255,255,0.5);
 }
 
 
-#footer-logo-welcome-noisli a:hover {
+.footer-logo a:hover {
   color: rgba(255,255,255,1);
 }
 
-#footer-logo-welcome-menu {
+.footer-logo-menu {
   text-align: right;
   line-height: 80px;
 }
-#footer-logo-welcome-menu ul {
+.footer-logo-menu ul {
   list-style: none;
   padding-right:28px;
 }
-#footer-logo-welcome-menu li {
+.footer-logo-menu li {
   list-style: none;
   display: inline-block;
   padding-right: 9px;
 }
-#footer-logo-welcome-menu li:last-child {
+.footer-logo-menu li:last-child {
   padding-right: 0;
 }
-#footer-logo-welcome-menu a {
+.footer-logo-menu a {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
@@ -126,7 +126,7 @@ div.play-div {
   text-decoration: none;
 }
 
-#footer-logo-welcome-menu a:hover {
+.footer-logo-menu a:hover {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
