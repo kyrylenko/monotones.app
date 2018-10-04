@@ -15,9 +15,17 @@ class Home extends Component {
         isGlobalPlay: false
     };
 
-    playPause(isGlobalPlay) {
+    globalPlayPause = (isGlobalPlay) => {
         this.setState({ isGlobalPlay });
     };
+
+    playPauseVolume = (sound) => {
+        //console.log('playPauseVolume, sound ', sound);
+        if(!this.state.isGlobalPlay && sound.isPlay){
+            this.globalPlayPause(true);
+        }
+        this.props.playPauseVolume(sound);
+    }
 
     aggregateSounds = () => {
 
@@ -36,13 +44,13 @@ class Home extends Component {
     }
 
     render() {
+        let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
         //console.log("Home this.props ", this.props);
-        let ggg = this.state.isGlobalPlay ? null : this.props.lastUpdatedId;
-        console.log("Home ggg ", ggg);
+        //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}                
         return (
-            <div>
-                <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.playPause(m)} key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId} />
-                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
+            <div>                
+                {hasActiveSounds && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}         
+                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />       
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
         );

@@ -7,7 +7,6 @@ const initialState = {
         { id: soundIds.sailing_yacht, isPlay: true, volume: 0.2 },
         { id: soundIds.summer_day, isPlay: true, volume: 0.2 },
     ],
-    lastUpdatedId: ''
 };
 
 export const actionCreators = {
@@ -25,7 +24,7 @@ export const reducer = (state, action) => {
 
         sounds.push(action.sound);
 
-        return { ...state, sounds: sounds, lastUpdatedId: action.sound.id }
+        return { ...state, sounds: sounds }
     }
 
     return state;
