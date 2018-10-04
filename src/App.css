@@ -86,13 +86,13 @@ div.play-div {
     transform:scale(0.7);    
   }
   25% {
-    transform:scale(1.7);    
+    transform:scale(1.5);    
   }
   50% {
     transform:scale(0.8);    
   }
   75% {
-    transform:scale(1.4);    
+    transform:scale(1.2);    
   }
   100% {
     transform:scale(1);
