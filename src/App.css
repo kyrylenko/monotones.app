@@ -108,12 +108,21 @@ div.mixtures-div {
   height: 500px;
   /* background-color: gray; */
 }
+
 .mixture-block{
   /* text-align: left; */
   border: 1px solid #ffffff !important;
   border-radius: 12px;  
   /* padding: 5px; */
 }
+.flex-container {  
+  display:flex;
+  align-items: center; /* Vertical center alignment */
+  justify-content: flex-end; /* Horizontal center alignment */
+}
+.mixture-item{
+  padding: 3px;
+} 
 .mixture-img{
   width: 35px;
   padding: 3px;
@@ -122,15 +131,6 @@ div.mixtures-div {
 .mixture-action-btn{
   cursor: pointer;
 }
-.flex-container {  
-  display:flex;
-  align-items: center; /* Vertical center alignment */
-  justify-content: flex-end; /* Horizontal center alignment */
-}
-
- .mixture-item{
-  padding: 3px;
-} 
 
 
 

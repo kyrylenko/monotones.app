@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { RowsView } from '../components/RowsView';
 import { GlobalPlayPause } from '../components/GlobalPlayPause';
+import MixtureFuture from '../components/MixtureFuture';
+import Mixture from '../components/Mixture';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 class Home extends Component {
 
@@ -46,41 +48,19 @@ class Home extends Component {
     }
 
     render() {
-        let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
+        //let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
+        let activeSounds = this.props.sounds.filter(s => s.isPlay);
+        console.log("Home activeSounds ", activeSounds);
         //console.log("Home this.props ", this.props);
-        //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}                
+        //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}   
+                
         return (
             <div>
-                {hasActiveSounds && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
+                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
                 <div className="mixtures-div">
                     <Container fluid>
-                        <Row style={{ marginTop: '5px' }}>
-                            <Col lg={9} md={9} sm={9} className="mixture-block col-xs-9 flex-container" style={{ overflow: 'hidden' }}>
-                                <div className="mixture-item"><img className="mixture-img" src={require('../assets/icons/white/birds_in_park.png')} alt=''></img></div>
-                                <div className="mixture-item"><img className="mixture-img" src={require('../assets/icons/white/city_street.png')} alt=''></img></div>
-                                <div className="mixture-item"><img className="mixture-img" src={require('../assets/icons/white/wind_chimes.png')} alt=''></img></div>
-                                <div className="mixture-item"><img className="mixture-img" src={require('../assets/icons/white/campfire.png')} alt=''></img></div>
-                            </Col>
-                            <Col lg={3} md={3} sm={3} className="col-xs-3">
-                                <img className="mixture-img" src={require('../assets/icons/pause.png')}></img>
-                            </Col>
-                        </Row>
-                        <Row style={{ marginTop: '5px' }}>
-                            <Col lg={9} md={9} sm={9} className="mixture-block col-xs-9" style={{ textAlign: 'center', minHeight: '42px', lineHeight: '42px' }}>
-                                <span>Mixture name</span>
-                            </Col>
-                            <Col lg={3} md={3} sm={3} className="col-xs-3">
-                                <img className="mixture-img mixture-action-btn" src={require('../assets/icons/play.png')}></img>
-                            </Col>
-                        </Row>
-                        <Row style={{ marginTop: '5px' }}>
-                            <Col lg={9} md={9} sm={9} className="mixture-block col-xs-9 flex-container" style={{ minHeight: '42px' }}>
-                                <span>Mixture name</span>
-                            </Col>
-                            <Col lg={3} md={3} sm={3} className="col-xs-3">
-                                <img className="mixture-img mixture-action-btn" src={require('../assets/icons/play.png')}></img>
-                            </Col>
-                        </Row>
+                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds}/>}
+                        <Mixture name='Mixture lolo' id={22} isActive={false}/>
                     </Container>
                 </div>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
