@@ -15,7 +15,7 @@ export default class MixtureFuture extends Component {
                     {sounds}
                 </Col>
                 <Col lg={3} md={3} sm={3} className="col-xs-3">
-                    <img className="mixture-img" src={require('../assets/icons/pause.png')}></img>
+                    <img className="mixture-img" src={require('../assets/icons/pause.png')} title='Save mixture' alt='Save mixture'></img>
                 </Col>
             </Row>
         );

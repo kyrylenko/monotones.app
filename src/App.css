@@ -131,7 +131,15 @@ div.mixtures-div {
 .mixture-action-btn{
   cursor: pointer;
 }
-
+.mixture-row .mixture-img{
+  opacity: 0;
+}
+.mixture-row:hover .mixture-img{
+  opacity: 0.5;
+}
+.mixture-row .mixture-img:hover{
+  opacity: 1;
+}
 
 
 /* FOOTER LOGO WELCOME */
