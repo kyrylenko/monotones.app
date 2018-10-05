@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 export default class MixtureFuture extends Component {
+    
     render() {
 
         let sounds = this.props.activeSounds.map(x =>
             <div className="mixture-item" key={x.id}>
-                <img className="mixture-img" src={require(`../assets/icons/white/${x.id}.png`)} id={x.id} alt={x.id}></img>
+                <img
+                    className="mixture-img"
+                    src={require(`../assets/icons/white/${x.id}.png`)}
+                    id={x.id} 
+                    alt={x.id}
+                    title={x.id}
+                    onClick={() => this.props.pauseSound(x.id)}></img>
             </div>);
 
         return (

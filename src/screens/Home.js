@@ -49,8 +49,7 @@ class Home extends Component {
 
     render() {
         //let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
-        let activeSounds = this.props.sounds.filter(s => s.isPlay);
-        console.log("Home activeSounds ", activeSounds);
+        let activeSounds = this.props.sounds.filter(s => s.isPlay);        
         //console.log("Home this.props ", this.props);
         //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}   
                 
@@ -59,7 +58,7 @@ class Home extends Component {
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
                 <div className="mixtures-div">
                     <Container fluid>
-                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds}/>}
+                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound}/>}
                         <Mixture name='Mixture lolo' id={22} isActive={false}/>
                     </Container>
                 </div>
