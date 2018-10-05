@@ -99,6 +99,40 @@ div.play-div {
   }
 }
 
+/* MIXTURES */
+div.mixtures-div {
+  position: fixed;
+  top: 150px;
+  left: 45px;
+  width: 250px;
+  height: 500px;
+  /* background-color: gray; */
+}
+.mixture-block{
+  /* text-align: left; */
+  border: 1px solid #ffffff !important;
+  border-radius: 12px;  
+  /* padding: 5px; */
+}
+.mixture-img{
+  width: 35px;
+  padding: 3px;
+  cursor: pointer;
+}
+.mixture-action-btn{
+  cursor: pointer;
+}
+.flex-container {  
+  display:flex;
+  align-items: center; /* Vertical center alignment */
+  justify-content: flex-end; /* Horizontal center alignment */
+}
+
+ .mixture-item{
+  padding: 3px;
+} 
+
+
 
 /* FOOTER LOGO WELCOME */
 .footer-logo-welcome{
