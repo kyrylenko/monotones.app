@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Container, Row } from 'react-bootstrap'; //https://github.com/react-bootstrap/react-bootstrap
+import { Col, Container, Row } from 'reactstrap'; //https://github.com/react-bootstrap/react-bootstrap
 import PropTypes from 'prop-types'
 import { SoundSlider } from '../components/SoundSlider';
 
@@ -21,8 +21,8 @@ export class RowsView extends Component {
             let sRight = this.props.sounds[j];
 
             let row = <Row key={i} className="sounds-row">
-                <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
-                <Col lg={3} md={3} sm={4} className="text-center col-xs-6">
+                <Col lg={2} md={2} sm={2} className="d-none d-sm-block"></Col>
+                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
                     <SoundSlider
                         id={sLeft.id}
                         isGlobalPlay={this.props.isGlobalPlay}
@@ -31,8 +31,8 @@ export class RowsView extends Component {
                         title={sLeft.id}
                         playPauseVolume={this.props.playPauseVolume} />
                 </Col>
-                <Col lg={2} md={2} sm={2} className="hidden-xs hidden-sm"></Col>
-                <Col lg={3} md={3} sm={4} className="text-center col-xs-6">
+                <Col lg={2} md={2} sm={2} className="d-none d-sm-none d-md-block"></Col>
+                <Col lg={3} md={3} sm={4} xs={6} className="text-center">
                     <SoundSlider
                         id={sRight.id}
                         isGlobalPlay={this.props.isGlobalPlay}
@@ -41,7 +41,7 @@ export class RowsView extends Component {
                         title={sRight.id}
                         playPauseVolume={this.props.playPauseVolume} />
                 </Col>
-                <Col lg={2} md={2} sm={2} className="hidden-xs"></Col>
+                <Col lg={2} md={2} sm={2} className="d-none d-sm-block"></Col>
             </Row>;
 
             elements.push(row);

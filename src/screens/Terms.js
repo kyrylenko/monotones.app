@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container } from 'reactstrap';
 
 class Terms extends Component {
     render() {
