@@ -3,6 +3,7 @@ import { RowsView } from '../components/RowsView';
 import { GlobalPlayPause } from '../components/GlobalPlayPause';
 import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
+import { SaveMixtureModal } from '../components/Modals';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,8 +17,22 @@ class Home extends Component {
     //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
 
     state = {
-        isGlobalPlay: false
+        isGlobalPlay: false,
+        modal: false
     };
+
+
+    toggleSaveMixtureModal() {
+        this.setState({
+            modal: !this.state.modal
+        });
+    };
+
+    saveMixture = () => {
+        this.setState({
+            modal: true
+        });
+    }
 
     globalPlayPause = (isGlobalPlay) => {
         this.setState({ isGlobalPlay });
@@ -58,11 +73,12 @@ class Home extends Component {
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
                 <div className="mixtures-div">
                     <Container fluid>
-                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} />}
+                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.saveMixture} />}
                         <Mixture name='Mixture lolo' id={22} isActive={false} />
                     </Container>
                 </div>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
+                <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleSaveMixtureModal} />
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
         );

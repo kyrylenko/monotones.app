@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 
 export default class MixtureFuture extends Component {
-    
+
     render() {
 
         let sounds = this.props.activeSounds.map(x =>
@@ -10,7 +10,7 @@ export default class MixtureFuture extends Component {
                 <img
                     className="mixture-img"
                     src={require(`../assets/icons/white/${x.id}.png`)}
-                    id={x.id} 
+                    id={x.id}
                     alt={x.id}
                     title={x.id}
                     onClick={() => this.props.pauseSound(x.id)}></img>
@@ -22,7 +22,7 @@ export default class MixtureFuture extends Component {
                     {sounds}
                 </Col>
                 <Col lg={3} md={3} sm={3} className="col-xs-3">
-                    <img className="mixture-img" src={require('../assets/icons/pause.png')} title='Save mixture' alt='Save mixture'></img>
+                    <img className="mixture-img" src={require('../assets/icons/pause.png')} title='Save mixture' alt='Save mixture' onClick={this.props.saveClick}></img>
                 </Col>
             </Row>
         );
