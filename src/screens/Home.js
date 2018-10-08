@@ -65,7 +65,7 @@ class Home extends Component {
     render() {
         //let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
         let activeSounds = this.props.sounds.filter(s => s.isPlay);
-        console.log("Home this.props ", this.props);
+        //console.log("Home this.props ", this.props);
         //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}
         let mixtures = this.props.mixtures.map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
@@ -81,7 +81,7 @@ class Home extends Component {
                     </Container>
                 </div>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
-                <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} autoFocus={false} />
+                <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} />
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
         );
