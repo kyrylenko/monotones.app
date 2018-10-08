@@ -21,16 +21,9 @@ class Home extends Component {
         modal: false
     };
 
-
-    toggleSaveMixtureModal() {
-        this.setState({
-            modal: !this.state.modal
-        });
-    };
-
     saveMixture = () => {
         this.setState({
-            modal: true
+            modal: !this.state.modal
         });
     }
 
@@ -78,7 +71,7 @@ class Home extends Component {
                     </Container>
                 </div>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
-                <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleSaveMixtureModal} />
+                <SaveMixtureModal isOpen={this.state.modal} toggle={this.saveMixture} size='sm' autoFocus={false}/>
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
         );
