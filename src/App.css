@@ -99,6 +99,10 @@ div.play-div {
   }
 }
 
+.white-text {
+  color: #ffffff;
+}
+
 /* MIXTURES */
 div.mixtures-div {
   position: fixed;
@@ -113,7 +117,7 @@ div.mixtures-div {
   /* text-align: left; */
   border: 1px solid #ffffff !important;
   border-radius: 12px;  
-  /* padding: 5px; */
+  /* padding: 5px; */ 
 }
 
 .mixture-block-selectable:hover {

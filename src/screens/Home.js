@@ -76,7 +76,9 @@ class Home extends Component {
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
                 <div className="mixtures-div">
                     <Container fluid>
+                        {activeSounds.length > 0 && <span className='white-text'>Now play</span>}
                         {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
+                        {mixtures.length > 0 && <span className='white-text'>My Mixtures</span>}
                         {mixtures}
                     </Container>
                 </div>
