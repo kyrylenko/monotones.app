@@ -125,24 +125,25 @@ div.mixtures-div {
   align-items: center; /* Vertical center alignment */
   justify-content: flex-end; /* Horizontal center alignment */
 }
-.mixture-item{
+.mixture-item {
   padding: 3px;
 } 
-.mixture-img{
+.mixture-img {
   width: 35px;
   padding: 3px;
   cursor: pointer;
 }
-.mixture-action-btn{
+.mixture-action-btn {
   cursor: pointer;
 }
-.mixture-row .mixture-img{
+
+.mixture-row .mixture-img {
   opacity: 0;
 }
-.mixture-row:hover .mixture-img{
+.mixture-row:hover .mixture-img {
   opacity: 0.5;
 }
-.mixture-row .mixture-img:hover{
+.mixture-row .mixture-img:hover {
   opacity: 1;
 }
 

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
+import colors from '../constants/colors'
 
 export default class Mixture extends Component {
     render() {
         return (
             <Row style={{ marginTop: '5px' }} className='mixture-row'>
-                <Col lg={9} md={9} sm={9} xs={9}
-                    className='mixture-block mixture-block-selectable flex-container mixture-action-btn'
-                    style={this.props.isActive ? { minHeight: '42px', justifyContent: 'center', backgroundColor: 'rgb(146, 221, 240)' } : { minHeight: '42px', justifyContent: 'center' }}
+                <Col lg={9} md={9} sm={9} xs={9}                    
+                    className= {'mixture-block mixture-block-selectable flex-container ' + (this.props.isActive ? null : 'mixture-action-btn')}                    
+                    style={{ minHeight: '42px', justifyContent: 'center', backgroundColor: this.props.isActive ? colors.themeActive : colors.theme }}
                     onClick={() => this.props.switch(this.props.id)}>
                     <span>{this.props.title}</span>
                 </Col>
