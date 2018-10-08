@@ -17,7 +17,7 @@ const initialState = {
 export const actionCreators = {
     playPauseVolume: (sound) => ({ type: PLAY_PAUSE_VOLUME, sound }),
     pauseSound: (id) => ({ type: PAUSE_SOUND, id }),
-    
+
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
     switchMixture: (id) => ({ type: SWITCH, id })
@@ -33,8 +33,12 @@ export const reducer = (state, action) => {
         sounds = sounds.filter(s => s.id !== action.sound.id);
 
         sounds.push(action.sound);
+        //Deactivate the Active mixture
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+            return { sounds: x.sounds, id: x.id, isActive: false }
+        });
 
-        return { ...state, sounds: sounds }
+        return { ...state, sounds: sounds, mixtures: mixtures }
     }
 
     if (action.type === PAUSE_SOUND) {
@@ -46,7 +50,12 @@ export const reducer = (state, action) => {
             }
         }
 
-        return { ...state, sounds: sounds }
+        //Deactivate the Active mixture
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+            return { sounds: x.sounds, id: x.id, isActive: false }
+        });
+
+        return { ...state, sounds: sounds, mixtures: mixtures }
     }
 
     if (action.type === ADD) {

@@ -18,10 +18,10 @@ export default class MixtureFuture extends Component {
 
         return (
             <Row style={{ marginTop: '5px' }}>
-                <Col lg={9} md={9} sm={9} className="mixture-block col-xs-9 flex-container" style={{ overflow: 'hidden' }}>
+                <Col lg={9} md={9} sm={9} xs={9} className="mixture-block flex-container" style={{ overflow: 'hidden' }}>
                     {sounds}
                 </Col>
-                <Col lg={3} md={3} sm={3} className="col-xs-3">
+                <Col lg={3} md={3} sm={3} xs={3}>
                     <img className="mixture-img" src={require('../assets/icons/pause.png')} title='Save mixture' alt='Save mixture' onClick={this.props.saveClick}></img>
                 </Col>
             </Row>

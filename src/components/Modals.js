@@ -11,15 +11,12 @@ export class SaveMixtureModal extends React.Component {
         });
     };
 
-    save = (val) => {
-        //console.log(val);
+    save = (val) => {        
         this.props.save(val);
         this.props.toggle();
     };
 
-    //isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}
     //value={this.state.inputValue}
-    //isOpen={this.state.modal} toggle={this.toggleModal} size='sm' autoFocus={false} save={this.props.addMixture}
     render() {
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm' autoFocus={false}

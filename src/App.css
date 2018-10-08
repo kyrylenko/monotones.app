@@ -115,6 +115,11 @@ div.mixtures-div {
   border-radius: 12px;  
   /* padding: 5px; */
 }
+
+.mixture-block-selectable:hover {
+  background-color: rgb(146, 221, 240);
+}
+
 .flex-container {  
   display:flex;
   align-items: center; /* Vertical center alignment */
