@@ -13,15 +13,19 @@ export class SaveMixtureModal extends React.Component {
     };
 
     save = (val)=>{
-        console.log(val);
+        //console.log(val);
+        this.props.save(val);
         this.props.toggle();
     };
 
     //isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}
     //value={this.state.inputValue}
+    //isOpen={this.state.modal} toggle={this.toggleModal} size='sm' autoFocus={false} save={this.props.addMixture}
     render() {
         return (
-            <Modal {...this.props}>
+            <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm'
+            //{...this.props}
+            >
                 <ModalHeader toggle={this.props.toggle}>Save mixture</ModalHeader>
                 <ModalBody>
                     <Input type="text" name="text" id="mixture-name" placeholder="Mixture name" maxLength="25" autoFocus
