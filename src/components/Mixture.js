@@ -7,9 +7,9 @@ export default class Mixture extends Component {
         return (
             <Row style={{ marginTop: '5px' }} className='mixture-row'>
                 <Col lg={9} md={9} sm={9} xs={9}                    
-                    className= {'mixture-block mixture-block-selectable flex-container white-text ' + (this.props.isActive ? null : 'mixture-action-btn')}                    
+                    className= 'mixture-block mixture-block-selectable flex-container mixture-action-btn white-text'
                     style={{ minHeight: '42px', justifyContent: 'center', backgroundColor: this.props.isActive ? colors.themeActive : colors.theme }}
-                    onClick={() => this.props.switch(this.props.id)}>
+                    onClick={this.props.isActive ? () => this.props.deactivate() : () => this.props.switch(this.props.id)}>
                     <span>{this.props.title}</span>
                 </Col>
                 <Col lg={3} md={3} sm={3} xs={3}>

@@ -5,6 +5,7 @@ export const PAUSE_SOUND = 'PAUSE_SOUND';
 export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const SWITCH = 'SWITCH';
+export const DEACTIVATE = 'DEACTIVATE';
 
 const initialState = {
     sounds: [
@@ -20,14 +21,14 @@ export const actionCreators = {
 
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
-    switchMixture: (id) => ({ type: SWITCH, id })
+    switchMixture: (id) => ({ type: SWITCH, id }),
+    deactivateMixtures: () => ({ type: DEACTIVATE })
 };
 
 export const reducer = (state, action) => {
     state = state || initialState;
 
     if (action.type === PLAY_PAUSE_VOLUME) {
-
         let sounds = JSON.parse(JSON.stringify(state.sounds));
 
         sounds = sounds.filter(s => s.id !== action.sound.id);
@@ -42,7 +43,6 @@ export const reducer = (state, action) => {
     }
 
     if (action.type === PAUSE_SOUND) {
-
         let sounds = JSON.parse(JSON.stringify(state.sounds));
         for (let s of sounds) {
             if (s.id === action.id) {
@@ -59,7 +59,6 @@ export const reducer = (state, action) => {
     }
 
     if (action.type === ADD) {
-
         let sounds = JSON.parse(JSON.stringify(state.sounds));
         let mixture = {
             sounds,
@@ -80,7 +79,6 @@ export const reducer = (state, action) => {
     }
 
     if (action.type === DEL) {
-
         let filtered = state.mixtures.filter((m) => m.id !== action.id);
         if (filtered.length && !filtered.some(m => m.isActive === true)) {
             //TODO: is there a need to have an active mixture?
@@ -97,7 +95,6 @@ export const reducer = (state, action) => {
     }
 
     if (action.type === SWITCH) {
-
         if (state.mixtures.some(m => m.isActive !== true && m.id === action.id)) {
             return {
                 ...state,
@@ -110,5 +107,13 @@ export const reducer = (state, action) => {
         }
     }
 
+    if (action.type === DEACTIVATE) {
+        //Deactivate the Active mixture
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+            return { sounds: x.sounds, id: x.id, isActive: false }
+        });
+
+        return { ...state, mixtures: mixtures }
+    }
     return state;
 };

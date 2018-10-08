@@ -41,12 +41,12 @@ export class SoundSlider extends Component {
     }
 
     play = () => {
-        console.log("will play ", this.props.id);
+        //console.log("will play ", this.props.id);
         this.stream.play();
     }
 
     pause = () => {
-        console.log("will pause: ", this.props.id);
+        //console.log("will pause: ", this.props.id);
         this.stream.pause();
         this.stream.src = ''
         this.stream.load();

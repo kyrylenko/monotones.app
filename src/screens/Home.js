@@ -46,8 +46,14 @@ class Home extends Component {
         this.props.switchMixture(id);
     };
 
-    aggregateSounds = () => {
+    deactivateMixtures = () => {
+        if (this.state.isGlobalPlay) {
+            this.globalPlayPause(false);
+        }
+        this.props.deactivateMixtures();
+    };
 
+    aggregateSounds = () => {
         let aggregate = Object.values(soundIds).map(x => {
             let setting = this.props.sounds.find(s => s.id === x);
             let hasSetting = setting !== undefined;
@@ -69,19 +75,18 @@ class Home extends Component {
         //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}
         let mixtures = this.props.mixtures.map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
+            deactivate={this.deactivateMixtures}
             switch={this.switchMixture} />)
 
         return (
             <div>
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
-                <div className="mixtures-div">
-                    <Container fluid>
-                        {activeSounds.length > 0 && <span className='white-text'>Now play</span>}
-                        {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
-                        {mixtures.length > 0 && <span className='white-text'>My Mixtures</span>}
-                        {mixtures}
-                    </Container>
-                </div>
+                <Container fluid className="mixtures-div">
+                    {activeSounds.length > 0 && <span className='white-text'>Now play</span>}
+                    {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
+                    {mixtures.length > 0 && <span className='white-text'>My Mixtures</span>}
+                    {mixtures}
+                </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
                 <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} />
             </div>

@@ -67,9 +67,14 @@ div.play-div {
 } */
 
 @media (max-width: 768px) {
-  div.play-div{
+  div.play-div {
     top: auto;
     bottom: 54px;
+  }
+}
+@media (max-width: 992px) {
+  div.mixtures-div {
+    display: none;
   }
 }
 
@@ -100,7 +105,7 @@ div.play-div {
 }
 
 .white-text {
-  color: #ffffff;
+  color: #ffffff;  
 }
 
 /* MIXTURES */
