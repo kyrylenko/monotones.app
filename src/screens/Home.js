@@ -73,7 +73,7 @@ class Home extends Component {
         let activeSounds = this.props.sounds.filter(s => s.isPlay);
         //console.log("Home this.props ", this.props);
         //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}
-        let mixtures = this.props.mixtures.map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
+        let mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
             deactivate={this.deactivateMixtures}
             switch={this.switchMixture} />)

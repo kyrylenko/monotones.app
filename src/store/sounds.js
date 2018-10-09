@@ -35,7 +35,7 @@ export const reducer = (state, action) => {
 
         sounds.push(action.sound);
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
             return { sounds: x.sounds, id: x.id, isActive: false }
         });
 
@@ -51,7 +51,7 @@ export const reducer = (state, action) => {
         }
 
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
             return { sounds: x.sounds, id: x.id, isActive: false }
         });
 
@@ -109,7 +109,7 @@ export const reducer = (state, action) => {
 
     if (action.type === DEACTIVATE) {
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures)).map(x => {
+        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
             return { sounds: x.sounds, id: x.id, isActive: false }
         });
 
