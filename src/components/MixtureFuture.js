@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import save from '../assets/icons/save.svg'
+import { StringUtils } from '../utils/StringUtils'
+
+const utils = new StringUtils();
 
 export default class MixtureFuture extends Component {
 
@@ -13,7 +16,7 @@ export default class MixtureFuture extends Component {
                     src={require(`../assets/icons/white/${x.id}.png`)}
                     id={x.id}
                     alt={x.id}
-                    title={x.id}
+                    title={utils.idToTitle(x.id)}
                     onClick={() => this.props.pauseSound(x.id)}></img>
             </div>);
 

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import '../App.css';
+import { StringUtils } from '../utils/StringUtils'
+
+const utils = new StringUtils();
 
 export class SoundSlider extends Component {
 
@@ -86,7 +89,7 @@ export class SoundSlider extends Component {
     render() {
         return (
             <div>
-                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.idToTitle(this.props.title)}
+                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={utils.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
