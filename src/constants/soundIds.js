@@ -25,9 +25,10 @@ export default {
     kitty_purr: 'kitty_purr',
     magic_chimes: 'magic_chimes',
     night_owls: 'night_owls',
-    pink_noise: 'pink_noise',
-    white_noise: 'white_noise',
     playground: 'playground',
+    white_noise: 'white_noise',
+    pink_noise: 'pink_noise',
+    
     ship_hull: 'ship_hull',
     space_drone: 'space_drone',
     subway: 'subway',
