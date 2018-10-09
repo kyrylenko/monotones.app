@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
+import defaultValues from '../constants/defaultValues';
 
 import { Container, Row, Col } from 'reactstrap';
 
@@ -61,7 +62,7 @@ class Home extends Component {
             return {
                 id: x,
                 isPlay: hasSetting ? setting.isPlay : false,
-                volume: hasSetting ? setting.volume : 0.1
+                volume: hasSetting ? setting.volume : defaultValues.defaultVolume
             };
         });
 
