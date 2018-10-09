@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import colors from '../constants/colors'
+import trash from '../assets/icons/trash.svg'
 
 export default class Mixture extends Component {
     render() {
@@ -13,7 +14,7 @@ export default class Mixture extends Component {
                     <span>{this.props.title}</span>
                 </Col>
                 <Col lg={3} md={3} sm={3} xs={3}>
-                    <img onClick={() => this.props.delete(this.props.id)} className="mixture-img mixture-action-btn" src={require('../assets/icons/play.png')} title='Delete mixture' alt='Delete mixture'></img>
+                    <img onClick={() => this.props.delete(this.props.id)} className="mixture-img mixture-action-btn" src={trash} title='Delete mixture' alt='Delete mixture'></img>
                 </Col>
             </Row>
         );
