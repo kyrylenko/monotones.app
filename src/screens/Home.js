@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 
-import { Container } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 class Home extends Component {
 
@@ -82,9 +82,19 @@ class Home extends Component {
             <div>
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
                 <Container fluid className="mixtures-div">
-                    {activeSounds.length > 0 && <span className='white-text'>Now play</span>}
+                    {activeSounds.length > 0 && <Row>
+                        <Col lg={9} md={9} sm={9} xs={9}>
+                            <span className='white-text'>Playing now</span>
+                        </Col>
+                        <Col lg={3} md={3} sm={3} xs={3}></Col>
+                    </Row>}
                     {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
-                    {mixtures.length > 0 && <span className='white-text'>My Mixtures</span>}
+                    {mixtures.length > 0 && <Row style={{ marginTop: '25px' }}>
+                        <Col lg={9} md={9} sm={9} xs={9}>
+                            <span className='white-text'>My Mixtures</span>
+                        </Col>
+                        <Col lg={3} md={3} sm={3} xs={3}></Col>
+                    </Row>}
                     {mixtures}
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
