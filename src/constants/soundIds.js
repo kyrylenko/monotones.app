@@ -13,7 +13,7 @@ export default {
     sailing_yacht: 'sailing_yacht',
     farm: 'farm',
     city_street: 'city_street',    
-    paris_cafe: 'paris_cafe',
+    //paris_cafe: 'paris_cafe',
     birds_in_park: 'birds_in_park',
     wind_chimes: 'wind_chimes',
     clock: 'clock',
