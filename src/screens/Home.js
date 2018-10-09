@@ -81,7 +81,7 @@ class Home extends Component {
         return (
             <div>
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
-                <Container fluid className="mixtures-div">
+                <Container fluid className="mixtures-div d-none d-md-block">
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
                             <span className='white-text'>Playing now</span>

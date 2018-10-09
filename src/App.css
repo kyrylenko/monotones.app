@@ -74,11 +74,6 @@ div.play-div {
     bottom: 54px;
   }
 }
-@media (max-width: 992px) {
-  div.mixtures-div {
-    display: none;
-  }
-}
 
 .example-appear {
   transform: scale(1);
