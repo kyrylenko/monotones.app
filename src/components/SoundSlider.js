@@ -64,12 +64,17 @@ export class SoundSlider extends Component {
         }
     }
 
+    idToTitle = (string) => {
+        const newStr = `${string[0].toUpperCase()}${string.slice(1)}`
+        return newStr.replace(/_/g, " ");
+    }
+
     componentDidMount() {
         this.initSound();
         this.playPause();
     }
 
-    componentDidUpdate(prevProps, prevState) {        
+    componentDidUpdate(prevProps, prevState) {
         this.stream.volume = this.props.volume;
 
         if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
@@ -81,7 +86,7 @@ export class SoundSlider extends Component {
     render() {
         return (
             <div>
-                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.props.title}
+                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={this.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
