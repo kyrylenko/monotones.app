@@ -19,11 +19,6 @@ class Layout extends Component {
         <div className="footer-logo-welcome">
           <div className="container">
             <div className="row">
-              {/*<div className="hidden-lg hidden-md hidden-sm col-xs-1 text-center"></div>
-              <div className="col-lg-2 col-md-2 col-sm-12 col-xs-10 footer-logo">
-                <a href="https://monotones.app/">{constants.appName}</a>
-              </div>
-              <div className="hidden-lg hidden-md hidden-sm col-xs-1 text-center"></div> */}
               <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer-logo-menu">
                 <ul style={{ marginBottom: 0 }}>
                   {/* <li><a target="_blank" rel="noopener noreferrer" href="/about">About/Features</a></li> */}

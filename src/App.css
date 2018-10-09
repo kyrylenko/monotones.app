@@ -56,11 +56,13 @@ div.play-div {
   position: fixed;
   top: 54px;
   right: 45px;
-  z-index: 99999;
+  z-index: 1029;
 }
 .play-div img {
-  width: 45px;
-  cursor: pointer;  
+  width: 75px;
+  cursor: pointer;
+  background-color: rgb(82, 186, 213);
+  border-radius: 50%;
 }
 /* .play-div:hover > img {
   opacity: 1;
@@ -70,11 +72,6 @@ div.play-div {
   div.play-div {
     top: auto;
     bottom: 54px;
-  }
-}
-@media (max-width: 992px) {
-  div.mixtures-div {
-    display: none;
   }
 }
 
