@@ -22,6 +22,21 @@ class Home extends Component {
         modalIsOpen: false
     };
 
+    componentDidMount() {
+        document.addEventListener("keydown", this.spaceFunction, false);
+    };
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.spaceFunction, false);
+    };
+    //Play / Pause on click space  
+    spaceFunction = (event) => {
+        if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
+            console.log('space ', event.target.tagName)
+            this.globalPlayPause(!this.state.isGlobalPlay);
+            event.preventDefault();
+        }
+    }
+
     toggleModal = () => {
         this.setState({
             modalIsOpen: !this.state.modalIsOpen
