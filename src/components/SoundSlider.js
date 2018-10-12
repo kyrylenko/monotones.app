@@ -7,7 +7,9 @@ import { StringUtils } from '../utils/StringUtils'
 const utils = new StringUtils();
 
 export class SoundSlider extends Component {
-
+    state = {
+        loaded: false
+    };
     onSliderChange = (volume) => {
         //console.log("onSliderChange: ", volume);
         this.props.playPauseVolume({
@@ -32,6 +34,7 @@ export class SoundSlider extends Component {
         //this.stream.autoplay = true;
         this.stream.preload = 'none';
         this.stream.volume = this.props.volume;
+        //this.stream.load();
 
         this.stream.addEventListener('timeupdate', function () {
             var buffer = .44
@@ -44,12 +47,17 @@ export class SoundSlider extends Component {
     }
 
     play = () => {
-        //console.log("will play ", this.props.id);
-        this.stream.play();
+        console.log("will play ", this.props.id);
+        this.stream.play().then(_ => {
+            if (!this.state.loaded)
+                this.setState({ loaded: true })
+        }).catch(error => {
+            console.log('error loading audio ', this.props.id, error)
+        });
     }
 
     pause = () => {
-        //console.log("will pause: ", this.props.id);
+        console.log("will pause: ", this.props.id);
         this.stream.pause();
         this.stream.src = ''
         this.stream.load();
@@ -62,12 +70,13 @@ export class SoundSlider extends Component {
     playPause = () => {
         if (this.props.isPlay && this.props.isGlobalPlay) {
             this.play();
-        } else if (!this.stream.paused) {
+        } else if (!this.stream.paused && this.state.loaded) {
             this.pause();
         }
     }
 
     componentDidMount() {
+        //console.log('SoundSlider did mount ', this.props.id)
         this.initSound();
         this.playPause();
     }
@@ -82,9 +91,11 @@ export class SoundSlider extends Component {
     }
 
     render() {
+
         return (
             <div>
-                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={utils.idToTitle(this.props.title)}
+                <img alt={this.props.title} className="sound-icon"
+                    src={!this.state.loaded && this.props.isPlay && this.props.isGlobalPlay ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${this.props.id}.png`)} title={utils.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
