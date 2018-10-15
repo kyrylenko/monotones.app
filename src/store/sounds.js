@@ -1,5 +1,6 @@
 //import soundIds from '../constants/soundIds';
 
+export const GLOBAL_PLAY_PAUSE = 'GLOBAL_PLAY_PAUSE';
 export const PLAY_PAUSE_VOLUME = 'PLAY_PAUSE_VOLUME';
 export const PAUSE_SOUND = 'PAUSE_SOUND';
 export const ADD = 'ADD';
@@ -8,6 +9,7 @@ export const SWITCH = 'SWITCH';
 export const DEACTIVATE = 'DEACTIVATE';
 
 const initialState = {
+    isGlobalPlay: false,
     sounds: [
         //{ id: soundIds.sailing_yacht, isPlay: true, volume: 0.2 },
         //{ id: soundIds.summer_day, isPlay: true, volume: 0.2 },
@@ -16,6 +18,7 @@ const initialState = {
 };
 
 export const actionCreators = {
+    globalPlayPause: (isGlobalPlay) => ({ type: GLOBAL_PLAY_PAUSE, isGlobalPlay }),
     playPauseVolume: (sound) => ({ type: PLAY_PAUSE_VOLUME, sound }),
     pauseSound: (id) => ({ type: PAUSE_SOUND, id }),
 
@@ -28,7 +31,11 @@ export const actionCreators = {
 export const reducer = (state, action) => {
     state = state || initialState;
 
-    if (action.type === PLAY_PAUSE_VOLUME) {
+    if (action.type === GLOBAL_PLAY_PAUSE) {
+        return { ...state, isGlobalPlay: action.isGlobalPlay }
+    }
+
+    if (action.type === PLAY_PAUSE_VOLUME) {        
         let sounds = JSON.parse(JSON.stringify(state.sounds));
 
         sounds = sounds.filter(s => s.id !== action.sound.id);
@@ -39,7 +46,12 @@ export const reducer = (state, action) => {
             return { sounds: x.sounds, id: x.id, isActive: false }
         });
 
-        return { ...state, sounds: sounds, mixtures: mixtures }
+        return {
+            ...state,
+            sounds: sounds,
+            mixtures: mixtures,
+            isGlobalPlay: action.sound.isPlay ? true : state.isGlobalPlay
+        }
     }
 
     if (action.type === PAUSE_SOUND) {
@@ -98,6 +110,7 @@ export const reducer = (state, action) => {
         if (state.mixtures.some(m => m.isActive !== true && m.id === action.id)) {
             return {
                 ...state,
+                isGlobalPlay: true,
                 sounds: JSON.parse(JSON.stringify(state.mixtures.find(x => x.id === action.id))).sounds,
                 mixtures: state.mixtures.map((m) => {
                     m.isActive = m.id === action.id;
@@ -113,7 +126,7 @@ export const reducer = (state, action) => {
             return { sounds: x.sounds, id: x.id, isActive: false }
         });
 
-        return { ...state, mixtures: mixtures }
+        return { ...state, mixtures: mixtures, isGlobalPlay: false }
     }
     return state;
 };

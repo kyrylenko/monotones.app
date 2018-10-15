@@ -17,8 +17,7 @@ class Home extends Component {
 
     //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
 
-    state = {
-        isGlobalPlay: false,
+    state = {        
         modalIsOpen: false
     };
 
@@ -26,32 +25,6 @@ class Home extends Component {
         this.setState({
             modalIsOpen: !this.state.modalIsOpen
         });
-    };
-
-    globalPlayPause = (isGlobalPlay) => {
-        this.setState({ isGlobalPlay });
-    };
-
-    playPauseVolume = (sound) => {
-        //console.log('playPauseVolume, sound ', sound);
-        if (!this.state.isGlobalPlay && sound.isPlay) {
-            this.globalPlayPause(true);
-        }
-        this.props.playPauseVolume(sound);
-    };
-
-    switchMixture = (id) => {
-        if (!this.state.isGlobalPlay) {
-            this.globalPlayPause(true);
-        }
-        this.props.switchMixture(id);
-    };
-
-    deactivateMixtures = () => {
-        if (this.state.isGlobalPlay) {
-            this.globalPlayPause(false);
-        }
-        this.props.deactivateMixtures();
     };
 
     aggregateSounds = () => {
@@ -72,16 +45,16 @@ class Home extends Component {
     render() {
         //let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
         let activeSounds = this.props.sounds.filter(s => s.isPlay);
-        //console.log("Home this.props ", this.props);
+        //console.log("Home this.props ", this.props);        
         //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}
         let mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
-            deactivate={this.deactivateMixtures}
-            switch={this.switchMixture} />)
+            deactivate={this.props.deactivateMixtures}
+            switch={this.props.switchMixture} />)
 
         return (
             <div>
-                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.state.isGlobalPlay} playPause={(m) => this.globalPlayPause(m)} />}
+                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false} playPause={(m) => this.props.globalPlayPause(m)} />}
                 <Container fluid className="mixtures-div d-none d-md-block">
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
@@ -98,7 +71,7 @@ class Home extends Component {
                     </Row>}
                     {mixtures}
                 </Container>
-                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.playPauseVolume} isGlobalPlay={this.state.isGlobalPlay} />
+                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} />
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
