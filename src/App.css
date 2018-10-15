@@ -84,22 +84,35 @@ div.play-div {
 }
 
 @keyframes bounce {
-  0% {
-    transform:scale(0.7);    
-  }
-  25% {
-    transform:scale(1.5);    
-  }
-  50% {
-    transform:scale(0.8);    
-  }
-  75% {
-    transform:scale(1.2);    
-  }
-  100% {
-    transform:scale(1);
-  }
+  0% { transform:scale(0.7); }
+  25% { transform:scale(1.5); }
+  50% { transform:scale(0.8); }
+  75% { transform:scale(1.2); }
+  100% {transform:scale(1); }
 }
+
+.mixanim-enter {
+  scale: 0;
+}
+.mixanim-enter.mixanim-enter-active {
+  animation: grow 0.4s;
+}
+.mixanim-leave {
+  scale: 1;
+}
+.mixanim-leave.mixanim-leave-active {
+  animation: collaps 0.4s;
+}
+
+@keyframes collaps {
+  0% { transform:scale(1); }
+  100% { transform:scale(0); }
+}
+@keyframes grow {
+  0% { transform:scale(0); }
+  100% {transform:scale(1); }
+}
+
 
 .white-text {
   color: #ffffff;  
