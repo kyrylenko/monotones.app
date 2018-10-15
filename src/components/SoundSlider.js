@@ -3,10 +3,15 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import '../App.css';
 import { StringUtils } from '../utils/StringUtils'
+import loading from '../assets/icons/loading.gif'
 
 const utils = new StringUtils();
 
 export class SoundSlider extends Component {
+
+    state = {
+        isLoaded: false
+    };
 
     onSliderChange = (volume) => {
         //console.log("onSliderChange: ", volume);
@@ -33,6 +38,7 @@ export class SoundSlider extends Component {
         this.stream.preload = 'none';
         this.stream.volume = this.props.volume;
 
+
         this.stream.addEventListener('timeupdate', function () {
             var buffer = .44
             if (this.currentTime > this.duration - buffer) {
@@ -45,38 +51,46 @@ export class SoundSlider extends Component {
 
     play = () => {
         //console.log("will play ", this.props.id);
-        this.stream.play();
+        this.stream.play()
+            .then(_ => {
+                if (!this.state.isLoaded) {
+                    //console.log('resolved ', this.props.id)
+                    this.setState({ isLoaded: true })
+                }
+            }).catch(error => {
+                console.log('Error while loading sound ', this.props.id, error);
+            });
     }
 
     pause = () => {
         //console.log("will pause: ", this.props.id);
-        this.stream.pause();
+ /*        this.stream.pause();
         this.stream.src = ''
         this.stream.load();
         this.stream = null;
-        this.initSound();
+        this.initSound(); */
 
-        //this.stream.pause();        
+        this.stream.pause();        
     }
 
     playPause = () => {
         if (this.props.isPlay && this.props.isGlobalPlay) {
             this.play();
-        } else if (!this.stream.paused) {
+        } else if (this.state.isLoaded && !this.stream.paused) {
             this.pause();
         }
     }
 
     componentDidMount() {
         this.initSound();
-        this.playPause();
+        //this.playPause();
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {        
         this.stream.volume = this.props.volume;
-
-        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
-            //console.log("prevProps.isGlobalPlay/ this.props.isGlobalPlay", prevProps.isGlobalPlay, this.props.isGlobalPlay);
+        
+        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay || prevState.isLoaded !== this.state.isLoaded) {
+            //console.log("prevProps.isGlobalPlay/ this.props.isGlobalPlay", prevProps.isGlobalPlay, this.props.isGlobalPlay);            
             this.playPause();
         }
     }
@@ -84,7 +98,10 @@ export class SoundSlider extends Component {
     render() {
         return (
             <div>
-                <img alt={this.props.title} className="sound-icon" src={require(`../assets/icons/white/${this.props.id}.png`)} title={utils.idToTitle(this.props.title)}
+                <img alt={this.props.title} className="sound-icon"
+                    src={!this.state.isLoaded && this.props.isPlay && this.props.isGlobalPlay ? loading : require(`../assets/icons/white/${this.props.id}.png`)}
+                    //src={loading}
+                    title={utils.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={() => this.clickHandler()}>
                 </img>
