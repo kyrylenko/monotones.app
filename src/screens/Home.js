@@ -30,7 +30,6 @@ class Home extends Component {
     //Play / Pause on click space  
     spaceFunction = (event) => {
         if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
-            console.log('space ', event.target.tagName)
             this.props.globalPlayPause(!this.props.isGlobalPlay);
             event.preventDefault();
         }

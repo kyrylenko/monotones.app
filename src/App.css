@@ -112,6 +112,7 @@ div.mixtures-div {
   left: 45px;
   width: 250px;
   height: 500px;
+  z-index: 1029;
   /* background-color: gray; */
 }
 
