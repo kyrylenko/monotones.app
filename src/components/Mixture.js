@@ -10,6 +10,7 @@ export default class Mixture extends Component {
                 <Col lg={9} md={9} sm={9} xs={9}                    
                     className= 'mixture-block mixture-block-selectable flex-container mixture-action-btn white-text'
                     style={{ minHeight: '42px', justifyContent: 'center', backgroundColor: this.props.isActive ? colors.themeActive : colors.theme }}
+                    title = {this.props.isActive ? 'Pause mixture': 'Play mixture'}
                     onClick={this.props.isActive ? () => this.props.deactivate() : () => this.props.switch(this.props.id)}>
                     <span>{this.props.title}</span>
                 </Col>
