@@ -112,15 +112,10 @@ export class SoundSlider extends Component {
                     onChange={this.onSliderChange}
                     //defaultValue={0.7}
                     value={this.props.volume}
-                    //trackStyle={{ height: 10 }}
-                    //railStyle={{ height: 10 }}
                     trackStyle={{ backgroundColor: '#fff' }}
                     handleStyle={{
-                        //borderColor: 'blue',
                         height: 24,
                         width: 24,
-                        //marginLeft: -14,
-                        //marginTop: -9,
                         marginTop: -11,
                     }}
                     style={{ visibility: this.props.isPlay ? 'visible' : 'hidden' }} />
