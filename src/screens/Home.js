@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { RowsView } from '../components/RowsView';
+import { CSSTransitionGroup } from 'react-transition-group';
 import { GlobalPlayPause } from '../components/GlobalPlayPause';
 import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
@@ -17,7 +18,7 @@ class Home extends Component {
 
     //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
 
-    state = {        
+    state = {
         modalIsOpen: false
     };
 
@@ -83,7 +84,12 @@ class Home extends Component {
                         </Col>
                         <Col lg={3} md={3} sm={3} xs={3}></Col>
                     </Row>}
-                    {mixtures}
+                    <CSSTransitionGroup
+                        transitionName="mixanim"
+                        transitionEnterTimeout={400}
+                        transitionLeaveTimeout={400}>
+                        {mixtures}
+                    </CSSTransitionGroup>
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} />

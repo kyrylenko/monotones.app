@@ -17,7 +17,7 @@ export default class MixtureFuture extends Component {
                     src={require(`../assets/icons/white/${x.id}.png`)}
                     id={x.id}
                     alt={x.id}
-                    title={`Pause ${utils.idToTitle(x.id)}`}
+                    title={`${utils.idToTitle(x.id)} - Pause`}
                     onClick={() => this.props.pauseSound(x.id)}></img>
             </div>);
 
