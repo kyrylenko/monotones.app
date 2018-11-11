@@ -1,6 +1,6 @@
 export default {    
     /* Sound IDs */
-    seawaves: 'seawaves',
+    //seawaves: 'seawaves',
     summer_day: 'summer_day',
     river_stream: 'river_stream',
     summer_night: 'summer_night',
@@ -14,7 +14,7 @@ export default {
     farm: 'farm',
     city_street: 'city_street',    
     //paris_cafe: 'paris_cafe',
-    birds_in_park: 'birds_in_park',
+    //birds_in_park: 'birds_in_park',
     wind_chimes: 'wind_chimes',
     clock: 'clock',
     //crickets: 'crickets',
