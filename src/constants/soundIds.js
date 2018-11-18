@@ -2,27 +2,29 @@ export default {
     /* Sound IDs */
     //seawaves: 'seawaves',
     summer_day: 'summer_day',
-    river_stream: 'river_stream',
+    thunderstorm: 'thunderstorm',
     summer_night: 'summer_night',
-    blue_whales: 'blue_whales',
+    kitty_purr: 'kitty_purr',
     campfire: 'campfire',
     inside_train: 'inside_train',
     deep_space: 'deep_space',    
     october_rain: 'october_rain',
-    thunderstorm: 'thunderstorm',
+    river_stream: 'river_stream',
     sailing_yacht: 'sailing_yacht',
     farm: 'farm',
     city_street: 'city_street',    
     //paris_cafe: 'paris_cafe',
     //birds_in_park: 'birds_in_park',
     wind_chimes: 'wind_chimes',
-    clock: 'clock',
+    //REASON:incorreact clock phase because trimmed sound
+    //clock: 'clock',
     //crickets: 'crickets',
-    desert: 'desert',
+    //REASON: too big size
+    //desert: 'desert',
     ghosty: 'ghosty',
     heartbeat: 'heartbeat',
-    keyboard: 'keyboard',
-    kitty_purr: 'kitty_purr',
+    vinyl_cracks: 'vinyl_cracks',
+    blue_whales: 'blue_whales',
     magic_chimes: 'magic_chimes',
     night_owls: 'night_owls',
     playground: 'playground',
@@ -34,5 +36,5 @@ export default {
     subway: 'subway',
     tropical_birds: 'tropical_birds',
     typewriter: 'typewriter',
-    vinyl_cracks: 'vinyl_cracks'
+    keyboard: 'keyboard'
 };

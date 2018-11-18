@@ -40,9 +40,10 @@ export class SoundSlider extends Component {
 
 
         this.stream.addEventListener('timeupdate', function () {
-            var buffer = .44
+            console.log(this.duration, this.currentTime)
+            const buffer = .34//.44//
             if (this.currentTime > this.duration - buffer) {
-                this.currentTime = 0
+                this.currentTime = 0.05
                 this.play()
             }
         }, false);
@@ -63,13 +64,6 @@ export class SoundSlider extends Component {
     }
 
     pause = () => {
-        //console.log("will pause: ", this.props.id);
- /*        this.stream.pause();
-        this.stream.src = ''
-        this.stream.load();
-        this.stream = null;
-        this.initSound(); */
-
         this.stream.pause();        
     }
 
