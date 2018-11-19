@@ -41,9 +41,9 @@ export class SoundSlider extends Component {
 
         this.stream.addEventListener('timeupdate', function () {
             console.log(this.duration, this.currentTime)
-            const buffer = .34//.44//
+            const buffer = .44
             if (this.currentTime > this.duration - buffer) {
-                this.currentTime = 0.05
+                this.currentTime = 0
                 this.play()
             }
         }, false);
