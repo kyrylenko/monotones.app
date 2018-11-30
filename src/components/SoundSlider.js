@@ -7,6 +7,8 @@ import loading from '../assets/icons/loading.gif'
 
 const utils = new StringUtils();
 
+const isFirefox = typeof InstallTrigger !== 'undefined';
+
 export class SoundSlider extends Component {
 
     state = {
@@ -31,18 +33,18 @@ export class SoundSlider extends Component {
         })
     }
 
-    initSound = () => {
+    initSound = () => {        
         this.stream = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));
-        //this.stream.loop = true; 
+        this.stream.loop = isFirefox; 
         //this.stream.autoplay = true;
-        this.stream.preload = 'none';
+        this.stream.preload = 'none';//'auto';//
         this.stream.volume = this.props.volume;
 
 
         this.stream.addEventListener('timeupdate', function () {
             console.log(this.duration, this.currentTime)
             const buffer = .44
-            if (this.currentTime > this.duration - buffer) {
+            if ((this.currentTime > this.duration - buffer) && !isFirefox) {
                 this.currentTime = 0
                 this.play()
             }
