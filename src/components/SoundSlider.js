@@ -42,7 +42,7 @@ export class SoundSlider extends Component {
 
 
         this.stream.addEventListener('timeupdate', function () {
-            console.log(this.duration, this.currentTime)
+            //console.log(this.duration, this.currentTime)
             const buffer = .44
             if ((this.currentTime > this.duration - buffer) && !isFirefox) {
                 this.currentTime = 0
