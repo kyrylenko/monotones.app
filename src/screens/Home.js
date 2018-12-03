@@ -17,10 +17,27 @@ import { Container, Row, Col } from 'reactstrap';
 class Home extends Component {
 
     //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
+    constructor(props) {
+        super(props);
 
-    state = {
-        modalIsOpen: false
-    };
+        this.state = {
+            modalIsOpen: false
+        };
+
+        const { location } = this.props;
+        console.log(this.props);
+        let params = new URLSearchParams(location.search);
+        //console.log(params.get("s"));
+        console.log([...params.values()])
+        for (let v of params.values()) {
+            console.log(v)
+        }
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        //console.log(props, state);
+        return null;
+    }
 
     componentDidMount() {
         document.addEventListener("keydown", this.spaceFunction, false);
@@ -34,7 +51,7 @@ class Home extends Component {
             this.props.globalPlayPause(!this.props.isGlobalPlay);
             event.preventDefault();
         }
-    }
+    };
 
     toggleModal = () => {
         this.setState({
@@ -55,13 +72,10 @@ class Home extends Component {
         });
 
         return aggregate;
-    }
+    };
 
     render() {
-        //let hasActiveSounds = this.props.sounds.some(s => s.isPlay);
         let activeSounds = this.props.sounds.filter(s => s.isPlay);
-        //console.log("Home this.props ", this.props);        
-        //key={this.state.isGlobalPlay ? null : this.props.lastUpdatedId}
         let mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
             deactivate={this.props.deactivateMixtures}
@@ -96,7 +110,7 @@ class Home extends Component {
             </div>
             /* TODO Here should be a logic responsible for different views of sounds page  */
         );
-    }
+    };
 };
 
 export default connect(

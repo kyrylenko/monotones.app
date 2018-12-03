@@ -6,7 +6,6 @@ import About from './screens/About'
 import Terms from './screens/Terms'
 
 export default class App extends Component {
-  displayName = App.name
 
   render() {    
     return (
