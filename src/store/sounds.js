@@ -1,7 +1,9 @@
-//import soundIds from '../constants/soundIds';
+import soundIds from '../constants/soundIds';
+import defaultValues from '../constants/defaultValues';
 
 export const GLOBAL_PLAY_PAUSE = 'GLOBAL_PLAY_PAUSE';
 export const PLAY_PAUSE_VOLUME = 'PLAY_PAUSE_VOLUME';
+export const SET_SOUNDS = 'SET_SOUNDS';
 export const PAUSE_SOUND = 'PAUSE_SOUND';
 export const ADD = 'ADD';
 export const DEL = 'DEL';
@@ -21,6 +23,7 @@ export const actionCreators = {
     globalPlayPause: (isGlobalPlay) => ({ type: GLOBAL_PLAY_PAUSE, isGlobalPlay }),
     playPauseVolume: (sound) => ({ type: PLAY_PAUSE_VOLUME, sound }),
     pauseSound: (id) => ({ type: PAUSE_SOUND, id }),
+    setSounds: (sounds) => ({ type: SET_SOUNDS, sounds }),
 
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
@@ -35,7 +38,7 @@ export const reducer = (state, action) => {
         return { ...state, isGlobalPlay: action.isGlobalPlay }
     }
 
-    if (action.type === PLAY_PAUSE_VOLUME) {        
+    if (action.type === PLAY_PAUSE_VOLUME) {
         let sounds = JSON.parse(JSON.stringify(state.sounds));
 
         sounds = sounds.filter(s => s.id !== action.sound.id);
@@ -52,6 +55,18 @@ export const reducer = (state, action) => {
             mixtures: mixtures,
             isGlobalPlay: action.sound.isPlay ? true : state.isGlobalPlay
         }
+    }
+
+    if (action.type === SET_SOUNDS) {
+        const sounds = action.sounds
+            .filter(x => x in soundIds)
+            .map(x => ({
+                id: soundIds[x],
+                isPlay: true,
+                volume: defaultValues.defaultVolume
+            }));
+
+        return { ...state, sounds }
     }
 
     if (action.type === PAUSE_SOUND) {

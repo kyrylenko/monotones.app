@@ -26,17 +26,18 @@ class Home extends Component {
 
         const { location } = this.props;
         console.log(this.props);
-        let params = new URLSearchParams(location.search);
+        const params = new URLSearchParams(location.search);
         //console.log(params.get("s"));
-        console.log([...params.values()])
-        for (let v of params.values()) {
-            console.log(v)
+        //const array = [...params.values()];
+        const share = params.get('share');
+        if (share) {
+            console.log('share ', share);
+            const sounds = share.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
+            console.log(sounds);
+            this.props.setSounds(sounds);
+            this.props.history.replace('/');
+//TODO: MOVE ALL THIS LOGIC TO <App/>  in the render Route function
         }
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        //console.log(props, state);
-        return null;
     }
 
     componentDidMount() {
