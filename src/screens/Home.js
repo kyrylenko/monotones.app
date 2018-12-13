@@ -21,30 +21,15 @@ class Home extends Component {
         super(props);
 
         this.state = {
-            modalIsOpen: false
+            modal: false
         };
-
-        const { location } = this.props;
-        console.log(this.props);
-        const params = new URLSearchParams(location.search);
-        //console.log(params.get("s"));
-        //const array = [...params.values()];
-        const share = params.get('share');
-        if (share) {
-            console.log('share ', share);
-            const sounds = share.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
-            console.log(sounds);
-            this.props.setSounds(sounds);
-            this.props.history.replace('/');
-//TODO: MOVE ALL THIS LOGIC TO <App/>  in the render Route function
-        }
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.spaceFunction, false);
+        document.addEventListener('keydown', this.spaceFunction, false);
     };
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.spaceFunction, false);
+        document.removeEventListener('keydown', this.spaceFunction, false);
     };
     //Play / Pause on click space  
     spaceFunction = (event) => {
@@ -56,7 +41,7 @@ class Home extends Component {
 
     toggleModal = () => {
         this.setState({
-            modalIsOpen: !this.state.modalIsOpen
+            modal: !this.state.modal
         });
     };
 
@@ -76,6 +61,7 @@ class Home extends Component {
     };
 
     render() {
+        console.log('render home')
         let activeSounds = this.props.sounds.filter(s => s.isPlay);
         let mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
@@ -85,7 +71,7 @@ class Home extends Component {
         return (
             <div>
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false} playPause={(m) => this.props.globalPlayPause(m)} />}
-                <Container fluid className="mixtures-div d-none d-md-block">
+                <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
                             <span className='white-text'>Playing now</span>
@@ -100,16 +86,15 @@ class Home extends Component {
                         <Col lg={3} md={3} sm={3} xs={3}></Col>
                     </Row>}
                     <CSSTransitionGroup
-                        transitionName="mixanim"
+                        transitionName='mixanim'
                         transitionEnterTimeout={400}
                         transitionLeaveTimeout={400}>
                         {mixtures}
                     </CSSTransitionGroup>
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
-                <SaveMixtureModal isOpen={this.state.modalIsOpen} toggle={this.toggleModal} save={this.props.addMixture} />
+                <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
             </div>
-            /* TODO Here should be a logic responsible for different views of sounds page  */
         );
     };
 };
