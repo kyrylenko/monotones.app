@@ -13,17 +13,17 @@ export const GlobalPlayPause = (props) => {
 
     return (
 
-        <div className="play-div">
+        <div className='play-div'>
             <CSSTransitionGroup
-                transitionName="example"
+                transitionName='example'
                 transitionAppear={true}
                 transitionAppearTimeout={1000}
                 transitionEnter={false}
                 transitionLeave={false}>
                 <img onClick={clickHandler}
-                    alt={props.isGlobPlay ? "Pause" : "Play"}
+                    alt={props.isGlobPlay ? 'Pause' : 'Play'}
                     src={props.isGlobPlay ? pause : play}
-                    style={{ opacity: props.isGlobPlay ? 1 : null }} title={props.isGlobPlay ? "Pause" : "Play"}>
+                    style={{ opacity: props.isGlobPlay ? 1 : null }} title={props.isGlobPlay ? 'Pause' : 'Play'}>
                 </img>
 
             </CSSTransitionGroup>

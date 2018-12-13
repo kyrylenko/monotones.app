@@ -11,8 +11,9 @@ import { connect } from 'react-redux';
 import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
+import share from '../assets/icons/share.svg';
 
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
 
 class Home extends Component {
 
@@ -21,7 +22,11 @@ class Home extends Component {
         super(props);
 
         this.state = {
-            modal: false
+            modal: false,
+            popover: false,
+            tooltip: false,
+            share: window.location.origin,
+            copied: false
         };
     }
 
@@ -39,11 +44,9 @@ class Home extends Component {
         }
     };
 
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
-    };
+    toggleModal = () => this.setState({ modal: !this.state.modal });
+    togglePopover = () => this.setState({ popover: !this.state.popover });
+    toggleTooltip = () => this.setState({ tooltip: !this.state.tooltip });
 
     aggregateSounds = () => {
         let aggregate = Object.values(soundIds).map(x => {
@@ -60,16 +63,38 @@ class Home extends Component {
         return aggregate;
     };
 
+    selectAndCopy = (e) => {
+        e.target.select();
+        document.execCommand('copy');
+        this.setState({ copied: true });
+    };
+
+    share = () => {
+        const sounds = this.props.sounds.filter(x => x.isPlay).map(x => x.id);
+        const activeIds = Object.entries(soundIds)
+            .filter(x => sounds.some(s => s === x[1])).map(x => x[0]);
+
+        const parameter = activeIds.reduce((acc, item) => acc += item);
+
+        this.setState({
+            share: `${window.location.href}share/${parameter}`
+        });
+        this.togglePopover();
+    };
+
+
     render() {
-        console.log('render home')
-        let activeSounds = this.props.sounds.filter(s => s.isPlay);
-        let mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
+        const activeSounds = this.props.sounds.filter(s => s.isPlay);
+        const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
             deactivate={this.props.deactivateMixtures}
             switch={this.props.switchMixture} />)
 
         return (
-            <div>
+            <>
+                {activeSounds.length > 0 &&
+                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}
+                        style={{ width: '75px', cursor: 'pointer', position: 'fixed', top: 140, right: 45 }}></img>}
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false} playPause={(m) => this.props.globalPlayPause(m)} />}
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
@@ -94,7 +119,16 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
-            </div>
+                <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
+                    <PopoverHeader>Share sounds</PopoverHeader>
+                    <PopoverBody>
+                        <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} id='tooltip' defaultValue={this.state.share}></input>
+                    </PopoverBody>
+                    <Tooltip placement='top' isOpen={this.state.tooltip} target='tooltip' toggle={this.toggleTooltip}>
+                        {this.state.copied ? 'Copied!' : 'Click to copy'}
+                    </Tooltip>
+                </Popover>
+            </>
         );
     };
 };

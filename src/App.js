@@ -11,7 +11,6 @@ import { actionCreators } from './store/sounds';
 class App extends Component {
 
   render() {
-    console.log(this.props)
     return (
       <Layout>
         <Switch>
