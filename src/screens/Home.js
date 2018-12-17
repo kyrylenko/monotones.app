@@ -12,6 +12,14 @@ import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
+import {
+    FacebookShareButton,
+    GooglePlusShareButton,
+    TwitterShareButton,
+    FacebookIcon,
+    TwitterIcon,
+    GooglePlusIcon
+} from 'react-share';
 
 import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
 
@@ -77,9 +85,9 @@ class Home extends Component {
         const parameter = activeIds.reduce((acc, item) => acc += item);
 
         this.setState({
-            share: `${window.location.href}share/${parameter}`
+            share: `https://monotones.app/share/${parameter}`,//${window.location.href}
+            popover: true
         });
-        this.togglePopover();
     };
 
 
@@ -119,15 +127,40 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
-                <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
-                    <PopoverHeader>Share sounds</PopoverHeader>
-                    <PopoverBody>
-                        <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} id='tooltip' defaultValue={this.state.share}></input>
-                    </PopoverBody>
-                    <Tooltip placement='top' isOpen={this.state.tooltip} target='tooltip' toggle={this.toggleTooltip}>
-                        {this.state.copied ? 'Copied!' : 'Click to copy'}
-                    </Tooltip>
-                </Popover>
+                {activeSounds.length > 0 &&
+                    <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
+                        <PopoverHeader>Share sounds</PopoverHeader>
+                        <PopoverBody>
+                            <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} id='tooltip' defaultValue={this.state.share}></input>
+                            <div className='d-flex justify-content-center my-2'>
+                                <FacebookShareButton
+                                    url={this.state.share}
+                                    className='share-button mx-1'>
+                                    <FacebookIcon
+                                        size={32}
+                                        round />
+                                </FacebookShareButton>
+                                <GooglePlusShareButton
+                                    url={this.state.share}
+                                    className='share-button mx-1'>
+                                    <GooglePlusIcon
+                                        size={32}
+                                        round />
+                                </GooglePlusShareButton>
+                                <TwitterShareButton
+                                    url={this.state.share}
+                                    className='share-button mx-1'>
+                                    <TwitterIcon
+                                        size={32}
+                                        round />
+                                </TwitterShareButton>
+                            </div>
+                        </PopoverBody>
+                        <Tooltip placement='top' isOpen={this.state.tooltip} target='tooltip' toggle={this.toggleTooltip}>
+                            {this.state.copied ? 'Copied!' : 'Click to copy'}
+                        </Tooltip>
+                    </Popover>
+                }
             </>
         );
     };

@@ -236,3 +236,11 @@ div.mixtures-div {
   /* text-align: left; */
   color: rgb(255,255,255);
 }
+
+.share-button {
+  cursor: pointer;
+}
+
+.share-button:hover:not(:active) {
+  opacity: 0.75;
+}
