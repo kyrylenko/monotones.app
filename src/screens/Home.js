@@ -100,9 +100,9 @@ class Home extends Component {
 
         return (
             <>
-                {activeSounds.length > 0 &&
-                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}
-                        style={{ width: '75px', cursor: 'pointer', position: 'fixed', top: 140, right: 45 }}></img>}
+                {activeSounds.length > 0 && <div className='share-div'>
+                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
+                </div>}
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false} playPause={(m) => this.props.globalPlayPause(m)} />}
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
