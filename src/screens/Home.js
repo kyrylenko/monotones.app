@@ -4,14 +4,13 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import { GlobalPlayPause } from '../components/GlobalPlayPause';
 import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
-import { SaveMixtureModal } from '../components/Modals';
-
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
+import timer from '../assets/icons/timer.svg';
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -20,17 +19,17 @@ import {
     TwitterIcon,
     GooglePlusIcon
 } from 'react-share';
-
 import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
+const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
+const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
 class Home extends Component {
-
-    //sounds = Object.values(soundIds).map(x => { return { id: x, isPlay: false, volume: 0.1 } });
     constructor(props) {
         super(props);
 
         this.state = {
             modal: false,
+            timerModal: false,
             popover: false,
             tooltip: false,
             share: window.location.origin,
@@ -53,6 +52,8 @@ class Home extends Component {
     };
 
     toggleModal = () => this.setState({ modal: !this.state.modal });
+    toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
+
     togglePopover = () => this.setState({ popover: !this.state.popover });
     toggleTooltip = () => this.setState({ tooltip: !this.state.tooltip });
 
@@ -90,6 +91,9 @@ class Home extends Component {
         });
     };
 
+    timer = (interval) => {
+        console.log('set timer ', interval);
+    };
 
     render() {
         const activeSounds = this.props.sounds.filter(s => s.isPlay);
@@ -100,6 +104,9 @@ class Home extends Component {
 
         return (
             <>
+                {activeSounds.length > 0 && <div className='timer-div'>
+                    <img src={timer} alt='Timer' title='Set pause interval' id='timer' onClick={this.toggleTimerModal}></img>
+                </div>}
                 {activeSounds.length > 0 && <div className='share-div'>
                     <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
                 </div>}
@@ -127,6 +134,7 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
+                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal} timer={this.timer} />
                 {activeSounds.length > 0 &&
                     <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
                         <PopoverHeader>Share sounds</PopoverHeader>
