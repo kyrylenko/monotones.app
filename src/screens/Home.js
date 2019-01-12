@@ -24,9 +24,12 @@ const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
 const TimerControl = (props) => {
+    const minutes = Math.floor((props.interval % (1000 * 60 * 60)) / 60);
+    const seconds = Math.floor(props.interval % 60);
+
     const element = props.timerRun ?
         <div className='timer-circle' onClick={props.onClick}>
-            <div className='my-3' style={{ color: '#ffffff' }}>{props.interval}</div>
+            <div className='my-3' >{`${minutes}:${seconds}`}</div>
         </div> :
         <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
 
@@ -120,7 +123,7 @@ class Home extends Component {
 
     setTimer = (interval, timerRun) => {
         console.log('set timer ', interval, timerRun);
-        this.setState({ interval, timerRun })
+        this.setState({ interval: interval * 60, timerRun })
     };
 
     render() {
