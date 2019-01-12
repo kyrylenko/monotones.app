@@ -20,18 +20,16 @@ import {
     GooglePlusIcon
 } from 'react-share';
 import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
+import { secToMin } from '../utils/Utils';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
-const n = (n) => n > 9 ? '' + n : '0' + n;
-
 const TimerControl = (props) => {
-    const minutes = Math.floor((props.interval % (1000 * 60 * 60)) / 60);
-    const seconds = Math.floor(props.interval % 60);
+    const { minutes, seconds } = secToMin(props.interval);
 
     const element = props.timerRun ?
         <div className='timer-circle' onClick={props.onClick}>
-            <div className='my-3' >{`${n(minutes)}:${n(seconds)}`}</div>
+            <div className='my-3' >{`${minutes}:${seconds}`}</div>
         </div> :
         <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
 
@@ -123,10 +121,7 @@ class Home extends Component {
         });
     };
 
-    setTimer = (interval, timerRun) => {
-        console.log('set timer ', interval, timerRun);
-        this.setState({ interval: interval * 60, timerRun })
-    };
+    setTimer = (interval, timerRun) => this.setState({ interval: interval * 60, timerRun });
 
     render() {
         const activeSounds = this.props.sounds.filter(s => s.isPlay);
@@ -167,7 +162,10 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
-                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal} timer={this.setTimer} />
+                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal}
+                    timer={this.setTimer}
+                    timerRun={this.state.timerRun}
+                    interval={this.state.interval} />
                 {activeSounds.length > 0 &&
                     <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
                         <PopoverHeader>Share sounds</PopoverHeader>
