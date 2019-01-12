@@ -9,14 +9,18 @@ export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const SWITCH = 'SWITCH';
 export const DEACTIVATE = 'DEACTIVATE';
+export const TIMER_START = 'TIMER_START';
+export const TIMER_STOP = 'TIMER_STOP';
 
 const initialState = {
     isGlobalPlay: false,
-    sounds: [
-        //{ id: soundIds.sailing_yacht, isPlay: true, volume: 0.2 },
-        //{ id: soundIds.summer_day, isPlay: true, volume: 0.2 },
-    ],
+    sounds: [],
     mixtures: [],
+};
+
+const timerState = {
+    timerRun: false,
+    interval: 1
 };
 
 export const actionCreators = {
@@ -28,7 +32,24 @@ export const actionCreators = {
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
     switchMixture: (id) => ({ type: SWITCH, id }),
-    deactivateMixtures: () => ({ type: DEACTIVATE })
+    deactivateMixtures: () => ({ type: DEACTIVATE }),
+
+    timerStart: (interval) => ({ type: TIMER_START, interval }),
+    timerStop: () => ({ type: TIMER_STOP })
+};
+
+export const timerReducer = (state, action) => {
+    state = state || timerState;
+
+    if (action.type === TIMER_START) {
+        return { ...state, timerRun: true, interval: action.interval }
+    }
+
+    if (action.type === TIMER_STOP) {
+        return { ...state, timerRun: false }
+    }
+
+    return state;
 };
 
 export const reducer = (state, action) => {

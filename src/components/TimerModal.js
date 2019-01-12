@@ -9,12 +9,12 @@ export default class TimerModal extends React.Component {
     };
 
     start = () => {
-        this.props.timer(this.state.interval, true);
+        this.props.start(this.state.interval * 60);
         this.props.toggle();
     };
 
     stop = () => {
-        this.props.timer(this.state.interval, false);
+        this.props.stop();
         this.props.toggle();
     };
 

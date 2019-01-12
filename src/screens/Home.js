@@ -34,32 +34,36 @@ class Home extends Component {
             tooltip: false,
             share: window.location.origin,
             copied: false,
-            //MOVE TO REDUX?
-            timerRun: false,
-            interval: 1
         };
     }
 
     componentDidMount() {
         document.addEventListener('keydown', this.spaceFunction, false);
+        this.setupTimer();
     };
     componentWillUnmount() {
         document.removeEventListener('keydown', this.spaceFunction, false);
     };
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.timerRun !== this.state.timerRun) {
-            if (this.state.timerRun) {
-                this.timer = setInterval(() => {
-                    this.setState({ interval: this.state.interval - 1 });
-                    if (this.state.interval <= 0) {
-                        this.setState({ timerRun: false });
-                    }
-                }, 1000);
-            } else {
-                clearInterval(this.timer);
-            }
+        if (prevProps.timerRun !== this.props.timerRun) {
+            this.setupTimer();
         }
     };
+
+    setupTimer = () => {
+        if (this.props.timerRun) {
+            this.timer = setInterval(() => {
+                this.props.timerStart(this.props.interval - 1)
+                if (this.props.interval <= 0) {
+                    //DO IT IN REDUCER AUTOMATICALLY
+                    this.props.timerStop();
+                }
+            }, 1000);
+        } else {
+            clearInterval(this.timer);
+        }
+    };
+
     //Play / Pause on click space  
     spaceFunction = (event) => {
         if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
@@ -103,12 +107,10 @@ class Home extends Component {
         const parameter = activeIds.reduce((acc, item) => acc += item);
 
         this.setState({
-            share: `https://monotones.app/share/${parameter}`,//${window.location.href}
+            share: `https://monotones.app/share/${parameter}`,
             popover: true
         });
     };
-
-    setTimer = (interval, timerRun) => this.setState({ interval: interval * 60, timerRun });
 
     render() {
         const activeSounds = this.props.sounds.filter(s => s.isPlay);
@@ -120,7 +122,7 @@ class Home extends Component {
         return (
             <>
                 {activeSounds.length > 0 && <div className='timer-div'>
-                    <TimerControl onClick={this.toggleTimerModal} interval={this.state.interval} timerRun={this.state.timerRun} />
+                    <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
                 {activeSounds.length > 0 && <div className='share-div'>
                     <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
@@ -149,10 +151,12 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
-                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal}
-                    timer={this.setTimer}
-                    timerRun={this.state.timerRun}
-                    interval={this.state.interval} />
+                <TimerModal isOpen={this.state.timerModal}
+                    toggle={this.toggleTimerModal}
+                    start={this.props.timerStart}
+                    stop={this.props.timerStop}
+                    timerRun={this.props.timerRun}
+                    interval={this.props.interval} />
                 {activeSounds.length > 0 &&
                     <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
                         <PopoverHeader>Share sounds</PopoverHeader>
@@ -193,6 +197,8 @@ class Home extends Component {
 };
 
 export default connect(
-    state => state.main,
+    state => {
+        return { ...state.main, ...state.timer };
+    },
     dispatch => bindActionCreators(actionCreators, dispatch)
 )(Home);

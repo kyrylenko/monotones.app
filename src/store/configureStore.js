@@ -21,6 +21,7 @@ const persistConfig = {
 
 const reducers = {
     main: sounds.reducer,
+    timer: sounds.timerReducer
     //Add the rest of reducers here:
     //weatherForecasts: mixtures.reducer
 };
