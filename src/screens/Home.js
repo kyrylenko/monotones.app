@@ -23,13 +23,15 @@ import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } fro
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
+const n = (n) => n > 9 ? '' + n : '0' + n;
+
 const TimerControl = (props) => {
     const minutes = Math.floor((props.interval % (1000 * 60 * 60)) / 60);
     const seconds = Math.floor(props.interval % 60);
 
     const element = props.timerRun ?
         <div className='timer-circle' onClick={props.onClick}>
-            <div className='my-3' >{`${minutes}:${seconds}`}</div>
+            <div className='my-3' >{`${n(minutes)}:${n(seconds)}`}</div>
         </div> :
         <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
 
