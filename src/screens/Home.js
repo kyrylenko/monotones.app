@@ -23,6 +23,16 @@ import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } fro
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
+const TimerControl = (props) => {
+    const element = props.timerRun ?
+        <div className='timer-circle' onClick={props.onClick}>
+            <div className='my-3' style={{ color: '#ffffff' }}>{props.interval}</div>
+        </div> :
+        <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
+
+    return element;
+};
+
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -33,7 +43,10 @@ class Home extends Component {
             popover: false,
             tooltip: false,
             share: window.location.origin,
-            copied: false
+            copied: false,
+            //MOVE TO REDUX?
+            timerRun: false,
+            interval: 1
         };
     }
 
@@ -42,6 +55,20 @@ class Home extends Component {
     };
     componentWillUnmount() {
         document.removeEventListener('keydown', this.spaceFunction, false);
+    };
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.timerRun !== this.state.timerRun) {
+            if (this.state.timerRun) {
+                this.timer = setInterval(() => {
+                    this.setState({ interval: this.state.interval - 1 });
+                    if (this.state.interval <= 0) {
+                        this.setState({ timerRun: false });
+                    }
+                }, 1000);
+            } else {
+                clearInterval(this.timer);
+            }
+        }
     };
     //Play / Pause on click space  
     spaceFunction = (event) => {
@@ -91,8 +118,9 @@ class Home extends Component {
         });
     };
 
-    timer = (interval) => {
-        console.log('set timer ', interval);
+    setTimer = (interval, timerRun) => {
+        console.log('set timer ', interval, timerRun);
+        this.setState({ interval, timerRun })
     };
 
     render() {
@@ -105,7 +133,7 @@ class Home extends Component {
         return (
             <>
                 {activeSounds.length > 0 && <div className='timer-div'>
-                    <img src={timer} alt='Timer' title='Set pause interval' id='timer' onClick={this.toggleTimerModal}></img>
+                    <TimerControl onClick={this.toggleTimerModal} interval={this.state.interval} timerRun={this.state.timerRun} />
                 </div>}
                 {activeSounds.length > 0 && <div className='share-div'>
                     <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
@@ -134,7 +162,7 @@ class Home extends Component {
                 </Container>
                 <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
-                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal} timer={this.timer} />
+                <TimerModal isOpen={this.state.timerModal} toggle={this.toggleTimerModal} timer={this.setTimer} />
                 {activeSounds.length > 0 &&
                     <Popover placement={'left'} isOpen={this.state.popover} target={'popover'} toggle={this.togglePopover}>
                         <PopoverHeader>Share sounds</PopoverHeader>

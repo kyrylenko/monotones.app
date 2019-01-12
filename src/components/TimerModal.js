@@ -7,14 +7,19 @@ export default class TimerModal extends React.Component {
         interval: '1'
     };
 
-    timer = () => {
-        this.props.timer(this.state.interval);
+    start = () => {
+        this.props.timer(this.state.interval, true);
+        this.props.toggle();
+    };
+
+    stop = () => {
+        this.props.timer(this.state.interval, false);
         this.props.toggle();
     };
 
     handleKeyPress = (target) => {
         if (target.charCode === 13) {
-            this.timer();
+            this.start();
         }
     };
 
@@ -54,8 +59,8 @@ export default class TimerModal extends React.Component {
                     </div> */}
                 </ModalBody>
                 <ModalFooter>
-                    <Button color='primary' onClick={this.timer}>Play</Button>
-                    <Button color='secondary' onClick={this.props.toggle}>Cancel</Button>
+                    <Button color='secondary' onClick={this.stop}>Cancel</Button>
+                    <Button color='primary' onClick={this.start}>Start</Button>
                 </ModalFooter>
             </Modal>
         );

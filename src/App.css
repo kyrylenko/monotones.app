@@ -84,6 +84,14 @@ div.play-div {
   border-radius: 50%;
 }
 
+.timer-circle {
+  background: rgb(82, 186, 213);
+  width: 75px;
+  height: 75px;
+  border: 5px solid #ffffff !important;
+  border-radius: 50%;
+}
+
 @media (max-width: 768px) {
   div.play-div {
     top: auto;
