@@ -52,13 +52,7 @@ class Home extends Component {
 
     setupTimer = () => {
         if (this.props.timerRun) {
-            this.timer = setInterval(() => {
-                this.props.timerStart(this.props.interval - 1)
-                if (this.props.interval <= 0) {
-                    //DO IT IN REDUCER AUTOMATICALLY
-                    this.props.timerStop();
-                }
-            }, 1000);
+            this.timer = setInterval(() => this.props.timerStart(this.props.interval - 1), 1000);
         } else {
             clearInterval(this.timer);
         }

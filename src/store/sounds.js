@@ -42,7 +42,7 @@ export const timerReducer = (state, action) => {
     state = state || timerState;
 
     if (action.type === TIMER_START) {
-        return { ...state, timerRun: true, interval: action.interval }
+        return { ...state, timerRun: action.interval > 0, interval: action.interval }
     }
 
     if (action.type === TIMER_STOP) {
