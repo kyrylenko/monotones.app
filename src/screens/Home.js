@@ -10,7 +10,6 @@ import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
-import timer from '../assets/icons/timer.svg';
 import {
     FacebookShareButton,
     GooglePlusShareButton,
@@ -20,21 +19,9 @@ import {
     GooglePlusIcon
 } from 'react-share';
 import { Container, Row, Col, Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
-import { secToMin } from '../utils/Utils';
+import TimerControl from '../components/TimerControl';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
-
-const TimerControl = (props) => {
-    const { minutes, seconds } = secToMin(props.interval);
-
-    const element = props.timerRun ?
-        <div className='timer-circle' onClick={props.onClick}>
-            <div className='my-3' >{`${minutes}:${seconds}`}</div>
-        </div> :
-        <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
-
-    return element;
-};
 
 class Home extends Component {
     constructor(props) {
