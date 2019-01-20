@@ -52,9 +52,14 @@ class Home extends Component {
 
     setupTimer = () => {
         if (this.props.timerRun) {
-            this.timer = setInterval(() => this.props.timerStart(this.props.interval - 1), 1000);
+            this.timer = setInterval(() => {
+                this.props.timerStart(this.props.interval - 1)
+            }, 1000);
         } else {
             clearInterval(this.timer);
+            if (this.props.interval === 0) {
+                this.props.globalPlayPause(false);
+            }
         }
     };
 
@@ -115,13 +120,19 @@ class Home extends Component {
 
         return (
             <>
-                {activeSounds.length > 0 && <div className='timer-div'>
+                {this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
                 {activeSounds.length > 0 && <div className='share-div'>
                     <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
                 </div>}
-                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false} playPause={(m) => this.props.globalPlayPause(m)} />}
+                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false}
+                    playPause={(m) => {
+                        this.props.globalPlayPause(m)
+                        if (!m) {
+                            this.props.timerStop()
+                        }
+                    }} />}
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>

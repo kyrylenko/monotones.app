@@ -5,7 +5,7 @@ import { secToMin } from '../utils/Utils';
 export default class TimerModal extends React.Component {
 
     state = {
-        interval: '1'
+        interval: '1'//min
     };
 
     start = () => {

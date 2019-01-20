@@ -6,24 +6,28 @@ import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import * as sounds from './sounds';
 //import * as mixtures from './mixtures';
 
-const saveSubsetBlacklistFilter = createBlacklistFilter(
+const mainBlacklistFilter = createBlacklistFilter(
     'main',
     ['isGlobalPlay']
+);
+
+const timerBlacklistFilter = createBlacklistFilter(
+    'timer',
+    ['timerRun']
 );
 
 const persistConfig = {
     key: 'root',
     storage,
     transforms: [
-        saveSubsetBlacklistFilter
+        mainBlacklistFilter,
+        timerBlacklistFilter
     ]
 }
 
 const reducers = {
     main: sounds.reducer,
     timer: sounds.timerReducer
-    //Add the rest of reducers here:
-    //weatherForecasts: mixtures.reducer
 };
 
 const rootReducer = combineReducers({
