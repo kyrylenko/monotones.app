@@ -5,7 +5,7 @@ import { secToMin } from '../utils/Utils';
 export default class TimerModal extends React.Component {
 
     state = {
-        interval: '60'//sec 
+        interval: '300'//sec 
     };
 
     start = () => {
@@ -24,10 +24,11 @@ export default class TimerModal extends React.Component {
         }
     };
 
-    scroll = (e) => { };
+    scroll = (e) => {
+        //console.log(e.target.value)
+     };
 
     render() {
-        console.log(this.state.interval)
         const { minutes, seconds } = secToMin(this.props.timerRun ? this.props.interval : this.state.interval);
 
         const button = this.props.timerRun ?

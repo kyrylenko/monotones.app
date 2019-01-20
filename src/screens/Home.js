@@ -120,12 +120,6 @@ class Home extends Component {
 
         return (
             <>
-                {this.props.isGlobalPlay && <div className='timer-div'>
-                    <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
-                </div>}
-                {activeSounds.length > 0 && <div className='share-div'>
-                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
-                </div>}
                 {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false}
                     playPause={(m) => {
                         this.props.globalPlayPause(m)
@@ -133,6 +127,12 @@ class Home extends Component {
                             this.props.timerStop()
                         }
                     }} />}
+                {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
+                    <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
+                </div>}
+                {activeSounds.length > 0 && <div className='share-div'>
+                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
+                </div>}
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
