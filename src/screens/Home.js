@@ -38,11 +38,11 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('keydown', this.spaceFunction, false);
+        document.addEventListener('keydown', this.spaceHandler, false);
         this.setupTimer();
     };
     componentWillUnmount() {
-        document.removeEventListener('keydown', this.spaceFunction, false);
+        document.removeEventListener('keydown', this.spaceHandler, false);
     };
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.timerRun !== this.props.timerRun) {
@@ -64,7 +64,7 @@ class Home extends Component {
     };
 
     //Play / Pause on click space  
-    spaceFunction = (event) => {
+    spaceHandler = (event) => {
         if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
             this.props.globalPlayPause(!this.props.isGlobalPlay);
             event.preventDefault();
@@ -202,8 +202,6 @@ class Home extends Component {
 };
 
 export default connect(
-    state => {
-        return { ...state.main, ...state.timer };
-    },
+    state => ({ ...state.main, ...state.timer }),
     dispatch => bindActionCreators(actionCreators, dispatch)
 )(Home);
