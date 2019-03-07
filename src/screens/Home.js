@@ -10,7 +10,7 @@ import { actionCreators } from '../store/sounds';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
-import Share from '../components/Share';
+import SharePopover from '../components/SharePopover';
 import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
@@ -24,7 +24,7 @@ class Home extends Component {
             modal: false,
             timerModal: false,
             popover: false,
-            share: window.location.origin,
+            shareUrl: window.location.origin,
         };
     }
 
@@ -90,7 +90,7 @@ class Home extends Component {
         const parameter = activeIds.reduce((acc, item) => acc += item);
 
         this.setState({
-            share: `https://monotones.app/share/${parameter}`,
+            shareUrl: `https://monotones.app/share/${parameter}`,
             popover: true
         });
     };
@@ -147,7 +147,7 @@ class Home extends Component {
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
                 {activeSounds.length > 0 &&
-                    <Share isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.share} />
+                    <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
                 }
             </>
         );

@@ -9,7 +9,7 @@ import {
     GooglePlusIcon
 } from 'react-share';
 
-export default class Share extends Component {
+export default class SharePopover extends Component {
 
     constructor(props) {
         super(props);
