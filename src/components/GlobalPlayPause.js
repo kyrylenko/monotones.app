@@ -1,6 +1,5 @@
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
-import '../App.css';
 import pause from '../assets/icons/pause.svg'
 import play from '../assets/icons/play.svg'
 

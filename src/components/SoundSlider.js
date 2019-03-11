@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import '../App.css';
 import { StringUtils } from '../utils/StringUtils'
 import loading from '../assets/icons/loading.gif'
 

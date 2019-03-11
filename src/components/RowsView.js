@@ -3,8 +3,6 @@ import { Col, Container, Row } from 'reactstrap'; //https://github.com/react-boo
 import PropTypes from 'prop-types'
 import { SoundSlider } from '../components/SoundSlider';
 
-import '../App.css';
-
 export class RowsView extends Component {
 
     //isOdd(num) { return (num % 2) === 1; }

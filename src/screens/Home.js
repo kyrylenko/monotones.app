@@ -68,9 +68,9 @@ class Home extends Component {
     togglePopover = () => this.setState({ popover: !this.state.popover });
 
     aggregateSounds = () => {
-        let aggregate = Object.values(soundIds).map(x => {
-            let setting = this.props.sounds.find(s => s.id === x);
-            let hasSetting = setting !== undefined;
+        const aggregate = Object.values(soundIds).map(x => {
+            const setting = this.props.sounds.find(s => s.id === x);
+            const hasSetting = setting !== undefined;
 
             return {
                 id: x,
@@ -96,6 +96,8 @@ class Home extends Component {
     };
 
     render() {
+        //console.log('Home props ', this.props);
+        
         const activeSounds = this.props.sounds.filter(s => s.isPlay);
         const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
