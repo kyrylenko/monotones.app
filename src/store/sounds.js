@@ -66,9 +66,8 @@ export const reducer = (state, action) => {
 
         sounds.push(action.sound);
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
-            return { sounds: x.sounds, id: x.id, isActive: false }
-        });
+        const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
+            .map(x => ({ ...x, isActive: false }));
 
         return {
             ...state,
@@ -99,16 +98,15 @@ export const reducer = (state, action) => {
         }
 
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
-            return { sounds: x.sounds, id: x.id, isActive: false }
-        });
+        const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
+            .map(x => ({ ...x, isActive: false }));
 
         return { ...state, sounds: sounds, mixtures: mixtures }
     }
 
     if (action.type === ADD) {
-        let sounds = JSON.parse(JSON.stringify(state.sounds));
-        let mixture = {
+        const sounds = JSON.parse(JSON.stringify(state.sounds));
+        const mixture = {
             sounds,
             id: action.title,
             isActive: true
@@ -158,9 +156,8 @@ export const reducer = (state, action) => {
 
     if (action.type === DEACTIVATE) {
         //Deactivate the Active mixture
-        let mixtures = JSON.parse(JSON.stringify(state.mixtures || [])).map(x => {
-            return { sounds: x.sounds, id: x.id, isActive: false }
-        });
+        const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
+            .map(x => ({ ...x, isActive: false }));
 
         return { ...state, mixtures: mixtures, isGlobalPlay: false }
     }
