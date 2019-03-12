@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { StringUtils } from '../utils/StringUtils'
@@ -8,7 +8,7 @@ const utils = new StringUtils();
 
 const isFirefox = typeof InstallTrigger !== 'undefined';
 
-export class SoundSlider extends Component {
+export class SoundSlider extends PureComponent {
 
     state = {
         isLoaded: false
