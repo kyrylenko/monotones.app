@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { StringUtils } from '../utils/StringUtils'
-import loading from '../assets/icons/loading.gif'
+//import loading from '../assets/icons/loading.gif'
 
 const utils = new StringUtils();
 
@@ -86,7 +86,8 @@ export class SoundSlider extends PureComponent {
         return (
             <div>
                 <img alt={this.props.title} className='sound-icon'
-                    src={!this.state.isLoaded && this.props.isPlay && this.props.isGlobalPlay ? loading : require(`../assets/icons/white/${this.props.id}.png`)}
+                    src={!this.state.isLoaded && this.props.isPlay && this.props.isGlobalPlay
+                        ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${this.props.id}.png`)}
                     title={utils.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}
                     onClick={this.clickHandler}>
