@@ -14,13 +14,16 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 const { persistor, store } = configureStore();
-
+//navigator.connection.downlink - internet speed
 const config = {
   onUpdate: function (r) {
-    console.log('update sw',new Date(), r);
+    console.log('sw updated: ', new Date());
   },
   onSuccess: function (r) {
-    console.log('success sw', new Date(), r);
+    console.log('sw success: ', new Date());
+  },
+  onUpdateFound: function () {
+    console.log('sw update started: ', new Date());
   },
 };
 

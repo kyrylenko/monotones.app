@@ -21,9 +21,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sw": "workbox generateSW --config-file=workbox-config.js"
   },
-  "browserslist": [
+  "browserslist": [ 
     ">0.2%",
     "not dead",
     "not ie <= 11",
