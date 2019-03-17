@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 
 import * as sounds from './sounds';
+import { loadingReducer } from './loadingReducer';
 //import * as mixtures from './mixtures';
 
 const mainBlacklistFilter = createBlacklistFilter(
@@ -27,7 +28,8 @@ const persistConfig = {
 
 const reducers = {
     main: sounds.reducer,
-    timer: sounds.timerReducer
+    timer: sounds.timerReducer,
+    loading: loadingReducer
 };
 
 const rootReducer = combineReducers({

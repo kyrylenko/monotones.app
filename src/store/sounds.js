@@ -12,7 +12,7 @@ export const DEACTIVATE = 'DEACTIVATE';
 export const TIMER_START = 'TIMER_START';
 export const TIMER_STOP = 'TIMER_STOP';
 
-const initialState = {
+const mainState = {
     isGlobalPlay: false,
     sounds: [],
     mixtures: [],
@@ -53,7 +53,7 @@ export const timerReducer = (state, action) => {
 };
 
 export const reducer = (state, action) => {
-    state = state || initialState;
+    state = state || mainState;
 
     if (action.type === GLOBAL_PLAY_PAUSE) {
         return { ...state, isGlobalPlay: action.isGlobalPlay }

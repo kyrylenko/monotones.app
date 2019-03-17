@@ -9,22 +9,20 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import App from './App';
 import * as serviceWorker from './registerServiceWorker';
-
+import { actionCreators } from './store/loadingReducer';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 const { persistor, store } = configureStore();
+
 //navigator.connection.downlink - internet speed
 const config = {
-  onUpdate: function (r) {
-    console.log('sw updated: ', new Date());
+  onUpdate: (r) => {
+    //console.log('sw updated: ', new Date());
+    store.dispatch(actionCreators.cachingEnd());
   },
-  onSuccess: function (r) {
-    console.log('sw success: ', new Date());
-  },
-  onUpdateFound: function () {
-    console.log('sw update started: ', new Date());
-  },
+  onSuccess: (r) => store.dispatch(actionCreators.cachingEnd()),
+  onUpdateFound: () => store.dispatch(actionCreators.cachingStart()),
 };
 
 ReactDOM.render(

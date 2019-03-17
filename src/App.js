@@ -14,6 +14,7 @@ class App extends Component {
   render() {
     return (
       <Layout>
+        {this.props.isCaching && <div className='white-text'>Getting things ready...</div>}
         <Suspense fallback={<div className='white-text'>Loading...</div>}>
           <Switch>
             <Route exact path='/' component={Home} />
@@ -37,6 +38,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withRouter(connect(
-  null,
+  state => ({ ...state.loading }),
   mapDispatchToProps
 )(App));
