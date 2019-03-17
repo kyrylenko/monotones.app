@@ -30,6 +30,11 @@ export function register(config) {
       // serve assets; see https://github.com/facebook/create-react-app/issues/2374
       return;
     }
+    //check browser storage quota
+    navigator.storage.estimate().then(x => {
+      const mb = 1024 * 1024;
+      console.log(`Cache storage quota, used ${x.usage / mb} of ${x.quota / mb} Mb`);
+    });
 
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
