@@ -1,4 +1,5 @@
 module.exports = {
+  offlineGoogleAnalytics: true,
   globDirectory: "build/",
   globPatterns: [
     "**/*.{html,js,css,mp3,gif,svg}"
