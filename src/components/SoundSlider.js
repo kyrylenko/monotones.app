@@ -32,6 +32,7 @@ export class SoundSlider extends PureComponent {
 
     initSound = () => {
         this.audio = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));
+        this.audio.crossOrigin = 'anonymous';
         this.audio.loop = isFirefox;
         //this.audio.autoplay = true;
         this.audio.preload = 'none';//'auto';//

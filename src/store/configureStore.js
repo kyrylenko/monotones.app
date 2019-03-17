@@ -11,10 +11,13 @@ const mainBlacklistFilter = createBlacklistFilter(
     'main',
     ['isGlobalPlay']
 );
-
 const timerBlacklistFilter = createBlacklistFilter(
     'timer',
     ['timerRun']
+);
+const loadingBlacklistFilter = createBlacklistFilter(
+    'loading',
+    ['isCaching']
 );
 
 const persistConfig = {
@@ -22,7 +25,8 @@ const persistConfig = {
     storage,
     transforms: [
         mainBlacklistFilter,
-        timerBlacklistFilter
+        timerBlacklistFilter,
+        loadingBlacklistFilter
     ]
 }
 
