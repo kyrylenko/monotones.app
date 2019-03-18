@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import constants from './constants/defaultValues';
-import logo from './logo.svg';
+import logo from './logo.png';
 import './App.css';
 
 class Layout extends Component {
@@ -11,7 +11,7 @@ class Layout extends Component {
     return (
       <div className='App'>
         <header className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
+          <img src={logo} className='App-logo' alt={constants.appName} />
           <h1 className='App-title'>{constants.appName}</h1>
         </header>
         {this.props.children}
