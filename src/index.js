@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import App from './App';
 import * as serviceWorker from './registerServiceWorker';
-import { actionCreators } from './store/loadingReducer';
+import { actionCreators as loadingActions } from './store/loadingReducer';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
@@ -19,10 +19,10 @@ const { persistor, store } = configureStore();
 const config = {
   onUpdate: (r) => {
     //console.log('sw updated: ', new Date());
-    store.dispatch(actionCreators.cachingEnd());
+    store.dispatch(loadingActions.cachingEnd());
   },
-  onSuccess: (r) => store.dispatch(actionCreators.cachingEnd()),
-  onUpdateFound: () => store.dispatch(actionCreators.cachingStart()),
+  onSuccess: (r) => store.dispatch(loadingActions.cachingEnd()),
+  onUpdateFound: () => store.dispatch(loadingActions.cachingStart()),
 };
 
 ReactDOM.render(

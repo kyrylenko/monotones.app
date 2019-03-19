@@ -4,7 +4,7 @@ import Layout from './Layout';
 import Home from './screens/Home';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actionCreators } from './store/sounds';
+import { actionCreators as mainActions } from './store/mainReducer';
 
 const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
@@ -33,7 +33,7 @@ class App extends Component {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const { setSounds } = actionCreators;
+  const { setSounds } = mainActions;
   return bindActionCreators({ setSounds }, dispatch);
 };
 

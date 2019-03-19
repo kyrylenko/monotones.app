@@ -3,7 +3,7 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web and AsyncStorage for react-native
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 
-import * as sounds from './sounds';
+import { mainReducer } from './mainReducer';
 import { loadingReducer } from './loadingReducer';
 import { timerReducer } from './timerReducer';
 //import * as mixtures from './mixtures';
@@ -32,7 +32,7 @@ const persistConfig = {
 }
 
 const reducers = {
-    main: sounds.reducer,
+    main: mainReducer,
     timer: timerReducer,
     loading: loadingReducer
 };

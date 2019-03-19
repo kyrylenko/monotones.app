@@ -28,7 +28,7 @@ export const actionCreators = {
     deactivateMixtures: () => ({ type: DEACTIVATE }),
 };
 
-export const reducer = (state, action) => {
+export const mainReducer = (state, action) => {
     state = state || mainState;
 
     if (action.type === GLOBAL_PLAY_PAUSE) {

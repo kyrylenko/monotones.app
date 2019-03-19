@@ -6,7 +6,7 @@ import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators as mainActions} from '../store/sounds';
+import { actionCreators as mainActions} from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
