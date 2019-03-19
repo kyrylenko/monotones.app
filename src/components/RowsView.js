@@ -5,7 +5,7 @@ import { SoundSlider } from '../components/SoundSlider';
 
 const RowsView = (props) => {
 
-    const elements = [];
+    const rows = [];
 
     for (let i = 0; i < props.sounds.length - 1; i += 2) {
 
@@ -37,12 +37,12 @@ const RowsView = (props) => {
             <Col lg={2} md={2} sm={2} className='d-none d-sm-block'></Col>
         </Row>;
 
-        elements.push(row);
+        rows.push(row);
     }
 
     return (
         <Container>
-            {elements}
+            {rows}
         </Container>
     );
 
