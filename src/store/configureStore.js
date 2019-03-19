@@ -5,6 +5,7 @@ import { createBlacklistFilter } from 'redux-persist-transform-filter';
 
 import * as sounds from './sounds';
 import { loadingReducer } from './loadingReducer';
+import { timerReducer } from './timerReducer';
 //import * as mixtures from './mixtures';
 
 const mainBlacklistFilter = createBlacklistFilter(
@@ -32,7 +33,7 @@ const persistConfig = {
 
 const reducers = {
     main: sounds.reducer,
-    timer: sounds.timerReducer,
+    timer: timerReducer,
     loading: loadingReducer
 };
 

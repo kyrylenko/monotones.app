@@ -6,7 +6,8 @@ import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store/sounds';
+import { actionCreators as mainActions} from '../store/sounds';
+import { actionCreators as timerActions } from '../store/timerReducer';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
@@ -97,7 +98,7 @@ class Home extends Component {
 
     render() {
         //console.log('Home props ', this.props);
-        
+
         const activeSounds = this.props.sounds.filter(s => s.isPlay);
         const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
@@ -158,5 +159,5 @@ class Home extends Component {
 
 export default connect(
     state => ({ ...state.main, ...state.timer }),
-    dispatch => bindActionCreators(actionCreators, dispatch)
+    dispatch => bindActionCreators({ ...mainActions, ...timerActions }, dispatch)
 )(Home);

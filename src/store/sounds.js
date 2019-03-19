@@ -9,18 +9,11 @@ export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const SWITCH = 'SWITCH';
 export const DEACTIVATE = 'DEACTIVATE';
-export const TIMER_START = 'TIMER_START';
-export const TIMER_STOP = 'TIMER_STOP';
 
 const mainState = {
     isGlobalPlay: false,
     sounds: [],
     mixtures: [],
-};
-
-const timerState = {
-    timerRun: false,
-    interval: 1
 };
 
 export const actionCreators = {
@@ -33,23 +26,6 @@ export const actionCreators = {
     deleteMixture: (id) => ({ type: DEL, id }),
     switchMixture: (id) => ({ type: SWITCH, id }),
     deactivateMixtures: () => ({ type: DEACTIVATE }),
-
-    timerStart: (interval) => ({ type: TIMER_START, interval }),
-    timerStop: () => ({ type: TIMER_STOP })
-};
-
-export const timerReducer = (state, action) => {
-    state = state || timerState;
-
-    if (action.type === TIMER_START) {
-        return { ...state, timerRun: action.interval > 0, interval: action.interval }
-    }
-
-    if (action.type === TIMER_STOP) {
-        return { ...state, timerRun: false }
-    }
-
-    return state;
 };
 
 export const reducer = (state, action) => {
