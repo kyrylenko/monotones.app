@@ -9,13 +9,14 @@ class Layout extends Component {
 
   render() {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <img src={logo} className='App-logo' alt={constants.appName} />
-          <h1 className='App-title'>{constants.appName}</h1>
+      <div className='app'>
+        <header className='app-header'>
+          <Link to='/' title={constants.appName}>
+            <img src={logo} className='app-logo' alt={constants.appName} />
+          </Link>
+          <h1 className='app-title'>{constants.appName}</h1>
         </header>
         {this.props.children}
-
         <div className='footer-logo-welcome'>
           <div className='container'>
             <div className='row'>
