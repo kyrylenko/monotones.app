@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RowsView } from '../components/RowsView';
+import RowsView from '../components/RowsView';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { GlobalPlayPause } from '../components/GlobalPlayPause';
 import MixtureFuture from '../components/MixtureFuture';
