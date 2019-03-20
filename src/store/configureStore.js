@@ -1,11 +1,12 @@
 import { combineReducers, createStore } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistStore, persistReducer, createMigrate } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web and AsyncStorage for react-native
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 
 import { mainReducer } from './mainReducer';
 import { loadingReducer } from './loadingReducer';
 import { timerReducer } from './timerReducer';
+import migrations from './migrations';
 
 const mainBlacklistFilter = createBlacklistFilter(
     'main',
@@ -23,6 +24,8 @@ const loadingBlacklistFilter = createBlacklistFilter(
 const persistConfig = {
     key: 'root',
     storage,
+    version: 1,
+    migrate: createMigrate(migrations, { debug: true }),
     transforms: [
         mainBlacklistFilter,
         timerBlacklistFilter,

@@ -12,7 +12,7 @@ export const DEACTIVATE = 'DEACTIVATE';
 
 const mainState = {
     isGlobalPlay: false,
-    sounds: [],
+    sounds: {},
     mixtures: [],
 };
 
@@ -36,18 +36,13 @@ export const mainReducer = (state, action) => {
     }
 
     if (action.type === PLAY_PAUSE_VOLUME) {
-        let sounds = JSON.parse(JSON.stringify(state.sounds));
-
-        sounds = sounds.filter(s => s.id !== action.sound.id);
-
-        sounds.push(action.sound);
         //Deactivate the Active mixture
         const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
             .map(x => ({ ...x, isActive: false }));
 
         return {
             ...state,
-            sounds: sounds,
+            sounds: { ...state.sounds, [action.sound.id]: action.sound },
             mixtures: mixtures,
             isGlobalPlay: action.sound.isPlay ? true : state.isGlobalPlay
         }
@@ -56,23 +51,20 @@ export const mainReducer = (state, action) => {
     if (action.type === SET_SOUNDS) {
         const sounds = action.sounds
             .filter(x => x in soundIds)
-            .map(x => ({
-                id: soundIds[x],
-                isPlay: true,
-                volume: defaultValues.defaultVolume
-            }));
+            .reduce((obj, x) => {
+                obj[soundIds[x]] = {
+                    id: soundIds[x],
+                    isPlay: true,
+                    volume: defaultValues.defaultVolume
+                };
+                return obj
+            }, {});
 
         return { ...state, sounds }
     }
 
     if (action.type === PAUSE_SOUND) {
-        let sounds = JSON.parse(JSON.stringify(state.sounds));
-        for (let s of sounds) {
-            if (s.id === action.id) {
-                s.isPlay = false;
-            }
-        }
-
+        const sounds = { ...state.sounds, [action.id]: { ...state.sounds[action.id], isPlay: false } };
         //Deactivate the Active mixture
         const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
             .map(x => ({ ...x, isActive: false }));
@@ -81,9 +73,8 @@ export const mainReducer = (state, action) => {
     }
 
     if (action.type === ADD) {
-        const sounds = JSON.parse(JSON.stringify(state.sounds));
         const mixture = {
-            sounds,
+            sounds: { ...state.sounds },
             id: action.title,
             isActive: true
         };

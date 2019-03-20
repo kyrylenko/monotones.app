@@ -6,7 +6,7 @@ import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators as mainActions} from '../store/mainReducer';
+import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import soundIds from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
@@ -70,7 +70,7 @@ class Home extends Component {
 
     aggregateSounds = () => {
         const aggregate = Object.values(soundIds).map(x => {
-            const setting = this.props.sounds.find(s => s.id === x);
+            const setting = this.props.sounds[x];
             const hasSetting = setting !== undefined;
 
             return {
@@ -84,11 +84,11 @@ class Home extends Component {
     };
 
     share = () => {
-        const sounds = this.props.sounds.filter(x => x.isPlay).map(x => x.id);
-        const activeIds = Object.entries(soundIds)
-            .filter(x => sounds.some(s => s === x[1])).map(x => x[0]);
+        const activeIds = Object.values(this.props.sounds).filter(x => x.isPlay).map(x => x.id);
+        const activeAbbrs = Object.entries(soundIds)
+            .filter(x => activeIds.some(s => s === x[1])).map(x => x[0]);
 
-        const parameter = activeIds.reduce((acc, item) => acc += item);
+        const parameter = activeAbbrs.reduce((acc, item) => acc += item);
 
         this.setState({
             shareUrl: `https://monotones.app/share/${parameter}`,
@@ -98,8 +98,7 @@ class Home extends Component {
 
     render() {
         //console.log('Home props ', this.props);
-
-        const activeSounds = this.props.sounds.filter(s => s.isPlay);
+        const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
         const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
             deactivate={this.props.deactivateMixtures}
