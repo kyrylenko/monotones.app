@@ -6,7 +6,6 @@ import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import { mainReducer } from './mainReducer';
 import { loadingReducer } from './loadingReducer';
 import { timerReducer } from './timerReducer';
-//import * as mixtures from './mixtures';
 
 const mainBlacklistFilter = createBlacklistFilter(
     'main',
@@ -14,7 +13,7 @@ const mainBlacklistFilter = createBlacklistFilter(
 );
 const timerBlacklistFilter = createBlacklistFilter(
     'timer',
-    ['timerRun']
+    ['timerRun', 'interval']
 );
 const loadingBlacklistFilter = createBlacklistFilter(
     'loading',
