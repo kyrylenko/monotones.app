@@ -9,11 +9,11 @@ import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import soundIds from '../constants/soundIds';
-import defaultValues from '../constants/defaultValues';
 import share from '../assets/icons/share.svg';
 import SharePopover from '../components/SharePopover';
 import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
+import { aggregateSounds } from '../utils/Utils';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
@@ -67,22 +67,6 @@ class Home extends Component {
     toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
 
     togglePopover = () => this.setState({ popover: !this.state.popover });
-
-    aggregateSounds = () => {
-        const aggregate = Object.values(soundIds).map(x => {
-            const setting = this.props.sounds[x];
-            const hasSetting = setting !== undefined;
-
-            return {
-                id: x,
-                isPlay: hasSetting ? setting.isPlay : false,
-                isLoaded: hasSetting ? setting.isLoaded : false,
-                volume: hasSetting ? setting.volume : defaultValues.defaultVolume
-            };
-        });
-
-        return aggregate;
-    };
 
     share = () => {
         const activeIds = Object.values(this.props.sounds).filter(x => x.isPlay).map(x => x.id);
@@ -141,7 +125,7 @@ class Home extends Component {
                         {mixtures}
                     </CSSTransitionGroup>
                 </Container>
-                <RowsView sounds={this.aggregateSounds()} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
+                <RowsView sounds={aggregateSounds(this.props.sounds)} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}
                     toggle={this.toggleTimerModal}

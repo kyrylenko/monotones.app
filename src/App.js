@@ -6,23 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators as mainActions } from './store/mainReducer';
 import Player from './components/Player';
-import soundIds from './constants/soundIds';
-import defaultValues from './constants/defaultValues';
-
-const aggregateSounds = (reduxSounds = {}) => {
-  const aggregate = Object.values(soundIds).map(x => {
-    const setting = reduxSounds[x];
-    const hasSetting = setting !== undefined;
-
-    return {
-      id: x,
-      isPlay: hasSetting ? setting.isPlay : false,
-      volume: hasSetting ? setting.volume : defaultValues.defaultVolume
-    };
-  });
-
-  return aggregate;
-};
+import { aggregateSounds } from './utils/Utils';
 
 const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
