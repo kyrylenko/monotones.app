@@ -76,6 +76,7 @@ class Home extends Component {
             return {
                 id: x,
                 isPlay: hasSetting ? setting.isPlay : false,
+                isLoaded: hasSetting ? setting.isLoaded : false,
                 volume: hasSetting ? setting.volume : defaultValues.defaultVolume
             };
         });

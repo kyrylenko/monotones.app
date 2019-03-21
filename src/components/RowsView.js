@@ -20,6 +20,7 @@ const RowsView = (props) => {
                     id={sLeft.id}
                     isGlobalPlay={props.isGlobalPlay}
                     isPlay={sLeft.isPlay}
+                    isLoaded={sLeft.isLoaded}
                     volume={sLeft.volume}
                     title={sLeft.id}
                     playPauseVolume={props.playPauseVolume} />
@@ -30,6 +31,7 @@ const RowsView = (props) => {
                     id={sRight.id}
                     isGlobalPlay={props.isGlobalPlay}
                     isPlay={sRight.isPlay}
+                    isLoaded={sRight.isLoaded}
                     volume={sRight.volume}
                     title={sRight.id}
                     playPauseVolume={props.playPauseVolume} />

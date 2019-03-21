@@ -6,19 +6,14 @@ import { StringUtils } from '../utils/StringUtils'
 
 const utils = new StringUtils();
 
-const isFirefox = typeof InstallTrigger !== 'undefined';
-
 export class SoundSlider extends PureComponent {
-
-    state = {
-        isLoaded: false
-    };
 
     onSliderChange = (volume) => {
         this.props.playPauseVolume({
             id: this.props.id,
             isPlay: this.props.isPlay,
-            volume
+            volume,
+            isLoaded: this.props.isLoaded,
         })
     }
 
@@ -30,64 +25,11 @@ export class SoundSlider extends PureComponent {
         })
     }
 
-    initSound = () => {
-        this.audio = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));
-        this.audio.crossOrigin = 'anonymous';
-        this.audio.loop = isFirefox;
-        //this.audio.autoplay = true;
-        this.audio.preload = 'none';//'auto';//
-        this.audio.volume = this.props.volume;
-
-        this.audio.addEventListener('timeupdate', function () {
-            //console.log(this.duration, this.currentTime)
-            const buffer = .44
-            if ((this.currentTime > this.duration - buffer) && !isFirefox) {
-                this.currentTime = 0
-                this.play()
-            }
-        }, false);
-    }
-
-    play = () => {
-        //console.log("will play ", this.props.id);
-        this.audio.play()
-            .then(_ => {
-                if (!this.state.isLoaded) {
-                    this.setState({ isLoaded: true })
-                }
-            }).catch(error => console.log('Error while loading sound ', this.props.id, error));
-    }
-
-    pause = () => {
-        this.audio.pause();
-    }
-
-    playPause = () => {
-        if (this.props.isPlay && this.props.isGlobalPlay) {
-            this.play();
-        } else if (this.state.isLoaded && !this.audio.paused) {
-            this.pause();
-        }
-    }
-
-    componentDidMount() {
-        this.initSound();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        this.audio.volume = this.props.volume;
-
-        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay || prevState.isLoaded !== this.state.isLoaded) {
-            //console.log("prevProps.isGlobalPlay/ this.props.isGlobalPlay", prevProps.isGlobalPlay, this.props.isGlobalPlay);            
-            this.playPause();
-        }
-    }
-
     render() {
         return (
             <div>
                 <img alt={this.props.title} className='sound-icon'
-                    src={!this.state.isLoaded && this.props.isPlay && this.props.isGlobalPlay
+                    src={!this.props.isLoaded && this.props.isPlay && this.props.isGlobalPlay
                         ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${this.props.id}.png`)}
                     title={utils.idToTitle(this.props.title)}
                     style={{ opacity: this.props.isPlay ? 1 : null }}

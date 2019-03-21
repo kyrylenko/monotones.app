@@ -25,7 +25,7 @@ const persistConfig = {
     key: 'root',
     storage,
     version: 1,
-    migrate: createMigrate(migrations, { debug: true }),
+    migrate: createMigrate(migrations, { debug: false }),
     transforms: [
         mainBlacklistFilter,
         timerBlacklistFilter,

@@ -9,6 +9,8 @@ export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const SWITCH = 'SWITCH';
 export const DEACTIVATE = 'DEACTIVATE';
+export const SET_SOUND_LOADED = 'SET_SOUND_LOADED';
+
 
 const mainState = {
     isGlobalPlay: false,
@@ -21,6 +23,7 @@ export const actionCreators = {
     playPauseVolume: (sound) => ({ type: PLAY_PAUSE_VOLUME, sound }),
     pauseSound: (id) => ({ type: PAUSE_SOUND, id }),
     setSounds: (sounds) => ({ type: SET_SOUNDS, sounds }),
+    setSoundLoaded: (id) => ({ type: SET_SOUND_LOADED, id }),
 
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
@@ -36,7 +39,7 @@ export const mainReducer = (state, action) => {
     }
 
     if (action.type === PLAY_PAUSE_VOLUME) {
-        //Deactivate the Active mixture
+        //Deactivate the Active mixture        
         const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
             .map(x => ({ ...x, isActive: false }));
 
@@ -60,6 +63,11 @@ export const mainReducer = (state, action) => {
                 return obj
             }, {});
 
+        return { ...state, sounds }
+    }
+
+    if (action.type === SET_SOUND_LOADED) {
+        const sounds = { ...state.sounds, [action.id]: { ...state.sounds[action.id], isLoaded: true } };
         return { ...state, sounds }
     }
 
