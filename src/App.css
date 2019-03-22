@@ -56,15 +56,15 @@ height: 180 px;
 
 div.timer-div {
   position: fixed;
-  top: 140px;
-  right: 45px;
+  top: 54px;
+  left: 150px;
   z-index: 1029;
 }
 
 div.share-div {
   position: fixed;
   top: 54px;
-  left: 45px;
+  right: 45px;
   z-index: 1029;
 }
 .share-div img {
@@ -76,7 +76,7 @@ div.share-div {
 div.play-div {
   position: fixed;
   top: 54px;
-  right: 45px;
+  left: 45px;
   z-index: 1029;
 }
 .timer-div img,
@@ -99,18 +99,20 @@ div.play-div {
 
 @media (max-width: 768px) {
   div.play-div {
+    left: auto;
     top: auto;
     right: 35px;
     bottom: 35px;
   }
   div.share-div {
     top: 35px;
-    left: 35px;
-    right: auto;
+    right: 35px;
+    left: auto;
   }
   div.timer-div {
     top: 35px;
-    right: 35px;
+    left: 35px;
+    right: auto;
   }
 }
 
