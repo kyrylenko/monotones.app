@@ -10,7 +10,7 @@ export default class MixtureFuture extends Component {
 
     render() {
 
-        let sounds = this.props.activeSounds.map(x =>
+        const sounds = this.props.activeSounds.map(x =>
             <div className='mixture-item' key={x.id}>
                 <img
                     className='mixture-img'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
-import colors from '../constants/colors'
-import trash from '../assets/icons/trash.svg'
+import colors from '../constants/colors';
+import trash from '../assets/icons/trash.svg';
 
 export default class Mixture extends Component {
     render() {

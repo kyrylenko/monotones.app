@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RowsView from '../components/RowsView';
 import { CSSTransitionGroup } from 'react-transition-group';
 import MixtureFuture from '../components/MixtureFuture';
+import PlayingNow from '../components/PlayingNow';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -78,7 +79,7 @@ class Home extends Component {
             switch={this.props.switchMixture} />)
 
         return (
-            <>                
+            <>
                 {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
@@ -117,6 +118,9 @@ class Home extends Component {
                 {activeSounds.length > 0 &&
                     <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
                 }
+                {activeSounds.length > 0 && <footer className='fixed-bottom'>
+                    <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
+                </footer>}
             </>
         );
     };
