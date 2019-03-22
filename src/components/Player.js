@@ -10,10 +10,13 @@ class Player extends PureComponent {
 
     componentDidUpdate(prevProps, prevState) {
         this.audio.volume = this.props.volume;
-        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {           
+        if (prevProps.isPlay !== this.props.isPlay || prevProps.isGlobalPlay !== this.props.isGlobalPlay) {
             this.playPause();
         }
     }
+    //TODO: consider using shouldComponentUpdate to prevent re-rendering if only isGlobalPlay changed for not played sound
+    //shouldComponentUpdate(nextProps, nextState) {
+    //}
 
     initSound = () => {
         this.audio = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));

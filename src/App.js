@@ -5,7 +5,9 @@ import Home from './screens/Home';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators as mainActions } from './store/mainReducer';
+import { actionCreators as timerActions } from './store/timerReducer';
 import Player from './components/Player';
+import GlobalPlayPause from './components/GlobalPlayPause';
 import { aggregateSounds } from './utils/Utils';
 
 const About = lazy(() => import('./screens/About'));
@@ -13,7 +15,24 @@ const Terms = lazy(() => import('./screens/Terms'));
 
 class App extends Component {
 
+  //Play / Pause on click space  
+  spaceHandler = (event) => {
+    if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
+      this.props.globalPlayPause(!this.props.isGlobalPlay);
+      event.preventDefault();
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.spaceHandler, false);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.spaceHandler, false);
+  };
+
   render() {
+
     const players = aggregateSounds(this.props.sounds)
       .map(x => <Player
         setSoundLoaded={this.props.setSoundLoaded}
@@ -22,6 +41,8 @@ class App extends Component {
         id={x.id}
         isPlay={x.isPlay}
         volume={x.volume} />);
+
+    const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
 
     return (
       <Layout>
@@ -39,14 +60,23 @@ class App extends Component {
           </Switch>
         </Suspense>
         {players}
+        {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false}
+          playPause={(shouldPlay) => {
+            this.props.globalPlayPause(shouldPlay)
+            if (!shouldPlay) {
+              this.props.timerStop()
+            }
+          }} />}
       </Layout>
     );
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const { setSounds, setSoundLoaded } = mainActions;
-  return bindActionCreators({ setSounds, setSoundLoaded }, dispatch);
+  const { setSounds, setSoundLoaded, globalPlayPause } = mainActions;
+  const { timerStop } = timerActions;
+
+  return bindActionCreators({ setSounds, setSoundLoaded, globalPlayPause, timerStop }, dispatch);
 };
 
 export default withRouter(connect(

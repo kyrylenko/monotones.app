@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import RowsView from '../components/RowsView';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { GlobalPlayPause } from '../components/GlobalPlayPause';
 import MixtureFuture from '../components/MixtureFuture';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
@@ -30,13 +29,10 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener('keydown', this.spaceHandler, false);
         this.setupTimer();
     };
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.spaceHandler, false);
-    };
-    componentDidUpdate(prevProps, prevState) {
+
+    componentDidUpdate(prevProps) {
         if (prevProps.timerRun !== this.props.timerRun) {
             this.setupTimer();
         }
@@ -52,14 +48,6 @@ class Home extends Component {
             if (this.props.interval === 0) {
                 this.props.globalPlayPause(false);
             }
-        }
-    };
-
-    //Play / Pause on click space  
-    spaceHandler = (event) => {
-        if (event.keyCode === 32 && event.target.tagName !== 'INPUT') {
-            this.props.globalPlayPause(!this.props.isGlobalPlay);
-            event.preventDefault();
         }
     };
 
@@ -90,14 +78,7 @@ class Home extends Component {
             switch={this.props.switchMixture} />)
 
         return (
-            <>
-                {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false}
-                    playPause={(m) => {
-                        this.props.globalPlayPause(m)
-                        if (!m) {
-                            this.props.timerStop()
-                        }
-                    }} />}
+            <>                
                 {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}

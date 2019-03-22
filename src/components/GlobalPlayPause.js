@@ -3,7 +3,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import pause from '../assets/icons/pause.svg'
 import play from '../assets/icons/play.svg'
 
-export const GlobalPlayPause = ({isGlobPlay, playPause}) => {
+const GlobalPlayPause = ({ isGlobPlay, playPause }) => {
 
     const clickHandler = () => playPause(!isGlobPlay);
 
@@ -25,3 +25,5 @@ export const GlobalPlayPause = ({isGlobPlay, playPause}) => {
         </div>
     );
 };
+
+export default GlobalPlayPause;
