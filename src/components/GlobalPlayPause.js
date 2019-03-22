@@ -3,15 +3,11 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import pause from '../assets/icons/pause.svg'
 import play from '../assets/icons/play.svg'
 
-//Stateless presentational  component
-export const GlobalPlayPause = (props) => {
+export const GlobalPlayPause = ({isGlobPlay, playPause}) => {
 
-    const clickHandler = () => {
-        props.playPause(!props.isGlobPlay);
-    };
+    const clickHandler = () => playPause(!isGlobPlay);
 
     return (
-
         <div className='play-div'>
             <CSSTransitionGroup
                 transitionName='example'
@@ -20,13 +16,12 @@ export const GlobalPlayPause = (props) => {
                 transitionEnter={false}
                 transitionLeave={false}>
                 <img onClick={clickHandler}
-                    alt={props.isGlobPlay ? 'Pause' : 'Play'}
-                    src={props.isGlobPlay ? pause : play}
-                    style={{ opacity: props.isGlobPlay ? 1 : null }} title={props.isGlobPlay ? 'Pause' : 'Play'}>
+                    alt={isGlobPlay ? 'Pause' : 'Play'}
+                    src={isGlobPlay ? pause : play}
+                    style={{ opacity: isGlobPlay ? 1 : null }}
+                    title={isGlobPlay ? 'Pause' : 'Play'}>
                 </img>
-
             </CSSTransitionGroup>
         </div>
-
     );
 };
