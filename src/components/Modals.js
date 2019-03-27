@@ -27,7 +27,7 @@ export default class SaveMixtureModal extends React.Component {
     render() {
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm' autoFocus={false} >
-                <ModalHeader toggle={this.props.toggle}>Save mixture</ModalHeader>
+                <ModalHeader toggle={this.props.toggle} style={{ color: 'black' }}>Save mixture</ModalHeader>
                 <ModalBody>
                     <Input type='text' name='text' id='mixture-name' placeholder='Mixture name' maxLength='25' autoFocus
                         onChange={this.updateInputValue} onKeyPress={this.handleKeyPress} />

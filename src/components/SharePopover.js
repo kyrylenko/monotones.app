@@ -31,7 +31,7 @@ export default class SharePopover extends Component {
     render() {
         return (
             <Popover placement={'left'} isOpen={this.props.isOpen} target={'popover'} toggle={this.props.toggle}>
-                <PopoverHeader>Share sounds</PopoverHeader>
+                <PopoverHeader style={{ color: 'black' }}>Share sounds</PopoverHeader>
                 <PopoverBody>
                     <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} id='tooltip' defaultValue={this.props.url}></input>
                     <div className='d-flex justify-content-center my-2'>
