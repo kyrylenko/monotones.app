@@ -24,7 +24,7 @@
     "eject": "react-scripts eject",
     "sw": "workbox generateSW --config-file=workbox-config.js"
   },
-  "browserslist": [ 
+  "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",

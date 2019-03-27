@@ -14,10 +14,11 @@ import SharePopover from '../components/SharePopover';
 import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
 import { aggregateSounds } from '../utils/Utils';
+import Affix from '../components/Affix';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 //Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-const isMobile =document.documentElement.clientWidth <= 768;
+const isMobile = document.documentElement.clientWidth <= 768;
 
 class Home extends Component {
     constructor(props) {
@@ -120,9 +121,11 @@ class Home extends Component {
                 {activeSounds.length > 0 &&
                     <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
                 }
-                {activeSounds.length > 0 && isMobile && <footer className='fixed-bottom'>
-                    <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
-                </footer>}
+                {activeSounds.length > 0 && isMobile &&
+                    <Affix className='fixed-bottom' offsetbottom={45}>
+                        <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
+                    </Affix>
+                }
             </>
         );
     };
