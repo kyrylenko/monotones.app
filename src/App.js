@@ -52,9 +52,11 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
-            <Route exact path='/share/:sounds' render={props => {
-              const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
-              this.props.setSounds(sounds);
+            <Route exact path='/share/:sounds?' render={props => {
+              if (props.match.params.sounds !== undefined) {
+                const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
+                this.props.setSounds(sounds);
+              }
               return <Redirect to='/' />;
             }} />
           </Switch>
