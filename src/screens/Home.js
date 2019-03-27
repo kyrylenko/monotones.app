@@ -8,12 +8,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
-import soundIds from '../constants/soundIds';
-import share from '../assets/icons/share.svg';
-import SharePopover from '../components/SharePopover';
 import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
 import { aggregateSounds } from '../utils/Utils';
+import Share from '../components/Share';
 import Affix from '../components/Affix';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
@@ -27,8 +25,6 @@ class Home extends Component {
         this.state = {
             modal: false,
             timerModal: false,
-            popover: false,
-            shareUrl: window.location.origin,
         };
     }
 
@@ -58,28 +54,6 @@ class Home extends Component {
     toggleModal = () => this.setState({ modal: !this.state.modal });
     toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
 
-    togglePopover = () => this.setState({ popover: !this.state.popover });
-
-    share = () => {
-        const activeIds = Object.values(this.props.sounds).filter(x => x.isPlay).map(x => x.id);
-
-        if (activeIds.length > 0) {
-            const activeAbbrs = Object.entries(soundIds)
-                .filter(x => activeIds.some(s => s === x[1])).map(x => x[0]);
-
-            const parameter = activeAbbrs.reduce((acc, item) => acc += item);
-            this.setState({
-                shareUrl: `https://monotones.app/share/${parameter}`,
-                popover: true
-            });
-        } else {
-            this.setState({
-                shareUrl: `https://monotones.app`,
-                popover: true
-            });
-        }
-    };
-
     render() {
         //console.log('Home props ', this.props);
         const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
@@ -93,10 +67,7 @@ class Home extends Component {
                 {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <div className='share-div'>
-                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
-                </div>
-                <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
+                <Share reduxSounds={this.props.sounds} />
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
@@ -126,7 +97,7 @@ class Home extends Component {
                     stop={this.props.timerStop}
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
-                
+
                 {activeSounds.length > 0 && isMobile &&
                     <Affix className='fixed-bottom' offsetbottom={45}>
                         <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
