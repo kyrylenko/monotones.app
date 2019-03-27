@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
-import constants from './constants/defaultValues';
-import logo from './logo.png';
+import Header from './components/Header';
+import HeaderMobile from './components/HeaderMobile';
 import './App.css';
 
 class Layout extends Component {
 
   render() {
+    const header = this.props.isMobile ? <HeaderMobile reduxSounds={this.props.reduxSounds} /> : <Header reduxSounds={this.props.reduxSounds} />
     return (
       <div className='app'>
-        <header className='app-header'>
-          <Link to='/' title={constants.appName}>
-            <img src={logo} className='app-logo' alt={constants.appName} />
-          </Link>
-          <h1 className='app-title'>{constants.appName}</h1>
-        </header>
+        {header}
         {this.props.children}
         <div className='footer-logo-welcome'>
           <div className='container'>

@@ -12,6 +12,9 @@ import { aggregateSounds } from './utils/Utils';
 
 const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
+const Donate = lazy(() => import('./screens/Donate'));
+
+const isMobile = document.documentElement.clientWidth <= 768;
 
 class App extends Component {
 
@@ -45,13 +48,14 @@ class App extends Component {
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
 
     return (
-      <Layout>
-        {this.props.isCaching && <div className='white-text'>Getting things ready...</div>}
-        <Suspense fallback={<div className='white-text'>Loading...</div>}>
+      <Layout reduxSounds={this.props.sounds} isMobile={isMobile}>
+        {this.props.isCaching && <div>Getting things ready...</div>}
+        <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
+            <Route exact path='/donate' render={props => <Donate {...props} />} />
             <Route exact path='/share/:sounds?' render={props => {
               if (props.match.params.sounds !== undefined) {
                 const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);

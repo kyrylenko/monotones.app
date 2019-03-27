@@ -11,7 +11,6 @@ import { actionCreators as timerActions } from '../store/timerReducer';
 import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
 import { aggregateSounds } from '../utils/Utils';
-import Share from '../components/Share';
 import Affix from '../components/Affix';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
@@ -67,18 +66,17 @@ class Home extends Component {
                 {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <Share reduxSounds={this.props.sounds} />
                 <Container fluid className='mixtures-div d-none d-md-block'>
                     {activeSounds.length > 0 && <Row>
                         <Col lg={9} md={9} sm={9} xs={9}>
-                            <span className='white-text'>Playing now</span>
+                            <span>Playing now</span>
                         </Col>
                         <Col lg={3} md={3} sm={3} xs={3}></Col>
                     </Row>}
                     {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
                     {mixtures.length > 0 && <Row style={{ marginTop: '25px' }}>
                         <Col lg={9} md={9} sm={9} xs={9}>
-                            <span className='white-text'>My Mixtures</span>
+                            <span>My Mixtures</span>
                         </Col>
                         <Col lg={3} md={3} sm={3} xs={3}></Col>
                     </Row>}

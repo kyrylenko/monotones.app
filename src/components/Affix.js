@@ -23,7 +23,7 @@ class Affix extends Component {
     handleScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight - window.innerHeight - this.props.offsetbottom;
 
-        console.log('pageYOffset: ', window.pageYOffset, 'scrollHeight: ', scrollHeight);
+        //console.log('pageYOffset: ', window.pageYOffset, 'scrollHeight: ', scrollHeight);
 
         if (window.pageYOffset < scrollHeight) {
             if (!this.state.affix)

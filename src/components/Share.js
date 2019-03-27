@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SharePopover from './SharePopover';
-import share from '../assets/icons/share.svg';
 import soundIds from '../constants/soundIds';
 
 class Share extends Component {
@@ -35,8 +34,8 @@ class Share extends Component {
     render() {
         return (
             <>
-                <div className='share-div'>
-                    <img src={share} alt='Share' title='Share sounds' id='popover' onClick={this.share}></img>
+                <div className={this.props.className} title='Share sounds' id='popover' onClick={this.share} style={{cursor: 'pointer'}}>
+                    Share
                 </div>
                 <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
             </>
