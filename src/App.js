@@ -14,9 +14,24 @@ const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
 const Donate = lazy(() => import('./screens/Donate'));
 
-const isMobile = document.documentElement.clientWidth <= 768;
+const mediaQuery = window.matchMedia('(max-width: 768px)')
 
 class App extends Component {
+
+  state = {
+    isMobile: false
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.spaceHandler, false);
+    mediaQuery.addListener(this.mediaQueryHandler);
+    this.mediaQueryHandler(mediaQuery);
+  };
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.spaceHandler, false);
+    mediaQuery.removeListener(this.mediaQueryHandler);
+  };
 
   //Play / Pause on click space  
   spaceHandler = (event) => {
@@ -26,16 +41,9 @@ class App extends Component {
     }
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.spaceHandler, false);
-  };
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.spaceHandler, false);
-  };
+  mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
-
     const players = aggregateSounds(this.props.sounds)
       .map(x => <Player
         setSoundLoaded={this.props.setSoundLoaded}
@@ -48,7 +56,7 @@ class App extends Component {
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
 
     return (
-      <Layout reduxSounds={this.props.sounds} isMobile={isMobile}>
+      <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
         {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
