@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import PropTypes from 'prop-types'
 import SoundSlider from '../components/SoundSlider';
 
@@ -43,9 +43,9 @@ const RowsView = (props) => {
     }
 
     return (
-        <Container>
+        <main className='container'>
             {rows}
-        </Container>
+        </main>
     );
 
 }

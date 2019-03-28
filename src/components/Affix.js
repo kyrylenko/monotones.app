@@ -41,9 +41,9 @@ class Affix extends Component {
         const affix = this.state.affix ? className : '';
 
         return (
-            <div className={affix}>
+            <footer className={affix}>
                 {this.props.children}
-            </div>
+            </footer>
         );
     }
 }

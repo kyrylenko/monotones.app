@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+
+//TODO: donations using PayPal https://github.com/paypal/paypal-checkout-components
+//https://github.com/thinhvo0108/react-paypal-express-checkout
+// & BTC http://www.reactjstutorial.net/donate.html
 
 class Donate extends Component {
     render() {
         return (
-            <Container className="about-text">
+            <main className='container'>
                 <h2>Donate</h2>
-            </Container>
+            </main>
         );
     }
 };

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
 
 class Terms extends Component {
     render() {
         return (
-            <Container style={{ textAlign: 'left' }} className="about-text">
+            <main style={{ textAlign: 'left' }} className='container about-text'>
                 <h2 >Privacy Policy</h2>
                 <p>
                     Pavlo Kyrylenko built the Monotones app as a Freemium app. This SERVICE is provided by Pavlo Kyrylenko at no cost and is intended for use as is.
@@ -60,7 +59,7 @@ class Terms extends Component {
                 <p>
                     If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me.
                 </p>
-            </Container>
+            </main>
         );
     }
 };
