@@ -14,8 +14,6 @@ import { aggregateSounds } from '../utils/Utils';
 import Affix from '../components/Affix';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
-//Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-const isMobile = document.documentElement.clientWidth <= 768;
 
 class Home extends Component {
     constructor(props) {
@@ -96,7 +94,7 @@ class Home extends Component {
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
 
-                {activeSounds.length > 0 && isMobile &&
+                {activeSounds.length > 0 && this.props.isMobile &&
                     <Affix className='fixed-bottom' offsetbottom={45}>
                         <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
                     </Affix>

@@ -60,7 +60,7 @@ class App extends Component {
         {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <Route exact path='/' render={props => <Home {...props} isMobile={this.state.isMobile} />} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
             <Route exact path='/donate' render={props => <Donate {...props} />} />
