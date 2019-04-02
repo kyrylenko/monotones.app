@@ -2,7 +2,7 @@
   "short_name": "Monotones",
   "name": "Monotones",
   "description": "Monotones – sound equalizer for relaxing or productivity.",
-  "orientation": "portrait-primary",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "favicon.ico",
