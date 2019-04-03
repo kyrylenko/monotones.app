@@ -9,6 +9,6 @@ module.exports = {
   clientsClaim: true,
   navigateFallback: '/index.html',
   navigateFallbackBlacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
-  globIgnores: ["**/service-worker.js",
+  globIgnores: ["**/service-worker.js", "**/service-worker-custom.js",
     "**/precache-manifest*"]
 };
