@@ -2,6 +2,7 @@ import React, { Component, Suspense, lazy } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
+import Callback from './screens/Callback';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actionCreators as mainActions } from './store/mainReducer';
@@ -9,6 +10,7 @@ import { actionCreators as timerActions } from './store/timerReducer';
 import Player from './components/Player';
 import GlobalPlayPause from './components/GlobalPlayPause';
 import { aggregateSounds } from './utils/Utils';
+import Auth from './Auth';
 
 const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
@@ -18,9 +20,14 @@ const mediaQuery = window.matchMedia('(max-width: 768px)')
 
 class App extends Component {
 
-  state = {
-    isMobile: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMobile: false
+    };
+    this.auth = new Auth(this.props.history);
+  }
+
 
   componentDidMount() {
     document.addEventListener('keydown', this.spaceHandler, false);
@@ -44,6 +51,7 @@ class App extends Component {
   mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
+
     const players = aggregateSounds(this.props.sounds)
       .map(x => <Player
         setSoundLoaded={this.props.setSoundLoaded}
@@ -54,16 +62,17 @@ class App extends Component {
         volume={x.volume} />);
 
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
-
+    //callback
     return (
-      <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
+      <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile} auth={this.auth}>
         {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
-          <Switch>
-            <Route exact path='/' render={props => <Home {...props} isMobile={this.state.isMobile} />} />
-            <Route exact path='/about' render={props => <About {...props} />} />
-            <Route exact path='/terms' render={props => <Terms {...props} />} />
-            <Route exact path='/donate' render={props => <Donate {...props} />} />
+          <Switch>          
+            <Route exact path='/' render={props => <Home {...props} auth={this.auth} isMobile={this.state.isMobile} />} />
+            <Route exact path='/callback' render={props => <Callback {...props} auth={this.auth} />} />
+            <Route exact path='/about' render={props => <About {...props} auth={this.auth} />} />
+            <Route exact path='/terms' render={props => <Terms {...props} auth={this.auth} />} />
+            <Route exact path='/donate' render={props => <Donate {...props} auth={this.auth} />} />
             <Route exact path='/share/:sounds?' render={props => {
               if (props.match.params.sounds !== undefined) {
                 const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);

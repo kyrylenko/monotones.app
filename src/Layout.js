@@ -7,7 +7,7 @@ const Layout = (props) => {
 
   return (
     <div className='app'>
-      <Header reduxSounds={props.reduxSounds} isMobile={props.isMobile} />
+      <Header reduxSounds={props.reduxSounds} isMobile={props.isMobile} auth={props.auth} />
       {props.children}
       <footer className='container footer-logo-welcome'>
         <div className='row'>

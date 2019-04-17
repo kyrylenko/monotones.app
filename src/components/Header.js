@@ -6,6 +6,8 @@ import logo from '../logo.png';
 import PropTypes from 'prop-types'
 
 const HeaderWeb = (props) => {
+    const { login, logout, isAuthenticated } = props.auth;
+
     return (
         <header className='container-fluid'>
             <div className='row justify-content-end'>
@@ -16,8 +18,10 @@ const HeaderWeb = (props) => {
                     <h3>{constants.appName}</h3>
                 </div>
                 <div className='col-4 d-flex justify-content-end align-items-center app-title'>
-                    <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-5 px-4' />
-                    <NavLink to='/donate' className='top-bar-item px-lg-5 px-4' title='Buy us a cup of coffee :)'>Donate</NavLink>
+                    <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-4 px-3' />
+                    <NavLink to='/donate' className='top-bar-item px-lg-4 px-3' title='Buy us a cup of coffee :)'>Donate</NavLink>
+                    <div className='top-bar-item px-lg-4 px-3'
+                        onClick={isAuthenticated() ? logout : login} style={{ cursor: 'pointer' }}>{isAuthenticated() ? 'Log out' : 'Log in'}</div>
                 </div>
             </div>
         </header>
