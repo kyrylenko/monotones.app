@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col, Row } from 'reactstrap';
 import PropTypes from 'prop-types'
 import SoundSlider from '../components/SoundSlider';
 
@@ -13,9 +12,9 @@ const RowsView = (props) => {
         const sLeft = props.sounds[i];
         const sRight = props.sounds[j];
 
-        const row = <Row key={i} className='sounds-row'>
-            <Col lg={2} md={2} sm={2} className='d-none d-sm-block'></Col>
-            <Col lg={3} md={3} sm={4} xs={6} className='text-center'>
+        const row = <div key={i} className='sounds-row row'>
+            <div className='d-none d-sm-block col-sm-2 col-md-2 col-lg-2'></div>
+            <div className='text-center col-6 col-sm-4 col-md-3 col-lg-3'>
                 <SoundSlider
                     id={sLeft.id}
                     isGlobalPlay={props.isGlobalPlay}
@@ -24,9 +23,9 @@ const RowsView = (props) => {
                     volume={sLeft.volume}
                     title={sLeft.id}
                     playPauseVolume={props.playPauseVolume} />
-            </Col>
-            <Col lg={2} md={2} sm={2} className='d-none d-sm-none d-md-block'></Col>
-            <Col lg={3} md={3} sm={4} xs={6} className='text-center'>
+            </div>
+            <div className='d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2'></div>
+            <div className='text-center col-6 col-sm-4 col-md-3 col-lg-3'>
                 <SoundSlider
                     id={sRight.id}
                     isGlobalPlay={props.isGlobalPlay}
@@ -35,9 +34,9 @@ const RowsView = (props) => {
                     volume={sRight.volume}
                     title={sRight.id}
                     playPauseVolume={props.playPauseVolume} />
-            </Col>
-            <Col lg={2} md={2} sm={2} className='d-none d-sm-block'></Col>
-        </Row>;
+            </div>
+            <div className='d-none d-sm-block col-sm-2 col-md-2 col-lg-2'></div>
+        </div>;
 
         rows.push(row);
     }

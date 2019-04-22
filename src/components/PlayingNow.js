@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'reactstrap';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { StringUtils } from '../utils/StringUtils'
 import colors from '../constants/colors';
@@ -9,7 +8,6 @@ const utils = new StringUtils();
 export default class PlayingNow extends Component {
 
     render() {
-
         const sounds = this.props.activeSounds.map(x =>
             <div className='mixture-item' key={x.id}>
                 <img
@@ -23,16 +21,16 @@ export default class PlayingNow extends Component {
 
         return (
             <div className='container-fluid'>
-                <Row style={{ marginTop: '5px' }}>
-                    <Col style={{ overflow: 'hidden', backgroundColor: colors.themeActive }}>
+                <div style={{ marginTop: '5px' }} className='row'>
+                    <div style={{ overflow: 'hidden', backgroundColor: colors.themeActive }} className='col'>
                         <CSSTransitionGroup className='d-flex justify-content-center'
                             transitionName='mixanim'
                             transitionEnterTimeout={400}
                             transitionLeaveTimeout={400}>
                             {sounds}
                         </CSSTransitionGroup>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
 
         );

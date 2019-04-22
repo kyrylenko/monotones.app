@@ -1,5 +1,9 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Button from 'reactstrap/lib/Button';
+import Modal from 'reactstrap/lib/Modal';
+import ModalHeader from 'reactstrap/lib/ModalHeader';
+import ModalFooter from 'reactstrap/lib/ModalFooter';
+import ModalBody from 'reactstrap/lib/ModalBody';
 import { secToMin } from '../utils/Utils';
 
 export default class TimerModal extends React.Component {
@@ -24,9 +28,7 @@ export default class TimerModal extends React.Component {
         }
     };
 
-    scroll = (e) => {
-        //console.log(e.target.value)
-    };
+    scroll = (e) => { };
 
     render() {
         const { minutes, seconds } = secToMin(this.props.timerRun ? this.props.interval : this.state.interval);

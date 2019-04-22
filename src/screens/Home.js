@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
-import { Container, Row, Col } from 'reactstrap';
 import TimerControl from '../components/TimerControl';
 import { aggregateSounds } from '../utils/Utils';
 import Affix from '../components/Affix';
@@ -64,27 +63,27 @@ class Home extends Component {
                 {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <Container fluid className='mixtures-div d-none d-md-block'>
-                    {activeSounds.length > 0 && <Row>
-                        <Col lg={9} md={9} sm={9} xs={9}>
+                <div className='mixtures-div d-none d-md-block container-fluid'>
+                    {activeSounds.length > 0 && <div className='row'>
+                        <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
                             <span>Playing now</span>
-                        </Col>
-                        <Col lg={3} md={3} sm={3} xs={3}></Col>
-                    </Row>}
+                        </div>
+                        <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
+                    </div>}
                     {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
-                    {mixtures.length > 0 && <Row style={{ marginTop: '25px' }}>
-                        <Col lg={9} md={9} sm={9} xs={9}>
+                    {mixtures.length > 0 && <div style={{ marginTop: '25px' }} className='row'>
+                        <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
                             <span>My Mixtures</span>
-                        </Col>
-                        <Col lg={3} md={3} sm={3} xs={3}></Col>
-                    </Row>}
+                        </div>
+                        <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
+                    </div>}
                     <CSSTransitionGroup
                         transitionName='mixanim'
                         transitionEnterTimeout={400}
                         transitionLeaveTimeout={400}>
                         {mixtures}
                     </CSSTransitionGroup>
-                </Container>
+                </div>
                 <RowsView sounds={aggregateSounds(this.props.sounds)} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}

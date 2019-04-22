@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Popover, PopoverHeader, PopoverBody, Tooltip } from 'reactstrap';
+import Popover from 'reactstrap/lib/Popover';
+import PopoverHeader from 'reactstrap/lib/PopoverHeader';
+import PopoverBody from 'reactstrap/lib/PopoverBody';
+import Tooltip from 'reactstrap/lib/Tooltip';
 import {
     FacebookShareButton,
     GooglePlusShareButton,
