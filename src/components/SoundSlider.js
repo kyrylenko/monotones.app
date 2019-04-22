@@ -26,7 +26,7 @@ const SoundSlider = React.memo((props) => {
     }
 
     return (
-        <div>
+        <>
             <img alt={props.title} className='sound-icon'
                 src={!props.isLoaded && props.isPlay && props.isGlobalPlay
                     ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${props.id}.png`)}
@@ -46,7 +46,7 @@ const SoundSlider = React.memo((props) => {
                     marginTop: -11,
                 }}
                 style={{ visibility: props.isPlay ? 'visible' : 'hidden' }} />
-        </div>
+        </>
     );
 });
 
