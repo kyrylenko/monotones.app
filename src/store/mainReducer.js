@@ -1,4 +1,4 @@
-import soundIds from '../constants/soundIds';
+import { all } from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 
 export const GLOBAL_PLAY_PAUSE = 'GLOBAL_PLAY_PAUSE';
@@ -53,10 +53,10 @@ export const mainReducer = (state, action) => {
 
     if (action.type === SET_SOUNDS) {
         const sounds = action.sounds
-            .filter(x => x in soundIds)
+            .filter(x => x in all)
             .reduce((obj, x) => {
-                obj[soundIds[x]] = {
-                    id: soundIds[x],
+                obj[all[x]] = {
+                    id: all[x],
                     isPlay: true,
                     volume: defaultValues.defaultVolume
                 };

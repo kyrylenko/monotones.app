@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SharePopover from './SharePopover';
-import soundIds from '../constants/soundIds';
+import { all } from '../constants/soundIds';
 
 class Share extends Component {
 
@@ -15,7 +15,7 @@ class Share extends Component {
         const activeIds = Object.values(this.props.reduxSounds).filter(x => x.isPlay).map(x => x.id);
 
         if (activeIds.length > 0) {
-            const activeAbbrs = Object.entries(soundIds)
+            const activeAbbrs = Object.entries(all)
                 .filter(x => activeIds.some(s => s === x[1])).map(x => x[0]);
 
             const parameter = activeAbbrs.reduce((acc, item) => acc += item);
@@ -34,7 +34,7 @@ class Share extends Component {
     render() {
         return (
             <>
-                <div className={this.props.className} title='Share sounds' id='popover' onClick={this.share} style={{cursor: 'pointer'}}>
+                <div className={this.props.className} title='Share sounds' id='popover' onClick={this.share} style={{ cursor: 'pointer' }}>
                     Share
                 </div>
                 <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />

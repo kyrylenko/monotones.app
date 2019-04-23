@@ -1,6 +1,4 @@
-export default {    
-    /* Sound IDs */
-    //seawaves: 'seawaves',
+export const relax = {
     sy: 'summer_day',
     tm: 'thunderstorm',
     st: 'summer_night',
@@ -15,6 +13,8 @@ export default {
     ct: 'city_street',
     //paris_cafe: 'paris_cafe',
     //birds_in_park: 'birds_in_park',
+};
+export const sleep = {
     ws: 'wind_chimes',
     //REASON:incorreact clock phase because trimmed sound
     //clock: 'clock',
@@ -30,11 +30,16 @@ export default {
     pd: 'playground',
     wn: 'white_noise',
     pe: 'pink_noise',
-    
+
     sl: 'ship_hull',
     se: 'space_drone',
     sa: 'subway',
     ts: 'tropical_birds',
     tr: 'typewriter',
     kb: 'keyboard'
+};
+
+export const all = {
+    ...relax,
+    ...sleep
 };

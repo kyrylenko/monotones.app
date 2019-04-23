@@ -18,9 +18,7 @@ const mediaQuery = window.matchMedia('(max-width: 768px)')
 
 class App extends Component {
 
-  state = {
-    isMobile: false
-  };
+  state = { isMobile: false };
 
   componentDidMount() {
     document.addEventListener('keydown', this.spaceHandler, false);
@@ -44,10 +42,25 @@ class App extends Component {
   mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
-    const readySounds = aggregateSounds(this.props.sounds);
+    const { relaxSounds, sleepSounds } = aggregateSounds(this.props.sounds);
+    const allSounds = [...relaxSounds, ...sleepSounds];
+
+    let readySounds = [];
+    switch (this.props.location.pathname) {
+      case '/relax':
+        readySounds = relaxSounds;
+        break;
+      case '/sleep':
+        readySounds = sleepSounds;
+        break;
+      default:
+        readySounds = allSounds;
+        break;
+    }
+
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
 
-    const players = readySounds.map(x => <Player
+    const players = allSounds.map(x => <Player
       setSoundLoaded={this.props.setSoundLoaded}
       isGlobalPlay={this.props.isGlobalPlay || false}
       key={x.id}
@@ -55,15 +68,19 @@ class App extends Component {
       isPlay={x.isPlay}
       volume={x.volume} />);
 
+    const renderHome = props => <Home {...props}
+      isMobile={this.state.isMobile}
+      readySounds={readySounds}
+      activeSounds={activeSounds} />;
+
     return (
       <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
         {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
-            <Route exact path='/' render={props => <Home {...props}
-              isMobile={this.state.isMobile}
-              readySounds={readySounds}
-              activeSounds={activeSounds} />} />
+            <Route exact path='/' render={renderHome} />
+            <Route exact path='/relax' render={renderHome} />
+            <Route exact path='/sleep' render={renderHome} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
             <Route exact path='/donate' render={props => <Donate {...props} />} />

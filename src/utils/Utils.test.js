@@ -42,14 +42,16 @@ describe('aggregateSounds tests', () => {
     };
 
     it('aggregateSounds returns 28 sounds', () => {
-        const actual = aggregateSounds();
+        const { relaxSounds, sleepSounds } = aggregateSounds();
         //console.log(actual);
         
-        expect(actual.length).toEqual(28);
+        expect(relaxSounds.length + sleepSounds.length).toEqual(28);
     });
 
     it('isPlay depends on reduxSounds', () => {
-        const actual = aggregateSounds(reduxSounds);
+        const { relaxSounds, sleepSounds } = aggregateSounds(reduxSounds);
+        const actual = [...relaxSounds, ...sleepSounds];
+        
         const summerNight = actual.find(x => x.id === 'summer_night');
         const campfire = actual.find(x => x.id === 'campfire');
 

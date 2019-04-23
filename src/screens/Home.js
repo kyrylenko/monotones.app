@@ -10,6 +10,7 @@ import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
 import Affix from '../components/Affix';
+import Categories from '../components/Categories';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
@@ -84,6 +85,7 @@ class Home extends Component {
                         {mixtures}
                     </CSSTransitionGroup>
                 </div>
+                <Categories isMobile={this.props.isMobile} />
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}

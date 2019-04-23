@@ -1,4 +1,4 @@
-import soundIds from '../constants/soundIds';
+import { relax, sleep } from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 
 const n = (n) => n > 9 ? '' + n : '0' + n;
@@ -10,8 +10,8 @@ export const secToMin = (sec) => {
     return { minutes, seconds };
 };
 
-export const aggregateSounds = (reduxSounds = {}) => {
-    const aggregate = Object.values(soundIds).map(x => {
+const aggregate = (sounds, reduxSounds) => {
+    return Object.values(sounds).map(x => {
         const setting = reduxSounds[x];
         const hasSetting = setting !== undefined;
 
@@ -21,7 +21,12 @@ export const aggregateSounds = (reduxSounds = {}) => {
             volume: hasSetting ? setting.volume : defaultValues.defaultVolume,
             isLoaded: hasSetting ? setting.isLoaded : false,
         };
-    });
+    })
+};
 
-    return aggregate;
+export const aggregateSounds = (reduxSounds = {}) => {
+    const relaxSounds = aggregate(relax, reduxSounds);
+    const sleepSounds = aggregate(sleep, reduxSounds);
+
+    return { relaxSounds, sleepSounds };
 };
