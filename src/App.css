@@ -304,3 +304,17 @@ header .top-bar-item:hover {
   /* color: rgba(255,255,255, 1); */
   text-decoration: none;
 }
+/*CATEGORIES NAV*/
+.list-group-item {
+  color:#ffffff;
+  background-color: rgb(82, 186, 213);
+  border-color: #ffffff;
+}
+.list-group-item:hover {
+  color:#ffffff;
+  background-color: rgb(146, 221, 240);
+}
+.list-group-item.active {
+  background-color: rgb(146, 221, 240);
+  border-color: #ffffff;
+}
