@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
-import { aggregateSounds } from '../utils/Utils';
 import Affix from '../components/Affix';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
@@ -51,8 +50,9 @@ class Home extends Component {
     toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
 
     render() {
-        //console.log('Home props ', this.props);
-        const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
+        const activeSounds = this.props.activeSounds;
+        const hasActiveSounds = activeSounds.length > 0;
+        //TODO: extract mixtures stuff to a separate component
         const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
             delete={this.props.deleteMixture}
             deactivate={this.props.deactivateMixtures}
@@ -60,17 +60,17 @@ class Home extends Component {
 
         return (
             <>
-                {activeSounds.length > 0 && this.props.isGlobalPlay && <div className='timer-div'>
+                {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
                 <div className='mixtures-div d-none d-md-block container-fluid'>
-                    {activeSounds.length > 0 && <div className='row'>
+                    {hasActiveSounds && <div className='row'>
                         <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
                             <span>Playing now</span>
                         </div>
                         <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
                     </div>}
-                    {activeSounds.length > 0 && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
+                    {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
                     {mixtures.length > 0 && <div style={{ marginTop: '25px' }} className='row'>
                         <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
                             <span>My Mixtures</span>
@@ -84,7 +84,7 @@ class Home extends Component {
                         {mixtures}
                     </CSSTransitionGroup>
                 </div>
-                <RowsView sounds={aggregateSounds(this.props.sounds)} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
+                <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}
                     toggle={this.toggleTimerModal}
@@ -93,7 +93,7 @@ class Home extends Component {
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
 
-                {activeSounds.length > 0 && this.props.isMobile &&
+                {hasActiveSounds && this.props.isMobile &&
                     <Affix className='fixed-bottom' offsetbottom={45}>
                         <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
                     </Affix>

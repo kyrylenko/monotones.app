@@ -44,23 +44,26 @@ class App extends Component {
   mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
-    const players = aggregateSounds(this.props.sounds)
-      .map(x => <Player
-        setSoundLoaded={this.props.setSoundLoaded}
-        isGlobalPlay={this.props.isGlobalPlay || false}
-        key={x.id}
-        id={x.id}
-        isPlay={x.isPlay}
-        volume={x.volume} />);
-
+    const readySounds = aggregateSounds(this.props.sounds);
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
+
+    const players = readySounds.map(x => <Player
+      setSoundLoaded={this.props.setSoundLoaded}
+      isGlobalPlay={this.props.isGlobalPlay || false}
+      key={x.id}
+      id={x.id}
+      isPlay={x.isPlay}
+      volume={x.volume} />);
 
     return (
       <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
         {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
-            <Route exact path='/' render={props => <Home {...props} isMobile={this.state.isMobile} />} />
+            <Route exact path='/' render={props => <Home {...props}
+              isMobile={this.state.isMobile}
+              readySounds={readySounds}
+              activeSounds={activeSounds} />} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
             <Route exact path='/donate' render={props => <Donate {...props} />} />
