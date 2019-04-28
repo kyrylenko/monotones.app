@@ -5,8 +5,6 @@ import play from '../assets/icons/play.svg'
 
 const GlobalPlayPause = ({ isGlobPlay, playPause }) => {
 
-    const clickHandler = () => playPause(!isGlobPlay);
-
     return (
         <div className='play-div'>
             <CSSTransitionGroup
@@ -15,7 +13,7 @@ const GlobalPlayPause = ({ isGlobPlay, playPause }) => {
                 transitionAppearTimeout={1000}
                 transitionEnter={false}
                 transitionLeave={false}>
-                <img onClick={clickHandler}
+                <img onClick={() => playPause(!isGlobPlay)}
                     alt={isGlobPlay ? 'Pause' : 'Play'}
                     src={isGlobPlay ? pause : play}
                     style={{ opacity: isGlobPlay ? 1 : null }}

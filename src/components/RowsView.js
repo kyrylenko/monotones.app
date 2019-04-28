@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import SoundSlider from '../components/SoundSlider';
 
-const RowsView = (props) => {
+const RowsView = React.memo((props) => {
 
     const rows = [];
 
@@ -47,7 +47,7 @@ const RowsView = (props) => {
         </main>
     );
 
-}
+});
 
 RowsView.propTypes = {
     playPauseVolume: PropTypes.func.isRequired,
