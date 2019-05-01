@@ -42,10 +42,7 @@ class App extends Component {
   mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
-
-    console.log(this.props);
-    
-    const { relaxSounds, sleepSounds } = aggregateSounds(this.props.sounds);
+    const { relaxSounds, sleepSounds, focusSounds } = aggregateSounds(this.props.sounds);
     const allSounds = [...relaxSounds, ...sleepSounds];
 
     let readySounds = [];
@@ -56,11 +53,14 @@ class App extends Component {
       case '/sleep':
         readySounds = sleepSounds;
         break;
+      case '/focus':
+        readySounds = focusSounds;
+        break;
       default:
         readySounds = allSounds;
         break;
     }
-
+    
     const activeSounds = Object.values(this.props.sounds).filter(s => s.isPlay);
 
     const players = allSounds.map(x => <Player
@@ -83,6 +83,7 @@ class App extends Component {
             <Route exact path='/' render={renderHome} />
             <Route exact path='/relax' render={renderHome} />
             <Route exact path='/sleep' render={renderHome} />
+            <Route exact path='/focus' render={renderHome} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
             <Route exact path='/donate' render={props => <Donate {...props} />} />

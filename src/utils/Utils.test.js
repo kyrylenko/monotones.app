@@ -42,10 +42,10 @@ describe('aggregateSounds tests', () => {
     };
 
     it('aggregateSounds returns 28 sounds', () => {
-        const { relaxSounds, sleepSounds } = aggregateSounds();
+        const { relaxSounds, sleepSounds, focusSounds } = aggregateSounds();
         //console.log(actual);
         
-        expect(relaxSounds.length + sleepSounds.length).toEqual(28);
+        expect(relaxSounds.length + sleepSounds.length + focusSounds.length).toEqual(28);
     });
 
     it('isPlay depends on reduxSounds', () => {

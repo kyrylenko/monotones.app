@@ -8,6 +8,7 @@ const CategoriesWeb = (props) => {
             <NavLink exact to='/' title='All' className='list-group-item list-group-item-action' activeClassName='active'>All</NavLink>
             <NavLink exact to='/relax' title='Relax' className='list-group-item list-group-item-action' activeClassName='active'>Relax</NavLink>
             <NavLink exact to='/sleep' title='Sleep' className='list-group-item list-group-item-action' activeClassName='active'>Sleep</NavLink>
+            <NavLink exact to='/focus' title='Focus' className='list-group-item list-group-item-action' activeClassName='active'>Focus</NavLink>
         </div>
     );
 }
@@ -18,6 +19,7 @@ const CategoriesMobile = (props) => {
             <NavLink exact to='/' title='All' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>All</NavLink>
             <NavLink exact to='/relax' title='Relax' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Relax</NavLink>
             <NavLink exact to='/sleep' title='Sleep' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Sleep</NavLink>
+            <NavLink exact to='/focus' title='Focus' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Focus</NavLink>
         </div>
     );
 }

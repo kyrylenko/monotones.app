@@ -1,4 +1,4 @@
-import { relax, sleep } from '../constants/soundIds';
+import { relax, sleep, focus } from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
 
 const n = (n) => n > 9 ? '' + n : '0' + n;
@@ -27,6 +27,7 @@ const aggregate = (sounds, reduxSounds) => {
 export const aggregateSounds = (reduxSounds = {}) => {
     const relaxSounds = aggregate(relax, reduxSounds);
     const sleepSounds = aggregate(sleep, reduxSounds);
+    const focusSounds = aggregate(focus, reduxSounds);
 
-    return { relaxSounds, sleepSounds };
+    return { relaxSounds, sleepSounds, focusSounds };
 };
