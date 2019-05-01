@@ -1,7 +1,7 @@
 
   .breathing {
     animation-name:breathing;
-    animation-duration: 5s;
+    animation-duration: 4s;
     animation-delay: 0s;
     animation-iteration-count:infinite;
     animation-timing-function: ease-in-out;
@@ -10,6 +10,6 @@
   
   @keyframes breathing {
     from { transform: scale(1);}
-    to { transform: scale(1.2);}
+    to { transform: scale(1.25);}
   }
   
