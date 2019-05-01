@@ -1,7 +1,7 @@
 import React from 'react';
 
 const About = () => (
-    <main style={{ textAlign: 'left' }} className='container about-text'>
+    <div style={{ textAlign: 'left' }} className='container about-text'>
         <section>
             <h3>Your subtle companion.</h3>
             <p>Feeling that the noise of the big city is too much for you to bear? Just turn on the sound and allow yourself to become engulfed in the tranquil sounds of nature. Whether you wish to feel as if you’re sitting near a fireplace under a cozy blanket, or that you’re meditating on a desolate sea shore as gusts of wind ruffle your hair, Monotones will be there to set the mood. With this ambient sound equalizer, not only will you be able to relax, but you will also increase your productivity, as you’re trying to concentrate on your work!</p>
@@ -28,7 +28,7 @@ const About = () => (
             <p>We appreciate respect, as this is what we feel towards our users. That is why we decided not to ever distract aesthetics of sound and image with any kind of advertisement or anything else, what may cause anxiousness and frustration.</p>
             <p>We believe in creativity as we are visionaries. This is why we not only collected the best sounds and tested them, but created a beautiful visual world, which brings a feeling of calmness and gives a perception of harmony.</p>
         </section>
-    </main>
+    </div>
 );
 
 export default About;

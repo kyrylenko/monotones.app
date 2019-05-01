@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Terms = () => (
-    <main style={{ textAlign: 'left' }} className='container about-text'>
+    <div style={{ textAlign: 'left' }} className='container about-text'>
         <section>
             <h3 >Privacy Policy</h3>
             <p>
@@ -78,7 +78,7 @@ const Terms = () => (
                 If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me.
         </p>
         </section>
-    </main>
+    </div>
 );
 
 export default Terms;

@@ -42,9 +42,9 @@ const RowsView = React.memo((props) => {
     }
 
     return (
-        <main className='container'>
+        <div className='container'>
             {rows}
-        </main>
+        </div>
     );
 
 });

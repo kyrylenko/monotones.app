@@ -5,7 +5,7 @@ import React from 'react';
 // & BTC http://www.reactjstutorial.net/donate.html
 
 const Donate = () => (
-    <main className='container'>
+    <div className='container'>
         <h3>Donate</h3>
         <section>
             <h5>PayPal</h5>
@@ -25,7 +25,7 @@ const Donate = () => (
                 <input type="image" src="https://bitpay.com/cdn/en_US/bp-btn-pay-currencies.svg" name="submit" style={{ width: '210px' }} alt="BitPay, the easy way to pay with bitcoins." ></input>
             </form>
         </section>
-    </main>
+    </div>
 );
 
 export default Donate;

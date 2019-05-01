@@ -1,19 +1,12 @@
-.app {
-  text-align: center;  
-}
-
 .spin-logo {
   animation: app-logo-spin infinite 20s linear;
 }
-
 .app-logo {
   height: 80px;
 }
-
 .app-title {
   font-size: 1.5em;
 }
-
 .App-intro {
   font-size: large;
 }
@@ -29,7 +22,6 @@
   height: 90px;
   cursor: pointer;
 
-
   -webkit-transition: opacity 0.1s ease-in-out;
   -moz-transition: opacity 0.1s ease-in-out;
   -ms-transition: opacity 0.1s ease-in-out;
@@ -38,7 +30,7 @@
   opacity: 0.5;  
 }
 
-.sounds-row{
+.sounds-row {
 margin-top: 40px;
 height: 180 px;
 }
@@ -46,14 +38,12 @@ height: 180 px;
 .sound-icon:hover {
   opacity: 0.8;
 }
-
 div.timer-div {
   position: fixed;
   top: 54px;
   left: 150px;
   z-index: 1029;
 }
-
 div.share-div {
   position: fixed;
   top: 54px;
@@ -203,16 +193,6 @@ div.mixtures-div {
 
 
 /* FOOTER LOGO WELCOME */
-.footer-logo-welcome{
-  /* background-color: rgb(138,220,179); */
-  width: 100%;
-/*   -webkit-box-shadow: 0px -2px 0px 0px rgba(29, 29, 27, 0.05);
-  -moz-box-shadow:    0px -2px 0px 0px rgba(29, 29, 27, 0.05);
-  box-shadow:         0px -2px 0px 0px rgba(29, 29, 27, 0.05); */
-  z-index: 1000;
-  height: 45px;
-}
-
 .footer-logo {
   /*text-align: left;*/
   height: 80px;
