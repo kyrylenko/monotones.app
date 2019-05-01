@@ -1,0 +1,15 @@
+
+  .breathing {
+    animation-name:breathing;
+    animation-duration: 5s;
+    animation-delay: 0s;
+    animation-iteration-count:infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
+  }
+  
+  @keyframes breathing {
+    from { transform: scale(1);}
+    to { transform: scale(1.2);}
+  }
+  

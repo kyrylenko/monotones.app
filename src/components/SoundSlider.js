@@ -7,7 +7,7 @@ import { StringUtils } from '../utils/StringUtils'
 const utils = new StringUtils();
 
 const SoundSlider = React.memo((props) => {
-    
+
     const onSliderChange = (volume) => {
         props.playPauseVolume({
             id: props.id,
@@ -27,7 +27,7 @@ const SoundSlider = React.memo((props) => {
 
     return (
         <>
-            <img alt={props.title} className='sound-icon'
+            <img alt={props.title} className={`sound-icon${props.isPlay && props.isGlobalPlay ? ' breathing' : ''}`}
                 src={!props.isLoaded && props.isPlay && props.isGlobalPlay
                     ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${props.id}.png`)}
                 title={utils.idToTitle(props.title)}
