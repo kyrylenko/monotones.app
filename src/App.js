@@ -43,7 +43,7 @@ class App extends Component {
 
   render() {
     const { relaxSounds, sleepSounds, focusSounds } = aggregateSounds(this.props.sounds);
-    const allSounds = [...relaxSounds, ...sleepSounds];
+    const allSounds = [...relaxSounds, ...sleepSounds, ...focusSounds];
 
     let readySounds = [];
     switch (this.props.location.pathname) {
