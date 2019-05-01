@@ -39,7 +39,7 @@ const SoundSlider = React.memo((props) => {
                 step={0.01}
                 onChange={onSliderChange}
                 value={props.volume}
-                trackStyle={{ backgroundColor: '#fff' }}
+                //trackStyle={{ backgroundColor: '#fff' }}
                 handleStyle={{
                     height: 24,
                     width: 24,

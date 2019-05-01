@@ -1,12 +1,11 @@
 import React from 'react';
-import colors from '../constants/colors';
 import trash from '../assets/icons/trash.svg';
 
 const Mixture = (props) => {
     return (
         <div style={{ marginTop: '5px' }} className='mixture-row row'>
-            <div className='mixture-block mixture-block-selectable flex-container mixture-action-btn col-9 col-sm-9 col-md-9 col-lg-9'
-                style={{ minHeight: '42px', justifyContent: 'center', backgroundColor: props.isActive ? colors.themeActive : colors.theme }}
+            <div className={`mixture-block mixture-block-selectable flex-container mixture-action-btn col-9 col-sm-9 col-md-9 col-lg-9 ${props.isActive ? 'active' : ''}`}
+                style={{ minHeight: '42px', justifyContent: 'center' }}
                 title={props.isActive ? 'Pause mixture' : 'Play mixture'}
                 onClick={props.isActive ? () => props.deactivate() : () => props.switch(props.id)}>
                 <span>{props.title}</span>

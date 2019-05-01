@@ -1,5 +1,5 @@
 
 export default {
-    theme: 'rgb(82, 186, 213)',
+    theme: 'white',
     themeActive:'rgb(146, 221, 240)',
   };

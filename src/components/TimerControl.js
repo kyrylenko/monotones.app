@@ -1,6 +1,6 @@
 
 import React from 'react';
-import timer from '../assets/icons/timer.svg';
+import timer from '../assets/icons/timer.png';
 import { secToMin } from '../utils/Utils';
 
 const TimerControl = (props) => {

@@ -76,7 +76,7 @@ div.play-div {
 .play-div img {
   width: 75px;
   cursor: pointer;
-  background-color: rgb(82, 186, 213);
+  background-color: #ffffff;
   border-radius: 50%;
 }
 
@@ -160,13 +160,18 @@ div.mixtures-div {
 
 .mixture-block{
   /* text-align: left; */
-  border: 1px solid #ffffff !important;
+  border: 1px solid rgb(146, 221, 240) !important;
   border-radius: 6px;  
   /* padding: 5px; */ 
+}
+.mixture-block-selectable.active {
+  background-color: rgb(146, 221, 240);
+  color:#ffffff;
 }
 
 .mixture-block-selectable:hover {
   background-color: rgb(146, 221, 240);
+  color:#ffffff;
 }
 
 .flex-container {  
@@ -247,7 +252,7 @@ div.mixtures-div {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
-  color: rgba(255,255,255, 0.5);
+  color: rgba(41, 6, 236, 0.5);  
   text-decoration: none;
 }
 
@@ -255,7 +260,7 @@ div.mixtures-div {
   font-size: 13px;
   font-weight: 500;
   text-transform: uppercase;
-  color: rgba(255,255,255, 1);
+  color: rgb(146, 221, 240);
   text-decoration: none;
 }
 
@@ -306,9 +311,7 @@ header .top-bar-item:hover {
 }
 /*CATEGORIES NAV*/
 .list-group-item {
-  color:#ffffff;
-  background-color: rgb(82, 186, 213);
-  border-color: #ffffff;
+  border-color: rgb(146, 221, 240);
 }
 .list-group-item:hover {
   color:#ffffff;
@@ -316,5 +319,5 @@ header .top-bar-item:hover {
 }
 .list-group-item.active {
   background-color: rgb(146, 221, 240);
-  border-color: #ffffff;
+  border-color: rgb(146, 221, 240);
 }
