@@ -42,6 +42,9 @@ class App extends Component {
   mediaQueryHandler = (x) => this.setState({ isMobile: x.matches });
 
   render() {
+
+    console.log(this.props);
+    
     const { relaxSounds, sleepSounds } = aggregateSounds(this.props.sounds);
     const allSounds = [...relaxSounds, ...sleepSounds];
 
@@ -75,7 +78,6 @@ class App extends Component {
 
     return (
       <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
-        {this.props.isCaching && <div>Getting things ready...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path='/' render={renderHome} />
@@ -114,6 +116,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withRouter(connect(
-  state => ({ ...state.main, ...state.loading }),
+  //state => ({ ...state.main, ...state.loading }),
+  state => state.main,
   mapDispatchToProps
 )(App));
