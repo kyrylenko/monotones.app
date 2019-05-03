@@ -1,10 +1,8 @@
 import React from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { StringUtils } from '../utils/StringUtils'
+import utils from '../utils/StringUtils';
 //import loading from '../assets/icons/loading.gif'
-
-const utils = new StringUtils();
 
 const SoundSlider = React.memo((props) => {
 
@@ -25,7 +23,7 @@ const SoundSlider = React.memo((props) => {
         })
     }
 
-    return (
+    return (        
         <>
             <img alt={props.title} className={`sound-icon${props.isPlay && props.isGlobalPlay ? ' breathing' : ''}`}
                 src={!props.isLoaded && props.isPlay && props.isGlobalPlay

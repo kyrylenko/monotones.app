@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
-import save from '../assets/icons/save.svg'
-import { StringUtils } from '../utils/StringUtils'
-
-const utils = new StringUtils();
+import save from '../assets/icons/save.svg';
+import utils from '../utils/StringUtils';
 
 export default class MixtureFuture extends Component {
 
     render() {
-
         const sounds = this.props.activeSounds.map(x =>
             <div className='mixture-item' key={x.id}>
                 <img

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { StringUtils } from '../utils/StringUtils'
+import utils from '../utils/StringUtils';
 import colors from '../constants/colors';
-
-const utils = new StringUtils();
 
 export default class PlayingNow extends Component {
 
-    render() {
+    render() {                
         const sounds = this.props.activeSounds.map(x =>
             <div className='mixture-item' key={x.id}>
                 <img
