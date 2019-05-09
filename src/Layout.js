@@ -15,7 +15,7 @@ const Layout = (props) => {
       </main>
       <footer className='footer mt-auto'>
         <div className='container-fluid'>
-          <div className='row pb-2 pb-md-5'>
+          <div className='row py-3 py-md-5'>
             <nav className='col-lg-12 col-md-12 col-sm-12 col-xs-12 footer-menu'>
               <ul style={{ marginBottom: 0 }} className='px-0'>
                 <li><Link to='/about' >About</Link> </li>

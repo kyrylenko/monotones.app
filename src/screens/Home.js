@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
-import Affix from '../components/Affix';
 import Categories from '../components/Categories';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
@@ -96,9 +95,9 @@ class Home extends Component {
                     interval={this.props.interval} />
 
                 {hasActiveSounds && this.props.isMobile &&
-                    <Affix className='fixed-bottom' offsetbottom={45}>
+                    <div className='fixed-bottom'>
                         <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
-                    </Affix>
+                    </div>
                 }
             </>
         );
