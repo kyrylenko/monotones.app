@@ -1,3 +1,7 @@
+/* COLORS */
+:root {
+  --blue :#A3D9F0;
+}
 .spin-logo {
   animation: app-logo-spin infinite 20s linear;
 }
@@ -152,17 +156,17 @@ div.mixtures-div {
 
 .mixture-block{
   /* text-align: left; */
-  border: 1px solid rgb(146, 221, 240) !important;
+  border: 1px solid var(--blue) !important;
   border-radius: 6px;  
   /* padding: 5px; */ 
 }
 .mixture-block-selectable.active {
-  background-color: rgb(146, 221, 240);
+  background-color: var(--blue);
   color:#ffffff;
 }
 
 .mixture-block-selectable:hover {
-  background-color: rgb(146, 221, 240);
+  background-color: var(--blue);
   color:#ffffff;
 }
 
@@ -298,15 +302,15 @@ header .top-bar-item:hover {
 }
 /*CATEGORIES NAV*/
 .list-group-item {
-  border-color: rgb(146, 221, 240);
+  border-color: var(--blue);
 }
 .list-group-item:hover {
   color:#ffffff;
-  background-color: rgb(146, 221, 240);
+  background-color: var(--blue);
 }
 .list-group-item.active {
-  background-color: rgb(146, 221, 240);
-  border-color: rgb(146, 221, 240);
+  background-color: var(--blue);
+  border-color: var(--blue);
 }
 /* SCROLLBAR */
 /* width */
