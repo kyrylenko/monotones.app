@@ -12,8 +12,7 @@ const RowsView = React.memo((props) => {
         const sLeft = props.sounds[i];
         const sRight = props.sounds[j];
 
-        const row = <div key={i} className='sounds-row row'>
-            <div className='d-none d-sm-block col-sm-2 col-md-2 col-lg-2'></div>
+        const row = <div key={sLeft.id} className='sounds-row row justify-content-center'>          
             <div className='text-center col-6 col-sm-4 col-md-3 col-lg-3'>
                 <SoundSlider
                     id={sLeft.id}
@@ -34,8 +33,7 @@ const RowsView = React.memo((props) => {
                     volume={sRight.volume}
                     title={sRight.id}
                     playPauseVolume={props.playPauseVolume} />
-            </div>
-            <div className='d-none d-sm-block col-sm-2 col-md-2 col-lg-2'></div>
+            </div>         
         </div>;
 
         rows.push(row);

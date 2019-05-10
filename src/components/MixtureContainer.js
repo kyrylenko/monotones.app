@@ -17,7 +17,6 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
     return <div className='mixtures-div container-fluid'>
         {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={props.pauseSound} saveClick={toggleModal} />}
         {mixtures.length > 0 && <div style={{ marginTop: '25px' }} className='row'>
-
             <div className='col-md-3 ml-md-auto'>
                 <div className='pb-2 caption'>My Mixtures</div>
                 <div className='list-group'>
@@ -26,7 +25,6 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
             </div>
 
         </div>}
-
     </div>
 };
 

@@ -145,7 +145,6 @@ div.play-div {
 div.mixtures-div {
   position: fixed;
   text-align: start;
-  z-index: 1029;
 }
 .mixtures-div .list-group-item {
   cursor: pointer;
