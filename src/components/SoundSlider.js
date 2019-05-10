@@ -23,7 +23,9 @@ const SoundSlider = React.memo((props) => {
         })
     }
 
-    return (        
+    //TODO: add shouldComponentUpdate and do not rerender if isGlobalPlay changed while isPlay is false
+
+    return (
         <>
             <img alt={props.title} className={`sound-icon${props.isPlay && props.isGlobalPlay ? ' breathing' : ''}`}
                 src={!props.isLoaded && props.isPlay && props.isGlobalPlay
