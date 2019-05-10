@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Web-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Landing-Page_Relax" transform="translate(-1436.000000, -388.000000)" fill="#FFFFFF">
+            <g id="Group-3" transform="translate(1436.000000, 388.000000)">
+                <path d="M8,-1.6 L8,-1.6 C8.8836556,-1.6 9.6,-0.8836556 9.6,3.01980663e-13 L9.6,16 C9.6,16.8836556 8.8836556,17.6 8,17.6 L8,17.6 C7.1163444,17.6 6.4,16.8836556 6.4,16 L6.4,3.02646797e-13 C6.4,-0.8836556 7.1163444,-1.6 8,-1.6 Z" id="Rectangle" transform="translate(8.000000, 8.000000) rotate(45.000000) translate(-8.000000, -8.000000) "></path>
+                <path d="M8,-1.6 L8,-1.6 C8.8836556,-1.6 9.6,-0.8836556 9.6,1.687539e-13 L9.6,16 C9.6,16.8836556 8.8836556,17.6 8,17.6 L8,17.6 C7.1163444,17.6 6.4,16.8836556 6.4,16 L6.4,1.69420034e-13 C6.4,-0.8836556 7.1163444,-1.6 8,-1.6 Z" id="Rectangle" transform="translate(8.000000, 8.000000) scale(-1, 1) rotate(45.000000) translate(-8.000000, -8.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -71,8 +71,6 @@ div.play-div {
 .play-div img {
   width: 75px;
   cursor: pointer;
-  background-color: #ffffff;
-  border-radius: 50%;
 }
 
 .timer-circle {
