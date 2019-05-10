@@ -24,8 +24,7 @@ export const actionCreators = {
     pauseSound: (id) => ({ type: PAUSE_SOUND, id }),
     setSounds: (sounds) => ({ type: SET_SOUNDS, sounds }),
     setSoundLoaded: (id) => ({ type: SET_SOUND_LOADED, id }),
-};
-export const mixtureActionCreators = {
+
     addMixture: (title) => ({ type: ADD, title }),
     deleteMixture: (id) => ({ type: DEL, id }),
     switchMixture: (id) => ({ type: SWITCH, id }),

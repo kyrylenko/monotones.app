@@ -1,10 +1,10 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { CSSTransitionGroup } from 'react-transition-group';
 import MixtureFuture from './MixtureFuture';
 import Mixture from './Mixture';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { mixtureActionCreators as actionCreators } from '../store/mainReducer';
+import { actionCreators } from '../store/mainReducer';
 
 const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
 

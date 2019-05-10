@@ -4,7 +4,6 @@ import PlayingNow from '../components/PlayingNow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
-import { mixtureActionCreators } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
 import Categories from '../components/Categories';
@@ -84,6 +83,5 @@ export default connect(
     dispatch => bindActionCreators({
         ...mainActions,
         ...timerActions,
-        addMixture: mixtureActionCreators.addMixture,
     }, dispatch)
 )(Home);
