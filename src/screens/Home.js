@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import RowsView from '../components/RowsView';
 import PlayingNow from '../components/PlayingNow';
-import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
+import { mixtureActionCreators } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
 import Categories from '../components/Categories';
@@ -50,19 +50,14 @@ class Home extends Component {
 
     render() {
         const hasActiveSounds = this.props.activeSounds.length > 0;
-        const mixtures = (this.props.mixtures || []).map(({ id, isActive }) => <Mixture title={id} id={id} key={id} isActive={isActive}
-            delete={this.props.deleteMixture}
-            deactivate={this.props.deactivateMixtures}
-            switch={this.props.switchMixture} />)
 
         return (
             <>
                 {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <MixtureContainer mixtures={mixtures}
+                <MixtureContainer
                     activeSounds={this.props.activeSounds}
-                    pauseSound={this.props.pauseSound}
                     toggleModal={this.toggleModal}
                 />
                 <Categories isMobile={this.props.isMobile} />
@@ -74,7 +69,6 @@ class Home extends Component {
                     stop={this.props.timerStop}
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
-
                 {hasActiveSounds && this.props.isMobile &&
                     <div className='fixed-bottom'>
                         <PlayingNow activeSounds={this.props.activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
@@ -87,5 +81,9 @@ class Home extends Component {
 
 export default connect(
     state => ({ ...state.main, ...state.timer }),
-    dispatch => bindActionCreators({ ...mainActions, ...timerActions }, dispatch)
+    dispatch => bindActionCreators({
+        ...mainActions,
+        ...timerActions,
+        addMixture: mixtureActionCreators.addMixture,
+    }, dispatch)
 )(Home);
