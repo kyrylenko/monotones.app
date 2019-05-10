@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import RowsView from '../components/RowsView';
-import { CSSTransitionGroup } from 'react-transition-group';
-import MixtureFuture from '../components/MixtureFuture';
 import PlayingNow from '../components/PlayingNow';
 import Mixture from '../components/Mixture';
 import { bindActionCreators } from 'redux';
@@ -10,6 +8,7 @@ import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
 import Categories from '../components/Categories';
+import MixtureContainer from '../components/MixtureContainer';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
@@ -50,10 +49,8 @@ class Home extends Component {
     toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
 
     render() {
-        const activeSounds = this.props.activeSounds;
-        const hasActiveSounds = activeSounds.length > 0;
-        //TODO: extract mixtures stuff to a separate component
-        const mixtures = (this.props.mixtures || []).map(x => <Mixture title={x.id} id={x.id} key={x.id} isActive={x.isActive}
+        const hasActiveSounds = this.props.activeSounds.length > 0;
+        const mixtures = (this.props.mixtures || []).map(({ id, isActive }) => <Mixture title={id} id={id} key={id} isActive={isActive}
             delete={this.props.deleteMixture}
             deactivate={this.props.deactivateMixtures}
             switch={this.props.switchMixture} />)
@@ -63,27 +60,11 @@ class Home extends Component {
                 {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <div className='mixtures-div d-none d-md-block container-fluid'>
-                    {hasActiveSounds && <div className='row'>
-                        <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
-                            <span>Playing now</span>
-                        </div>
-                        <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
-                    </div>}
-                    {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />}
-                    {mixtures.length > 0 && <div style={{ marginTop: '25px' }} className='row'>
-                        <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
-                            <span>My Mixtures</span>
-                        </div>
-                        <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
-                    </div>}
-                    <CSSTransitionGroup
-                        transitionName='mixanim'
-                        transitionEnterTimeout={400}
-                        transitionLeaveTimeout={400}>
-                        {mixtures}
-                    </CSSTransitionGroup>
-                </div>
+                <MixtureContainer mixtures={mixtures}
+                    activeSounds={this.props.activeSounds}
+                    pauseSound={this.props.pauseSound}
+                    toggleModal={this.toggleModal}
+                />
                 <Categories isMobile={this.props.isMobile} />
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
@@ -96,7 +77,7 @@ class Home extends Component {
 
                 {hasActiveSounds && this.props.isMobile &&
                     <div className='fixed-bottom'>
-                        <PlayingNow activeSounds={activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
+                        <PlayingNow activeSounds={this.props.activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
                     </div>
                 }
             </>
