@@ -13,7 +13,7 @@ const HeaderWeb = (props) => {
                     <Link to='/' title={constants.appName}>
                         <img src={logo} className='app-logo' alt={constants.appName} />
                     </Link>
-                    <h3>{constants.appName}</h3>
+                    <h5>{constants.appName}</h5>
                 </div>
                 <div className='col-4 d-flex justify-content-end align-items-center app-title'>
                     <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-5 px-4' />
