@@ -20,10 +20,14 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
             <div className='col-md-3 ml-md-auto'>
                 <div className='pb-2 caption'>My Mixtures</div>
                 <div className='list-group'>
-                    {mixtures}
+                    <CSSTransitionGroup
+                        transitionName='mixanim'
+                        transitionEnterTimeout={400}
+                        transitionLeaveTimeout={400}>
+                        {mixtures}
+                    </CSSTransitionGroup>
                 </div>
             </div>
-
         </div>}
     </div>
 };
