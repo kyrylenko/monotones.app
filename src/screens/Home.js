@@ -12,14 +12,10 @@ const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
 class Home extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            modal: false,
-            timerModal: false,
-        };
-    }
+    state = {
+        modal: false,
+        timerModal: false,
+    };
 
     componentDidMount() {
         this.setupTimer();
@@ -68,11 +64,9 @@ class Home extends Component {
                     stop={this.props.timerStop}
                     timerRun={this.props.timerRun}
                     interval={this.props.interval} />
-                {hasActiveSounds && this.props.isMobile &&
-                    <div className='fixed-bottom'>
-                        <PlayingNow activeSounds={this.props.activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
-                    </div>
-                }
+                {hasActiveSounds && this.props.isMobile && <div className='fixed-bottom'>
+                    <PlayingNow activeSounds={this.props.activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
+                </div>}
             </>
         );
     };
@@ -81,7 +75,7 @@ class Home extends Component {
 export default connect(
     state => ({ ...state.main, ...state.timer }),
     dispatch => bindActionCreators({
-        ...mainActions,
+        ...mainActions,//TODO: do not connect redundant action creators
         ...timerActions,
     }, dispatch)
 )(Home);
