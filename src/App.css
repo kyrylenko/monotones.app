@@ -144,19 +144,18 @@ div.play-div {
 /* MIXTURES */
 div.mixtures-div {
   position: fixed;
-  top: 150px;
-  right: 45px;
-  width: 250px;
-  height: 500px;
+  text-align: start;
   z-index: 1029;
-  /* background-color: gray; */
 }
-
-.mixture-block{
-  /* text-align: left; */
+.mixtures-div .list-group-item {
+  cursor: pointer;
+}
+.mixtures-div .caption {
+  font-size: 1.3em;
+}
+.mixture-block {
   border: 1px solid var(--blue) !important;
   border-radius: 6px;  
-  /* padding: 5px; */ 
 }
 .mixture-block-selectable.active {
   background-color: var(--blue);

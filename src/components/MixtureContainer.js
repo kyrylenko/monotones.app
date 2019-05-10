@@ -15,25 +15,18 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
         switch={props.switchMixture} />)
 
     return <div className='mixtures-div container-fluid'>
-        {hasActiveSounds && <div className='row'>
-            <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
-                <span>Playing now</span>
-            </div>
-            <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
-        </div>}
         {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={props.pauseSound} saveClick={toggleModal} />}
         {mixtures.length > 0 && <div style={{ marginTop: '25px' }} className='row'>
-            <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
-                <span>My Mixtures</span>
+
+            <div className='col-md-3 ml-md-auto'>
+                <div className='pb-2 caption'>My Mixtures</div>
+                <div className='list-group'>
+                    {mixtures}
+                </div>
             </div>
-            <div className='col-3 col-sm-3 col-md-3 col-lg-3'></div>
+
         </div>}
-        <CSSTransitionGroup
-            transitionName='mixanim'
-            transitionEnterTimeout={400}
-            transitionLeaveTimeout={400}>
-            {mixtures}
-        </CSSTransitionGroup>
+
     </div>
 };
 
