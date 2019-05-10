@@ -145,7 +145,7 @@ div.play-div {
 div.mixtures-div {
   position: fixed;
   top: 150px;
-  left: 45px;
+  right: 45px;
   width: 250px;
   height: 500px;
   z-index: 1029;

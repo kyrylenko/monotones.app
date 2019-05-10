@@ -51,10 +51,7 @@ class Home extends Component {
                 {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                <MixtureContainer
-                    activeSounds={this.props.activeSounds}
-                    toggleModal={this.toggleModal}
-                />
+                {!this.props.isMobile && <MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
                 <Categories isMobile={this.props.isMobile} />
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />

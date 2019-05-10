@@ -14,7 +14,7 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
         deactivate={props.deactivateMixtures}
         switch={props.switchMixture} />)
 
-    return <div className='mixtures-div d-none d-md-block container-fluid'>
+    return <div className='mixtures-div container-fluid'>
         {hasActiveSounds && <div className='row'>
             <div className='col-9 col-sm-9 col-md-9 col-lg-9'>
                 <span>Playing now</span>
