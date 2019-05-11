@@ -1,23 +1,13 @@
 /* COLORS */
 :root {
   --blue :#A3D9F0;
-}
-.spin-logo {
-  animation: app-logo-spin infinite 20s linear;
+  --violet: #6E497E;
 }
 .app-logo {
   height: 7rem;
 }
 .app-title {
-  font-size: 1.5em;
-}
-.App-intro {
-  font-size: large;
-}
-
-@keyframes app-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  font-size: 1.3rem;
 }
 /* SOUNDS */
 .sound-icon {
@@ -202,7 +192,7 @@ div.play-div {
 }
 
 .footer-logo a {
-  text-decoration:none;
+  text-decoration: none;
   color: rgba(255,255,255,0.5);
 }
 
@@ -224,7 +214,7 @@ div.play-div {
 .footer-menu a {
   font-size: 1.3em;
   font-weight: 500;
-  text-transform: uppercase;
+ /*  text-transform: uppercase; */
   color: inherit; 
   text-decoration: none;
 }
@@ -232,8 +222,8 @@ div.play-div {
 .footer-menu a:hover {
   font-size: 1.3em;
   font-weight: 500;
-  text-transform: uppercase;
-  color: rgba(41, 6, 236, 0.5);
+  /* text-transform: uppercase; */
+  color: var(--violet);
   text-decoration: none;
 }
 
@@ -277,16 +267,12 @@ div.play-div {
 
 header .top-bar-item {
     font-weight: 500;
-    text-transform: uppercase;
-    /* color: rgba(255,255,255, 0.5); 
-    color: rgba(255,255,255, 1);*/
-    text-decoration: none;
+    color: inherit;
 }
 
 header .top-bar-item:hover {
   font-weight: 500;
-  text-transform: uppercase;
-  /* color: rgba(255,255,255, 1); */
+  color: var(--violet);
   text-decoration: none;
 }
 /*CATEGORIES NAV*/
