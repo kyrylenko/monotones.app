@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import { actionCreators as mainActions } from '../store/mainReducer';
 import { actionCreators as timerActions } from '../store/timerReducer';
 import TimerControl from '../components/TimerControl';
-import Categories from '../components/Categories';
+import { CategoriesMobile, CategoriesWeb } from '../components/Categories';
 import MixtureContainer from '../components/MixtureContainer';
+import FixedControlsContainer from '../components/FixedControlsContainer';
 const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
 const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
@@ -51,8 +52,11 @@ class Home extends Component {
                 {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                {!this.props.isMobile && <MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
-                <Categories isMobile={this.props.isMobile} />
+                {this.props.isMobile && <CategoriesMobile />}
+                {!this.props.isMobile && <FixedControlsContainer
+                    left={<CategoriesWeb />}
+                    right={<MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
+                />}
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
                 <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}

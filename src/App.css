@@ -142,15 +142,14 @@ div.play-div {
 }
 
 /* MIXTURES */
-div.mixtures-div {
-  position: fixed;
+.mixtures-div {
   text-align: start;
 }
 .mixtures-div .list-group-item {
   cursor: pointer;
 }
 .mixtures-div .caption {
-  font-size: 1.3em;
+  font-size: 1.25rem;
 }
 .mixture-block {
   border: 1px solid var(--blue) !important;
@@ -216,7 +215,6 @@ div.mixtures-div {
 
 .footer-menu {
   text-align: center;
-  /* line-height: 80px; */
 }
 .footer-menu li {
   list-style: none;
@@ -255,8 +253,6 @@ div.mixtures-div {
 .about-text {
   font-size: 14px;
   font-weight: 400;
-  /* text-align: left; 
-  color: rgb(255,255,255);*/
 }
 
 .share-button {
