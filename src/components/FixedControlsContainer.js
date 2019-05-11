@@ -1,7 +1,7 @@
 import React from 'react';
 
-const FixedControlsContainer = (props) => {
-    return <div className='container-fluid' style={{ position: 'fixed' }}>
+const FixedControlsContainer = (props) => (
+    <div className='container-fluid fixed-controlls' style={{ position: 'fixed' }}>
         <div className='row'>
             <div className='col-md-3'>
                 {props.left}
@@ -11,6 +11,6 @@ const FixedControlsContainer = (props) => {
             </div>
         </div>
     </div>
-};
+);
 
 export default FixedControlsContainer;

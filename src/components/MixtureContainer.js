@@ -14,7 +14,7 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
         deactivate={props.deactivateMixtures}
         switch={props.switchMixture} />)
 
-    return <div className='mixtures-div'>
+    return <div>
         {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={props.pauseSound} saveClick={toggleModal} />}
         {mixtures.length > 0 && <div style={{ marginTop: '25px' }}>
             <div className='pb-2 caption'>My Mixtures</div>
