@@ -14,10 +14,10 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
         deactivate={props.deactivateMixtures}
         switch={props.switchMixture} />)
 
-    return <div>
+    return <>
         {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={props.pauseSound} saveClick={toggleModal} />}
-        {mixtures.length > 0 && <div style={{ marginTop: '25px' }}>
-            <div className='pb-2 caption'>My Mixtures</div>
+        {mixtures.length > 0 && < >
+            <div className='pb-2 mt-5 caption'>My Mixtures</div>
             <div className='list-group'>
                 <CSSTransitionGroup
                     transitionName='mixanim'
@@ -26,8 +26,8 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
                     {mixtures}
                 </CSSTransitionGroup>
             </div>
-        </div>}
-    </div>
+        </>}
+    </>
 };
 
 export default connect(
