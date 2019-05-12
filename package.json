@@ -22,7 +22,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "sw": "workbox generateSW --config-file=workbox-config.js"
+    "sw": "workbox generateSW --config-file=workbox-config.js",
+    "staging": "netlify deploy --prod"
   },
   "browserslist": [
     ">0.2%",
