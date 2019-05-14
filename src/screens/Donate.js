@@ -7,7 +7,7 @@ import React from 'react';
 const Donate = () => (
     <section className='mt-5'>
         <p>If you're willing to donate, please
-            <a className="bmc-button" target="_blank" href="https://www.buymeacoffee.com/kyrylenko">
+            <a className="bmc-button" target="_blank" rel="noopener noreferrer" href="https://www.buymeacoffee.com/kyrylenko">
                 <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy us a coffee"></img>
                 <span style={{ marginLeft: '5px' }}>Buy us a coffee</span>
             </a>!

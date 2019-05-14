@@ -1,16 +1,19 @@
 
 import React from 'react';
 import timer from '../assets/icons/timer.png';
+import timerEmpty from '../assets/icons/timer_empty.png';
 import { secToMin } from '../utils/Utils';
 
-const TimerControl = (props) => {
-    const { minutes, seconds } = secToMin(props.interval);
+const TimerControl = ({ timerRun, interval, onClick }) => {
+    const { minutes, seconds } = secToMin(interval);
 
-    const element = props.timerRun ?
-        <div className='timer-circle' onClick={props.onClick}>
-            <div className='my-3' >{`${minutes}:${seconds}`}</div>
-        </div> :
-        <img src={timer} alt='Timer' title='Set pause interval' onClick={props.onClick}></img>;
+    const element = timerRun ?
+        <div className='timer' title='Stop timer' style={{ cursor: 'pointer' }} onClick={onClick}>
+            <img src={timerEmpty} alt='Timer' ></img>
+            <div className='clock'>{`${minutes}:${seconds}`}</div>
+        </div>
+        :
+        <img src={timer} alt='Timer' title='Set pause interval' onClick={onClick}></img>;
 
     return element;
 };

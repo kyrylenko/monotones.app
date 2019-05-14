@@ -33,6 +33,17 @@
   opacity: 0.8;
   transform: scale(1.1);
 }
+.timer {
+  position: relative;
+  text-align: center;
+}
+.timer .clock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--violet);
+}
 div.timer-div {
   position: fixed;
   top: 54px;
@@ -60,16 +71,6 @@ div.play-div {
 .timer-div img,
 .play-div img {
   width: 75px;
-  cursor: pointer;
-}
-
-.timer-circle {
-  background: rgb(82, 186, 213);
-  color: #ffffff;
-  width: 75px;
-  height: 75px;
-  border: 5px solid #ffffff !important;
-  border-radius: 50%;
   cursor: pointer;
 }
 
