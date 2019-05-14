@@ -1,35 +1,33 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+function getPath(actual, path) {
+    return actual === path ? '/' : path;
+};
+
+function getClass(actual, path) {
+    return actual === path ? 'active' : '';
+};
 
 export const CategoriesWeb = ({ pathname }) => {
-    function getPath(path) {
-        return pathname === path ? '/' : path;
-    };
-
-    function getClass(path) {
-        return pathname === path ? 'active' : '';
-    };
-
     return (
         <div className='mx-auto' style={{ width: '80px' }}>
             <div className='pb-2 caption'>Filters</div>
-            <div className='list-group'>
-                <Link to={getPath('/sleep')} title='Sleep' className={`list-group-item list-group-item-action ${getClass('/sleep')}`}>Sleep</Link>
-                <Link to={getPath('/relax')} title='Relax' className={`list-group-item list-group-item-action ${getClass('/relax')}`}>Relax</Link>
-                <Link to={getPath('/focus')} title='Focus' className={`list-group-item list-group-item-action ${getClass('/focus')}`}>Focus</Link>
+            <div className='list-group web'>
+                <Link to={getPath(pathname, '/sleep')} title='Sleep' className={`list-group-item list-group-item-action ${getClass(pathname, '/sleep')}`}>Sleep</Link>
+                <Link to={getPath(pathname, '/relax')} title='Relax' className={`list-group-item list-group-item-action ${getClass(pathname, '/relax')}`}>Relax</Link>
+                <Link to={getPath(pathname, '/focus')} title='Focus' className={`list-group-item list-group-item-action ${getClass(pathname, '/focus')}`}>Focus</Link>
             </div>
         </div>
-
     );
 }
 
-export const CategoriesMobile = (props) => {
+export const CategoriesMobile = ({pathname}) => {
     return (
         <div className='list-group list-group-horizontal' style={{ position: 'sticky', height: '44px' }}>
-            <NavLink exact to='/' title='All' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>All</NavLink>
-            <NavLink exact to='/sleep' title='Sleep' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Sleep</NavLink>
-            <NavLink exact to='/relax' title='Relax' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Relax</NavLink>
-            <NavLink exact to='/focus' title='Focus' className='list-group-item list-group-item-action flex-fill' activeClassName='active'>Focus</NavLink>
+            <Link to={getPath(pathname, '/sleep')} title='Sleep' className={`list-group-item list-group-item-action flex-fill ${getClass(pathname, '/sleep')}`}>Sleep</Link>
+            <Link to={getPath(pathname, '/relax')} title='Relax' className={`list-group-item list-group-item-action flex-fill ${getClass(pathname, '/relax')}`}>Relax</Link>
+            <Link to={getPath(pathname, '/focus')} title='Focus' className={`list-group-item list-group-item-action flex-fill ${getClass(pathname, '/focus')}`}>Focus</Link>
         </div>
     );
 }

@@ -280,7 +280,7 @@ header .top-bar-item:hover {
 .list-group-item {
   border-color: var(--blue);
 }
-.list-group-item:hover {
+.web .list-group-item:hover {
   color:#ffffff;
   background-color: var(--blue);
 }
@@ -288,6 +288,7 @@ header .top-bar-item:hover {
   background-color: var(--blue);
   border-color: var(--blue);
 }
+
 /* SCROLLBAR */
 /* width */
 ::-webkit-scrollbar {

@@ -52,7 +52,7 @@ class Home extends Component {
                 {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
                     <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
                 </div>}
-                {this.props.isMobile && <CategoriesMobile />}
+                {this.props.isMobile && <CategoriesMobile pathname={this.props.location.pathname} />}
                 {!this.props.isMobile && <FixedControlsContainer
                     left={<CategoriesWeb pathname={this.props.location.pathname} />}
                     right={<MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
