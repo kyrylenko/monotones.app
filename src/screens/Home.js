@@ -54,7 +54,7 @@ class Home extends Component {
                 </div>}
                 {this.props.isMobile && <CategoriesMobile />}
                 {!this.props.isMobile && <FixedControlsContainer
-                    left={<CategoriesWeb />}
+                    left={<CategoriesWeb pathname={this.props.location.pathname} />}
                     right={<MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
                 />}
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
