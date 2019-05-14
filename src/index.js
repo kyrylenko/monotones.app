@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 
 import configureStore from './store/configureStore';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 import * as serviceWorker from './registerServiceWorker';
 import { actionCreators as loadingActions } from './store/loadingReducer';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -29,7 +30,9 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter basename={baseUrl}>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
       </BrowserRouter>
     </PersistGate>
   </Provider>,
