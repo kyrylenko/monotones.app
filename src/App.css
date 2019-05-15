@@ -279,7 +279,7 @@ header .top-bar-item:hover {
 /*CATEGORIES NAV*/
 .list-group-item {
   border-color: var(--blue);
-  border: none;
+  /* border: none; */
 }
 .web .list-group-item:hover {
   color:#ffffff;

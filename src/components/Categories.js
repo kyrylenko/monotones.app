@@ -12,7 +12,6 @@ function getClass(actual, path) {
 export const CategoriesWeb = ({ pathname }) => {
     return (
         <div className='mx-auto' style={{ width: '80px' }}>
-            <div className='pb-2 caption'>Filters</div>
             <div className='nav flex-column nav-pills web'>
                 <li className='nav-item'>
                     <Link to={getPath(pathname, '/sleep')} title='Sleep' className={`nav-link ${getClass(pathname, '/sleep')}`}>Sleep</Link>
