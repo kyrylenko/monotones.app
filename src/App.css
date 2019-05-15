@@ -327,3 +327,15 @@ header .top-bar-item:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(119, 119, 119); 
 }
+
+/*POPOVER*/
+.popover {
+  border: 2px solid var(--blue);
+}
+.popover .form-control {
+  border: 2px solid var(--blue);
+}
+.popover-header {
+  color: #ffffff !important;
+  background-color: var(--blue);
+}
