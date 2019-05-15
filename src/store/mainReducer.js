@@ -62,8 +62,11 @@ export const mainReducer = (state, action) => {
                 };
                 return obj
             }, {});
+        //Deactivate the Active mixture
+        const mixtures = JSON.parse(JSON.stringify(state.mixtures || []))
+            .map(x => ({ ...x, isActive: false }));
 
-        return { ...state, sounds }
+        return { ...state, sounds, mixtures: mixtures }
     }
 
     if (action.type === SET_SOUND_LOADED) {
