@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
 import save from '../assets/icons/save.svg';
+import reset from '../assets/icons/reset.svg';
 import utils from '../utils/StringUtils';
 
 export default class MixtureFuture extends Component {
@@ -21,7 +22,7 @@ export default class MixtureFuture extends Component {
             <>
                 <div className='pb-2 caption'>Playing now</div>
                 <div className='flex-container'>
-                    <div className='mixture-block col-9' style={{ overflow: 'hidden' }}>
+                    <div className='mixture-block mr-2' style={{ overflow: 'hidden', width: '100%' }}>
                         <CSSTransitionGroup className='flex-container'
                             transitionName='mixanim'
                             transitionEnterTimeout={400}
@@ -29,8 +30,9 @@ export default class MixtureFuture extends Component {
                             {sounds}
                         </CSSTransitionGroup>
                     </div>
-                    <div className='col-3'>
+                    <div className='flex-container mixture-actions'>
                         <img className='mixture-img' src={save} title='Save mixture' alt='Save mixture' onClick={this.props.saveClick}></img>
+                        <img className='mixture-img' src={reset} title='Reset all' alt='Reset all' onClick={this.props.setSounds}></img>
                     </div>
                 </div>
             </>

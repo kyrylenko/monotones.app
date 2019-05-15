@@ -15,7 +15,11 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
         switch={props.switchMixture} />)
 
     return <>
-        {hasActiveSounds && <MixtureFuture activeSounds={activeSounds} pauseSound={props.pauseSound} saveClick={toggleModal} />}
+        {hasActiveSounds && <MixtureFuture
+            activeSounds={activeSounds}
+            pauseSound={props.pauseSound}
+            saveClick={toggleModal}
+            setSounds={() => props.setSounds([])} />}
         {mixtures.length > 0 && < >
             <div className='pb-2 mt-5 caption'>My Mixtures</div>
             <div className='list-group'>

@@ -143,7 +143,7 @@ div.play-div {
 }
 /* MIXTURES */
 .mixture-block {
-  border: 1px solid var(--blue) !important;
+  border: 2px solid var(--blue) !important;
   border-radius: 6px;  
 }
 .mixture-block-selectable.active {
@@ -180,6 +180,9 @@ div.play-div {
 }
 .mixture-row .mixture-img:hover {
   opacity: 1;
+}
+.mixture-actions .mixture-img:hover {
+  opacity: 0.6;
 }
 
 /* FOOTER LOGO WELCOME */
@@ -279,6 +282,7 @@ header .top-bar-item:hover {
 /*CATEGORIES NAV*/
 .list-group-item {
   border-color: var(--blue);
+
   /* border: none; */
 }
 .web .list-group-item:hover {
