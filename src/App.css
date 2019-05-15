@@ -43,6 +43,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--violet);
+  font-weight: 600;
 }
 div.timer-div {
   position: fixed;
