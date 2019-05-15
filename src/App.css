@@ -1,6 +1,6 @@
 /* COLORS */
 :root {
-  --blue :#A3D9F0;
+  --blue : #A3D9F0;
   --d-blue: #61C3E5;
   --violet: #6E497E;
 }
@@ -34,6 +34,11 @@
   opacity: 0.8;
   transform: scale(1.1);
 }
+/*CAPTIONS*/
+.violet-headers h1, h2, h3, h4 {
+  color: var(--violet);
+}
+/*TIMER*/
 .timer {
   position: relative;
   text-align: center;
