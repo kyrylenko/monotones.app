@@ -35,19 +35,19 @@ const SoundSlider = React.memo((props) => {
                 onClick={clickHandler}>
             </img>
             <Slider
-            className='mx-auto'
+                className='mx-auto'
                 max={1}
                 step={0.01}
                 onChange={onSliderChange}
                 value={props.volume}
                 trackStyle={{ height: '6px', backgroundColor: '#A3D9F0' }}
-                railStyle={{ height: '6px', backgroundColor:'#CBE7F3' }}
+                railStyle={{ height: '6px', backgroundColor: '#CBE7F3' }}
                 handleStyle={{
                     height: 24,
                     width: 24,
                     marginTop: -9,
                 }}
-                style={{ visibility: props.isPlay ? 'visible' : 'hidden', width:'80%' }} />
+                style={{ visibility: props.isPlay ? 'visible' : 'hidden', width: '80%' }} />
         </>
     );
 });
