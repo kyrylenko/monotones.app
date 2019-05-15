@@ -279,6 +279,7 @@ header .top-bar-item:hover {
 /*CATEGORIES NAV*/
 .list-group-item {
   border-color: var(--blue);
+  border: none;
 }
 .web .list-group-item:hover {
   color:#ffffff;
@@ -287,6 +288,18 @@ header .top-bar-item:hover {
 .list-group-item.active {
   background-color: var(--blue);
   border-color: var(--blue);
+}
+
+.nav-pills .nav-link {
+  font-size: 1.3rem;
+  color: inherit;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills.web .nav-link:hover,
+.nav-pills .show>.nav-link {
+  background-color: var(--blue);
+  color:#ffffff;
 }
 
 /* SCROLLBAR */
