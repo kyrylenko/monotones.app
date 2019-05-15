@@ -1,7 +1,974 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RowsView test RowsView snapshot is correct 1`] = `
+exports[`RowsView snapshot is correct 1`] = `
 <div
   className="container"
-/>
+>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="summer_day"
+        className="sound-icon"
+        onClick={[Function]}
+        src="summer_day.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Summer day"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="kitty_purr"
+        className="sound-icon"
+        onClick={[Function]}
+        src="kitty_purr.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Kitty purr"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="campfire"
+        className="sound-icon"
+        onClick={[Function]}
+        src="campfire.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Campfire"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="river_stream"
+        className="sound-icon"
+        onClick={[Function]}
+        src="river_stream.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="River stream"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="farm"
+        className="sound-icon"
+        onClick={[Function]}
+        src="farm.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Farm"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="blue_whales"
+        className="sound-icon"
+        onClick={[Function]}
+        src="blue_whales.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Blue whales"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="magic_chimes"
+        className="sound-icon"
+        onClick={[Function]}
+        src="magic_chimes.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Magic chimes"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="night_owls"
+        className="sound-icon"
+        onClick={[Function]}
+        src="night_owls.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Night owls"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="playground"
+        className="sound-icon"
+        onClick={[Function]}
+        src="playground.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Playground"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="ship_hull"
+        className="sound-icon"
+        onClick={[Function]}
+        src="ship_hull.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Ship hull"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="sounds-row row justify-content-center"
+  >
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="subway"
+        className="sound-icon"
+        onClick={[Function]}
+        src="subway.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Subway"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+    <div
+      className="d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2"
+    />
+    <div
+      className="text-center col-6 col-sm-4 col-md-3 col-lg-3"
+    >
+      <img
+        alt="tropical_birds"
+        className="sound-icon"
+        onClick={[Function]}
+        src="tropical_birds.png"
+        style={
+          Object {
+            "opacity": null,
+          }
+        }
+        title="Tropical birds"
+      />
+      <div
+        className="rc-slider mx-auto"
+        onBlur={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onMouseDown={[Function]}
+        onMouseUp={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "visibility": "hidden",
+            "width": "80%",
+          }
+        }
+      >
+        <div
+          className="rc-slider-rail"
+          style={
+            Object {
+              "backgroundColor": "#CBE7F3",
+              "height": "6px",
+            }
+          }
+        />
+        <div
+          className="rc-slider-track"
+          style={
+            Object {
+              "backgroundColor": "#A3D9F0",
+              "height": "6px",
+              "left": "0%",
+              "width": "30%",
+            }
+          }
+        />
+        <div
+          className="rc-slider-step"
+        />
+        <div
+          aria-disabled={false}
+          aria-valuemax={1}
+          aria-valuemin={0}
+          aria-valuenow={0.3}
+          className="rc-slider-handle"
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          role="slider"
+          style={
+            Object {
+              "height": 24,
+              "left": "30%",
+              "marginTop": -9,
+              "width": 24,
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          className="rc-slider-mark"
+        />
+      </div>
+    </div>
+  </div>
+</div>
 `;

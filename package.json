@@ -34,7 +34,6 @@
   "devDependencies": {
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "react-test-renderer": "^16.8.6",
-    "sinon": "^7.3.2"
+    "react-test-renderer": "^16.8.6"
   }
 }
