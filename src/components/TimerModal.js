@@ -4,12 +4,13 @@ import Modal from 'reactstrap/lib/Modal';
 import ModalHeader from 'reactstrap/lib/ModalHeader';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
 import ModalBody from 'reactstrap/lib/ModalBody';
+import Slider from 'rc-slider/lib/Slider';
 import { secToMin } from '../utils/Utils';
 
 export default class TimerModal extends React.Component {
 
     state = {
-        interval: '300'//sec 
+        interval: 300//sec 
     };
 
     start = () => {
@@ -38,18 +39,24 @@ export default class TimerModal extends React.Component {
             <Button color='primary' size='lg' onClick={this.start}>Start</Button>;
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm' autoFocus={false} centered={true}>
-                <ModalHeader toggle={this.props.toggle}></ModalHeader>
+                <ModalHeader toggle={this.props.toggle} className='py-2'></ModalHeader>
                 <ModalBody style={{ color: 'black' }}>
-                    <h4 className='text-center'>{`Pause in ${minutes}:${seconds} min`}</h4>
-                    {!this.props.timerRun && <input type='range'
-                        className='custom-range'
-                        value={this.state.interval}
-                        autoFocus={true}
+                    <h5 className='text-center mb-3'>{`Pause in ${minutes}:${seconds} min`}</h5>
+                    {!this.props.timerRun && <Slider
+                        className='mx-auto'
                         min={30}
                         max={3600}
                         step={30}
-                        onWheel={this.scroll}
-                        onChange={(e) => this.setState({ interval: e.target.value })}></input>}
+                        onChange={(value) => this.setState({ interval: value })}
+                        value={this.state.interval}
+                        trackStyle={{ height: '6px', backgroundColor: '#A3D9F0' }}
+                        railStyle={{ height: '6px', backgroundColor: '#CBE7F3' }}
+                        handleStyle={{
+                            height: 24,
+                            width: 24,
+                            marginTop: -9,
+                        }}
+                        style={{ width: '90%' }} />}
                 </ModalBody>
                 <ModalFooter className='d-flex justify-content-center'>
                     {button}
