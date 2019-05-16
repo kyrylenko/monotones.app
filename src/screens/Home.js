@@ -14,7 +14,7 @@ const TimerModal = React.lazy(() => import('../components/TimerModal'));
 
 class Home extends Component {
     state = {
-        modal: false,
+        saveModal: false,
         timerModal: false,
     };
 
@@ -27,7 +27,7 @@ class Home extends Component {
             this.setupTimer();
         }
     };
-
+//MOVE TIMER TICK TO REDUX THUNK
     setupTimer = () => {
         if (this.props.timerRun) {
             this.timer = setInterval(() => {
@@ -41,7 +41,7 @@ class Home extends Component {
         }
     };
 
-    toggleModal = () => this.setState({ modal: !this.state.modal });
+    toggleModal = () => this.setState({ saveModal: !this.state.saveModal });
     toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
 
     render() {
@@ -58,7 +58,7 @@ class Home extends Component {
                     right={<MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
                 />}
                 <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
-                <SaveMixtureModal isOpen={this.state.modal} toggle={this.toggleModal} save={this.props.addMixture} />
+                <SaveMixtureModal isOpen={this.state.saveModal} toggle={this.toggleModal} save={this.props.addMixture} />
                 <TimerModal isOpen={this.state.timerModal}
                     toggle={this.toggleTimerModal}
                     start={this.props.timerStart}
