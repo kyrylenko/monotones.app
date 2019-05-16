@@ -5,11 +5,9 @@ import PopoverBody from 'reactstrap/lib/PopoverBody';
 import Tooltip from 'reactstrap/lib/Tooltip';
 import {
     FacebookShareButton,
-    GooglePlusShareButton,
     TwitterShareButton,
     FacebookIcon,
     TwitterIcon,
-    GooglePlusIcon
 } from 'react-share';
 
 export default class SharePopover extends Component {
@@ -45,13 +43,6 @@ export default class SharePopover extends Component {
                                 size={32}
                                 round />
                         </FacebookShareButton>
-                        <GooglePlusShareButton
-                            url={this.props.url}
-                            className='share-button mx-1'>
-                            <GooglePlusIcon
-                                size={32}
-                                round />
-                        </GooglePlusShareButton>
                         <TwitterShareButton
                             url={this.props.url}
                             className='share-button mx-1'>

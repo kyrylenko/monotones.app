@@ -4,7 +4,7 @@ import React from 'react';
 //https://github.com/thinhvo0108/react-paypal-express-checkout
 // & BTC http://www.reactjstutorial.net/donate.html
 
-const Donate = () => (
+export default () => (
     <section className='mt-5'>
         <p>If you're willing to donate, please
             <a className="bmc-button" target="_blank" rel="noopener noreferrer" href="https://www.buymeacoffee.com/kyrylenko">
@@ -23,5 +23,3 @@ const Donate = () => (
             </form> */}
     </section>
 );
-
-export default Donate;
