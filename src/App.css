@@ -86,7 +86,7 @@ div.play-div {
     left: auto;
     top: auto;
     right: 35px;
-    bottom: 55px;
+    bottom: 75px;
   }
   div.share-div {
     top: 35px;
@@ -94,8 +94,9 @@ div.play-div {
     left: auto;
   }
   div.timer-div {
-    top: 35px;
+    top: auto;
     left: 35px;
+    bottom: 75px;
     right: auto;
   }
 }

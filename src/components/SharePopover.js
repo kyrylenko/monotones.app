@@ -12,14 +12,10 @@ import {
 
 export default class SharePopover extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            tooltip: false,
-            copied: false,
-        };
-    }
+    state = {
+        tooltip: false,
+        copied: false,
+    };
 
     toggleTooltip = () => this.setState({ tooltip: !this.state.tooltip });
 
