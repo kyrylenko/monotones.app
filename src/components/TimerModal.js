@@ -34,8 +34,8 @@ export default class TimerModal extends React.Component {
         const { minutes, seconds } = secToMin(this.props.timerRun ? this.props.interval : this.state.interval);
 
         const button = this.props.timerRun ?
-            <Button color='secondary' onClick={this.stop}>Cancel Timer</Button> :
-            <Button color='primary' onClick={this.start}>Start</Button>;
+            <Button color='secondary' size='lg' onClick={this.stop}>Cancel Timer</Button> :
+            <Button color='primary' size='lg' onClick={this.start}>Start</Button>;
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm' autoFocus={false} centered={true}>
                 <ModalHeader toggle={this.props.toggle}></ModalHeader>

@@ -37,8 +37,7 @@ export default class SaveMixtureModal extends React.Component {
                         onChange={this.updateInputValue} onKeyPress={this.handleKeyPress} className='form-control'></input>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color='primary' onClick={this.save}>Save</Button>
-                    <Button color='secondary' onClick={this.props.toggle}>Cancel</Button>
+                    <Button color='primary' size='lg' onClick={this.save}>Save</Button>
                 </ModalFooter>
             </Modal>
         );

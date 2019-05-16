@@ -340,3 +340,23 @@ header .top-bar-item:hover {
   color: #ffffff !important;
   background-color: var(--blue);
 }
+
+.btn-primary {
+  background-color: var(--blue);
+  border-color: var(--blue);
+}
+.btn-primary:hover {
+  background-color: var(--d-blue);
+  border-color: var(--d-blue);
+}
+
+.modal-dialog .close {
+  color: var(--d-blue);
+  font-size: 2rem;
+}
+.modal-header {
+  border-bottom: none;
+}
+.modal-footer {
+  border-top: none;
+}
