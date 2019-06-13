@@ -150,6 +150,17 @@ div.play-div {
   font-size: 1.25rem;
 }
 /* MIXTURES */
+.mixtures.card {
+  background-color: var(--blue);
+  color:#ffffff;
+  border: none;
+  font-weight: bold;
+}
+.mixtures .card-header {
+  border-bottom: 3px solid #ffffff;
+}
+
+
 .mixture-block {
   border: 2px solid var(--blue) !important;
   border-radius: 6px;  

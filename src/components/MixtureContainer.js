@@ -20,8 +20,8 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
             pauseSound={props.pauseSound}
             saveClick={toggleModal}
             setSounds={() => props.setSounds([])} />}
-        {mixtures.length > 0 && < >
-            <div className='pb-2 mt-5 caption'>My Mixtures</div>
+        {mixtures.length > 0 && <div className='mixtures card mt-5'>
+            <div className='card-header'>My Mixtures</div>
             <div className='list-group'>
                 <CSSTransitionGroup
                     transitionName='mixanim'
@@ -30,7 +30,7 @@ const MixtureContainer = ({ activeSounds, toggleModal, ...props }) => {
                     {mixtures}
                 </CSSTransitionGroup>
             </div>
-        </>}
+        </div>}
     </>
 };
 
