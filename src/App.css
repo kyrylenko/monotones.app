@@ -288,14 +288,18 @@ header .top-bar-item:hover {
 .list-group-item {
   border-color: var(--blue);
 
-  /* border: none; */
+/* border: none; */
+}
+.list-group-item {
+  background-color: var(--blue);
+  color:#ffffff;
 }
 .web .list-group-item:hover {
+  background-color: var(--d-blue);
   color:#ffffff;
-  background-color: var(--blue);
 }
 .list-group-item.active {
-  background-color: var(--blue);
+  background-color: var(--d-blue);
   border-color: var(--blue);
 }
 
