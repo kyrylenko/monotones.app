@@ -53,31 +53,21 @@
 }
 div.timer-div {
   position: fixed;
-  top: 54px;
-  left: 150px;
+  top: 2rem;
+  left: 8rem;
   z-index: 1029;
-}
-div.share-div {
-  position: fixed;
-  top: 54px;
-  right: 45px;
-  z-index: 1029;
-}
-.share-div img {
-  width: 75px;
-  cursor: pointer;
 }
 
 /* PLAY / PAUSE */
 div.play-div {
   position: fixed;
-  top: 54px;
-  left: 45px;
+  top: 2rem;
+  left: 2rem;
   z-index: 1029;
 }
 .timer-div img,
 .play-div img {
-  width: 75px;
+  width: 4.8rem;
   cursor: pointer;
 }
 
@@ -85,18 +75,13 @@ div.play-div {
   div.play-div {
     left: auto;
     top: auto;
-    right: 35px;
-    bottom: 75px;
-  }
-  div.share-div {
-    top: 35px;
-    right: 35px;
-    left: auto;
+    right: 1.8rem;
+    bottom: 4.6rem;
   }
   div.timer-div {
     top: auto;
-    left: 35px;
-    bottom: 75px;
+    left: 1.8rem;
+    bottom: 4.6rem;
     right: auto;
   }
 }
