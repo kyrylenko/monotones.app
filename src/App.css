@@ -150,14 +150,8 @@ div.play-div {
   border: 2px solid var(--blue) !important;
   border-radius: 6px;  
 }
-.mixture-block-selectable.active {
-  background-color: var(--blue);
-  color:#ffffff;
-}
-
-.mixture-block-selectable:hover {
-  background-color: var(--blue);
-  color:#ffffff;
+.mixture-block .mixture-item:hover {
+  opacity: .8;
 }
 
 .flex-container {  
@@ -290,11 +284,8 @@ header .top-bar-item:hover {
   background-color: var(--blue);
   color:#ffffff;
 }
-.web .list-group-item:hover {
-  background-color: var(--d-blue);
-  color:#ffffff;
-}
-.list-group-item.active {
+.list-group-item.active,
+.list-group-item:hover  {
   background-color: var(--d-blue);
   border-color: var(--blue);
 }
