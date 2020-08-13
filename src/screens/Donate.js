@@ -12,7 +12,8 @@ class Donate extends Component {
               data: "eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXlkb25hdGUiLCJhbW91bnQiOiI1MCIsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiJTdXBwb3J0IE1vbm90b25lcyEiLCJwdWJsaWNfa2V5IjoiaTc2NzM0NTIxNjk0IiwibGFuZ3VhZ2UiOiJlbiJ9",
               signature: "gWGx3NfrzfuuW6pedgXDjfY0HXw=",
               embedTo: "#liqpay_checkout",
-              mode: "embed" // embed || popup,
+              mode: "embed", // embed || popup,
+              language: "en",
                 }).on("liqpay.callback", function(data){
               console.log(data.status);
               console.log(data);
