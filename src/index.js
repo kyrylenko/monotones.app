@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/es/integration/react'
 import { Provider } from 'react-redux';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 
 import configureStore from './store/configureStore';
 import App from './App';
@@ -31,7 +33,9 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter basename={baseUrl}>
         <ErrorBoundary>
-          <App />
+          <I18nextProvider i18n={i18n}>
+            <App />
+          </I18nextProvider>
         </ErrorBoundary>
       </BrowserRouter>
     </PersistGate>
