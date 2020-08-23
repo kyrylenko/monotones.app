@@ -2,10 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Header from './components/Header';
 import background from './assets/icons/background.png';
+import { useTranslation } from 'react-i18next';
 import './App.css';
 import './Breathing.css';
 
 const Layout = (props) => {
+  const { t } = useTranslation();
 
   return (
     <>
@@ -18,9 +20,9 @@ const Layout = (props) => {
           <div className='row py-3 py-md-5'>
             <nav className='col-lg-12 col-md-12 col-sm-12 col-xs-12 footer-menu'>
               <ul style={{ marginBottom: 0 }} className='px-0'>
-                <li><NavLink to='/about' >About</NavLink> </li>
-                <li><NavLink to='/terms' >Terms</NavLink> </li>
-                <li><a target='_blank' rel='noopener noreferrer' href='mailto:contact@monotones.app'>Contact</a></li>
+                <li><NavLink to='/about' >{t('about')}</NavLink> </li>
+                <li><NavLink to='/terms' >{t('terms')}</NavLink> </li>
+                <li><a target='_blank' rel='noopener noreferrer' href='mailto:contact@monotones.app'>{t('contact')}</a></li>
               </ul>
             </nav>
           </div>

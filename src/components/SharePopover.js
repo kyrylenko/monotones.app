@@ -9,8 +9,9 @@ import {
     FacebookIcon,
     TwitterIcon,
 } from 'react-share';
+import { withTranslation } from 'react-i18next';
 
-export default class SharePopover extends Component {
+class SharePopover extends Component {
 
     state = {
         tooltip: false,
@@ -26,9 +27,10 @@ export default class SharePopover extends Component {
     };
 
     render() {
+        const { t } = this.props;
         return (
             <Popover placement={'left'} isOpen={this.props.isOpen} target={'popover'} toggle={this.props.toggle}>
-                <PopoverHeader style={{ color: 'black' }}>Share sounds</PopoverHeader>
+                <PopoverHeader style={{ color: 'black' }}>{t('share_sounds')}</PopoverHeader>
                 <PopoverBody>
                     <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} id='tooltip' defaultValue={this.props.url}></input>
                     <div className='d-flex justify-content-center my-2'>
@@ -55,4 +57,6 @@ export default class SharePopover extends Component {
         );
     }
 };
+
+export default withTranslation()(SharePopover);
 

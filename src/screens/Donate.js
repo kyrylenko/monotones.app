@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withTranslation } from 'react-i18next'
+import { withTranslation } from 'react-i18next';
 
 //TODO: donations using PayPal https://github.com/paypal/paypal-checkout-components
 //https://github.com/thinhvo0108/react-paypal-express-checkout

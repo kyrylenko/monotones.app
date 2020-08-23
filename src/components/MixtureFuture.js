@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
+import { withTranslation } from 'react-i18next';
 import save from '../assets/icons/save.svg';
 import reset from '../assets/icons/reset.svg';
 import utils from '../utils/StringUtils';
 
-export default class MixtureFuture extends Component {
+class MixtureFuture extends Component {
 
     render() {
+        const { t } = this.props;
+
         const sounds = this.props.activeSounds.map(x =>
             <div className='mixture-item' key={x.id}>
                 <img
@@ -20,7 +23,7 @@ export default class MixtureFuture extends Component {
 
         return (
             <>
-                <div className='pb-2 caption'>Playing now</div>
+                <div className='pb-2 caption'>{t('playing_now')}</div>
                 <div className='flex-container'>
                     <div className='mixture-block mr-2' style={{ overflow: 'hidden', width: '100%' }}>
                         <CSSTransitionGroup className='flex-container'
@@ -40,3 +43,4 @@ export default class MixtureFuture extends Component {
     }
 };
 
+export default withTranslation()(MixtureFuture);

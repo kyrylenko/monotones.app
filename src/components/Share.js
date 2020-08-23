@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SharePopover from './SharePopover';
 import { all } from '../constants/soundIds';
+import { withTranslation } from 'react-i18next';
 
 class Share extends Component {
 
@@ -32,10 +33,11 @@ class Share extends Component {
     };
 
     render() {
+        const { t } = this.props;
         return (
             <>
-                <div className={this.props.className} title='Share sounds' id='popover' onClick={this.share} style={{ cursor: 'pointer' }}>
-                    Share
+                <div className={this.props.className} title={t('share_sounds')} id='popover' onClick={this.share} style={{ cursor: 'pointer' }}>
+                    {t('share')}
                 </div>
                 <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
             </>
@@ -43,4 +45,4 @@ class Share extends Component {
     }
 }
 
-export default Share;
+export default withTranslation()(Share);
