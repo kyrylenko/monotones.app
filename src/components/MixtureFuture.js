@@ -34,7 +34,7 @@ class MixtureFuture extends Component {
                         </CSSTransitionGroup>
                     </div>
                     <div className='flex-container mixture-actions'>
-                        <img className='mixture-img' src={save} title='Save mixture' alt='Save mixture' onClick={this.props.saveClick}></img>
+                        <img className='mixture-img' src={save} title={t('save_mixture')} alt={t('save_mixture')} onClick={this.props.saveClick}></img>
                         <img className='mixture-img' src={reset} title='Reset all' alt='Reset all' onClick={this.props.setSounds}></img>
                     </div>
                 </div>

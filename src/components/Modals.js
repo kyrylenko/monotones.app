@@ -4,8 +4,9 @@ import Modal from 'reactstrap/lib/Modal';
 import ModalHeader from 'reactstrap/lib/ModalHeader';
 import ModalFooter from 'reactstrap/lib/ModalFooter';
 import ModalBody from 'reactstrap/lib/ModalBody';
+import { withTranslation } from 'react-i18next';
 
-export default class SaveMixtureModal extends React.Component {
+class SaveMixtureModal extends React.Component {
     state = {
         inputValue: ''
     };
@@ -29,17 +30,20 @@ export default class SaveMixtureModal extends React.Component {
     };
 
     render() {
+        const { t } = this.props;
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} size='sm' autoFocus={false} >
-                <ModalHeader toggle={this.props.toggle} style={{ color: 'black' }} className='py-2'>Save mixture</ModalHeader>
+                <ModalHeader toggle={this.props.toggle} style={{ color: 'black' }} className='py-2'>{t('save_mixture')}</ModalHeader>
                 <ModalBody>
-                    <input type='text' name='text' id='mixture-name' placeholder='Mixture name' maxLength='25' autoFocus
+                    <input type='text' name='text' id='mixture-name' placeholder={t('mixture_name')} maxLength='25' autoFocus
                         onChange={this.updateInputValue} onKeyPress={this.handleKeyPress} className='form-control'></input>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color='primary' size='lg' onClick={this.save}>Save</Button>
+                    <Button color='primary' size='lg' onClick={this.save}>{t('save')}</Button>
                 </ModalFooter>
             </Modal>
         );
     }
 }
+
+export default withTranslation()(SaveMixtureModal);
