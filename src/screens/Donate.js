@@ -30,9 +30,11 @@ class Donate extends Component {
 
   render() {
     const { t } = this.props;
-    
+
     return (<section className='mt-5'>
-      <p>{t('buy_us_coffee')}</p>
+      <div className='donate'>
+        {t('buy_us_coffee')}
+      </div>
       <div id="liqpay_checkout"></div>
       {/* <a href='https://www.liqpay.ua/api/3/checkout?data=eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXlkb25hdGUiLCJhbW91bnQiOiIxMCIsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiJEb25hdGUiLCJwdWJsaWNfa2V5IjoiaTc2NzM0NTIxNjk0IiwibGFuZ3VhZ2UiOiJydSJ9&signature=pmyA21MndqhIHkacm+48A6LfOAI='>Liq</a> */}
     </section>);

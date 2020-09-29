@@ -7,7 +7,7 @@ i18n.use(LanguageDetector).init({
   resources: {
     en: {
       translations: {
-        buy_us_coffee: "If you like Monotones, buy us a coffee ;)",
+        buy_us_coffee: "Monotones - is absolutely free. And our mission is to make the quality of life a little bit better.\r\nYour donation directly helps the maintenance and further development of Monotones.\r\nJust name a fair amount you willing to donate us",
         sleep: "Sleep",
         relax: "Relax",
         focus: "Focus",
@@ -52,7 +52,7 @@ i18n.use(LanguageDetector).init({
     },
     uk: {
       translations: {
-        buy_us_coffee: "Якщо либиш Монотони, купи нам каву ;)",
+        buy_us_coffee: "Монотони - є і будуть абсолютно безкоштовні. Наша місія - хоча б трохи покращити якість життя.\r\nВаші пожертвування безпосередньо сприяють підтримці та подальшому розвитку Монотонів.\r\nПросто вкажіть суму, яку ви готові нам пожертвувати",
         sleep: "Сон",
         relax: "Релакс",
         focus: "Фокус",
