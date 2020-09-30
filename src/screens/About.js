@@ -1,18 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const About = () => (
-    <div style={{ textAlign: 'left' }} className='container about-text violet-headers'>
+const About = () => {
+    const { t } = useTranslation();
+
+    return <div style={{ textAlign: 'left' }} className='container about-text violet-headers'>
         <section>
-            <h3>Your subtle companion.</h3>
-            <p>Feeling that the noise of the big city is too much for you to bear? Just turn on the sound and allow yourself to become engulfed in the tranquil sounds of nature. Whether you wish to feel as if you’re sitting near a fireplace under a cozy blanket, or that you’re meditating on a desolate sea shore as gusts of wind ruffle your hair, Monotones will be there to set the mood. With this ambient sound equalizer, not only will you be able to relax, but you will also increase your productivity, as you’re trying to concentrate on your work!</p>
+            <h3>{t('your_subtle_companion')}</h3>
+            <p>{t('your_subtle_companion_content')}</p>
         </section>
         <section>
-            <h4>We Are The Creators</h4>
-            <p>Pavlo - happy father of beautiful baby girl and caring husband in his amazing family (cute painted image) and Anastasiya - UX designer, ambitious about time-management and anxious to find harmony between work and rest.</p>
-            <p>We are two people, coming from different branches and with different issues, but who found a mutual solution not only for us but for millions of other people - the impact of music on the ability to correct brain performance. </p>
-            <p>Either to calm a baby in the middle of the night or to boost a sleepy and non-productive conscious at 2 p.m., we realized that the best option is kept in non-figurative sounds, which do not take over brain activity but subtly help to correct it in the preferable direction.</p>
-            <p>Every sound in our collection was tested and we proved an impact with our own experience. As well, we believe in other creators, who can create perfect sound combination either to find a harmony between inner and outer, have a conversation with oneself or to motivate one's brain cells to focus on the important task.</p>
-            <p>We are the creators of our perfect world and we would like to share it with you.</p>
+            <h4>{t('we_are_creators')}</h4>
+            <p className='line-breaks'>{t('we_are_creators_content')}</p>
         </section>
         <section>
             <h4>Vision</h4>
@@ -29,6 +28,6 @@ const About = () => (
             <p>We believe in creativity as we are visionaries. This is why we not only collected the best sounds and tested them, but created a beautiful visual world, which brings a feeling of calmness and gives a perception of harmony.</p>
         </section>
     </div>
-);
+};
 
 export default About;

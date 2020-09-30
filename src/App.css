@@ -351,6 +351,6 @@ header .top-bar-item:hover {
 .modal-footer {
   border-top: none;
 }
-.donate {
+.line-breaks {
   white-space: pre-wrap;
 }

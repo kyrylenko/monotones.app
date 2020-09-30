@@ -32,7 +32,7 @@ class Donate extends Component {
     const { t } = this.props;
 
     return (<section className='mt-5'>
-      <div className='donate'>
+      <div className='line-breaks'>
         {t('buy_us_coffee')}
       </div>
       <div id="liqpay_checkout"></div>
