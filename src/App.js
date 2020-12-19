@@ -22,13 +22,13 @@ class App extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.spaceHandler, false);
-    mediaQuery.addListener(this.mediaQueryHandler);
+    mediaQuery.addEventListener('change', this.mediaQueryHandler);
     this.mediaQueryHandler(mediaQuery);
   };
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.spaceHandler, false);
-    mediaQuery.removeListener(this.mediaQueryHandler);
+    mediaQuery.removeEventListener('change', this.mediaQueryHandler);
   };
 
   //Play / Pause on click space  
