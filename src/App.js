@@ -10,9 +10,9 @@ import Player from './components/Player';
 import GlobalPlayPause from './components/GlobalPlayPause';
 import { aggregateSounds } from './utils/Utils';
 
-const About = lazy(() => import('./screens/About'));
-const Terms = lazy(() => import('./screens/Terms'));
-const Donate = lazy(() => import('./screens/Donate'));
+const About = lazy(() => import(/* webpackChunkName: "about" */ './screens/About'));
+const Terms = lazy(() => import(/* webpackChunkName: "terms" */ './screens/Terms'));
+const Donate = lazy(() => import(/* webpackChunkName: "donate" */ './screens/Donate'));
 
 const mediaQuery = window.matchMedia('(max-width: 768px)')
 

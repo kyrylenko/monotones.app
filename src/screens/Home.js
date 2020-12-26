@@ -9,8 +9,8 @@ import TimerControl from '../components/TimerControl';
 import { CategoriesMobile, CategoriesWeb } from '../components/Categories';
 import MixtureContainer from '../components/MixtureContainer';
 import FixedControlsContainer from '../components/FixedControlsContainer';
-const SaveMixtureModal = React.lazy(() => import('../components/Modals'));
-const TimerModal = React.lazy(() => import('../components/TimerModal'));
+const SaveMixtureModal = React.lazy(() => import(/* webpackChunkName: "modals" */ '../components/Modals'));
+const TimerModal = React.lazy(() => import(/* webpackChunkName: "timerModal" */'../components/TimerModal'));
 
 class Home extends Component {
     state = {
