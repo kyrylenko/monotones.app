@@ -17,8 +17,8 @@ const HeaderWeb = (props) => {
                     </Link>
                 </div>
                 <div className='col-4 d-flex justify-content-end align-items-center app-title'>
-                    <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-5 px-4' />
-                    <NavLink to='/donate' className='top-bar-item px-lg-5 px-4' title={t('buy_us_coffee')}>{t('donate')}</NavLink>
+                    <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-5 px-4' />                    
+                    <a href='https://www.patreon.com/monotones' target='_blank' rel='noreferrer' rel='noopener' className='top-bar-item px-lg-5 px-4' title={t('buy_us_coffee')}>{t('donate')}</a>
                 </div>
             </div>
         </header>
@@ -32,8 +32,8 @@ const HeaderMobile = (props) => {
             <Share reduxSounds={props.reduxSounds} className='top-bar-item' />
             <Link to='/' title={constants.appName}>
                 <img src={logo} alt={constants.appName} style={{ height: '45px' }} />
-            </Link>
-            <NavLink to='/donate' className='top-bar-item' title={t('buy_us_coffee')}>{t('donate')}</NavLink>
+            </Link>            
+            <a href='https://www.patreon.com/monotones' target='_blank' rel='noreferrer' rel='noopener'className='top-bar-item' title={t('buy_us_coffee')}>{t('donate')}</a>
         </header>
     );
 }

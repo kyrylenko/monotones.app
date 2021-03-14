@@ -12,7 +12,6 @@ import { aggregateSounds } from './utils/Utils';
 
 const About = lazy(() => import(/* webpackChunkName: "about" */ './screens/About'));
 const Terms = lazy(() => import(/* webpackChunkName: "terms" */ './screens/Terms'));
-const Donate = lazy(() => import(/* webpackChunkName: "donate" */ './screens/Donate'));
 
 const mediaQuery = window.matchMedia('(max-width: 768px)')
 
@@ -86,7 +85,6 @@ class App extends Component {
             <Route exact path='/focus' render={renderHome} />
             <Route exact path='/about' render={props => <About {...props} />} />
             <Route exact path='/terms' render={props => <Terms {...props} />} />
-            <Route exact path='/donate' render={props => <Donate {...props} />} />
             <Route exact path='/share/:sounds?' render={props => {
               if (props.match.params.sounds !== undefined) {
                 const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
