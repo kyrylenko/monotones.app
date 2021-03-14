@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Header from './components/Header';
 import LanguagePicker from './components/LanguagePicker';
-import background from './assets/icons/background.png';
+import background from './assets/icons/background.webp';
 import { useTranslation } from 'react-i18next';
 import './App.css';
 import './Breathing.css';

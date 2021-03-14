@@ -29,7 +29,7 @@ const SoundSlider = React.memo((props) => {
         <>
             <img alt={props.title} className={`sound-icon${props.isPlay && props.isGlobalPlay ? ' breathing' : ''}`}
                 src={!props.isLoaded && props.isPlay && props.isGlobalPlay
-                    ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${props.id}.png`)}
+                    ? require('../assets/icons/loading.gif') : require(`../assets/icons/white/${props.id}.webp`)}
                 title={utils.idToTitle(props.title)}
                 style={{ opacity: props.isPlay ? 1 : null }}
                 onClick={clickHandler}>

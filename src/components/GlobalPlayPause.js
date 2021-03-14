@@ -1,7 +1,7 @@
 import React from 'react';
 import { CSSTransitionGroup } from 'react-transition-group';
-import pause from '../assets/icons/pause.png'
-import play from '../assets/icons/play.png'
+import pause from '../assets/icons/pause.webp'
+import play from '../assets/icons/play.webp'
 
 const GlobalPlayPause = ({ isGlobPlay, playPause }) => {
 

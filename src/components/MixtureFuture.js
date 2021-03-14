@@ -14,7 +14,7 @@ class MixtureFuture extends Component {
             <div className='mixture-item' key={x.id}>
                 <img
                     className='mixture-img'
-                    src={require(`../assets/icons/white/${x.id}.png`)}
+                    src={require(`../assets/icons/white/${x.id}.webp`)}
                     id={x.id}
                     alt={x.id}
                     title={`${utils.idToTitle(x.id)} - Pause`}

@@ -1,7 +1,7 @@
 
 import React from 'react';
-import timer from '../assets/icons/timer.png';
-import timerEmpty from '../assets/icons/timer_empty.png';
+import timer from '../assets/icons/timer.webp';
+import timerEmpty from '../assets/icons/timer_empty.webp';
 import { secToMin } from '../utils/Utils';
 
 const TimerControl = ({ timerRun, interval, onClick }) => {
