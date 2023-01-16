@@ -5,7 +5,7 @@
   "homepage" : "https://monotones.app",
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "i18next": "^19.6.3",
+    "i18next": "^19.8.5",
     "i18next-browser-languagedetector": "^6.0.0",
     "rc-slider": "^8.6.3",
     "react": "^16.7.0",
@@ -13,7 +13,7 @@
     "react-i18next": "^11.7.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "^5.0.0",
     "react-share": "^2.4.0",
     "react-transition-group": "^1.2.1",
     "reactstrap": "^6.5.0",
