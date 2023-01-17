@@ -7,7 +7,7 @@
     "bootstrap": "^4.3.1",
     "i18next": "^19.6.3",
     "i18next-browser-languagedetector": "^6.0.0",
-    "rc-slider": "^8.6.3",
+    "rc-slider": "^8.7.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-i18next": "^11.7.0",
