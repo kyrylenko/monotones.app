@@ -20,7 +20,8 @@ export const sleep = {
     ht: 'heartbeat',
     vs: 'vinyl_cracks',
     wn: 'white_noise',
-    pe: 'pink_noise',
+    //REASON: replaced by brown noise, old 'pe' links open it (see utils/shareCode.ts)
+    //pe: 'pink_noise',
     bn: 'brown_noise',
     se: 'space_drone',
     ws: 'wind_chimes',

@@ -25,7 +25,7 @@ export type RootState = ReturnType<typeof rootReducer>;
 const persistConfig: PersistConfig<RootState> = {
     key: 'root',
     storage,
-    version: 1,
+    version: 2,
     migrate: createMigrate(migrations, { debug: false }),
     // Saved values are merged into the initial state, so fields that are not saved keep their defaults
     stateReconciler: autoMergeLevel2,

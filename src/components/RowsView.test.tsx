@@ -13,16 +13,15 @@ describe('RowsView', () => {
     });
 
     it('puts the last sound of an odd count on its own row', () => {
-        const { sleep } = aggregateSounds();
+        const sounds = aggregateSounds().sleep.slice(0, 7);
         const { container } = render(<RowsView
-            sounds={sleep}
+            sounds={sounds}
             playPauseVolume={() => { }}
             isGlobalPlay={true} />);
 
         const rows = container.querySelectorAll('.sounds-row');
-        expect(sleep).toHaveLength(9);
-        expect(rows).toHaveLength(5);
-        expect(rows[4].querySelectorAll('img.sound-icon')).toHaveLength(1);
-        expect(container.querySelectorAll('img.sound-icon')).toHaveLength(9);
+        expect(rows).toHaveLength(4);
+        expect(rows[3].querySelectorAll('img.sound-icon')).toHaveLength(1);
+        expect(container.querySelectorAll('img.sound-icon')).toHaveLength(7);
     });
 });
