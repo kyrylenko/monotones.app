@@ -1,13 +1,13 @@
 import { aggregateSounds, idToTitle } from './sounds';
 
 describe('aggregateSounds', () => {
-    it('returns the 28 sounds grouped by category in page order', () => {
+    it('returns the 29 sounds grouped by category in page order', () => {
         const categories = aggregateSounds();
 
         expect(Object.keys(categories)).toEqual(['relax', 'sleep', 'focus']);
-        expect(Object.values(categories).flat()).toHaveLength(28);
+        expect(Object.values(categories).flat()).toHaveLength(29);
         expect(categories.relax).toHaveLength(12);
-        expect(categories.sleep).toHaveLength(8);
+        expect(categories.sleep).toHaveLength(9);
         expect(categories.focus).toHaveLength(8);
     });
 

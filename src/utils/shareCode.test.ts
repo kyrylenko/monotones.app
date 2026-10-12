@@ -14,6 +14,10 @@ describe('encodeShareCode', () => {
         expect(encodeShareCode(sounds)).toBe('ce');
     });
 
+    it('encodes generated sounds like the others', () => {
+        expect(encodeShareCode(playing('brown_noise', 'pink_noise'))).toBe('pebn');
+    });
+
     it('is empty when nothing plays', () => {
         expect(encodeShareCode({})).toBe('');
     });

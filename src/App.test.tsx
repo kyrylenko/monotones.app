@@ -24,15 +24,15 @@ const mixtureNames = () => [...document.querySelectorAll('.mixtures .list-group-
 
 describe('App', () => {
     describe('sounds', () => {
-        it('shows all 28 sounds on the home page', async () => {
+        it('shows all 29 sounds on the home page', async () => {
             await renderApp();
 
-            expect(soundIcons()).toHaveLength(28);
+            expect(soundIcons()).toHaveLength(29);
             expect(globalButton()).toBeNull();
         });
 
         it.each([
-            ['/sleep', 8, 'summer_night'],
+            ['/sleep', 9, 'summer_night'],
             ['/relax', 12, 'summer_day'],
             ['/focus', 8, 'thunderstorm'],
         ])('shows only the %s category', async (path, count, firstId) => {
@@ -46,11 +46,11 @@ describe('App', () => {
             await renderApp();
 
             fireEvent.click(screen.getByRole('link', { name: 'Sleep' }));
-            expect(soundIcons()).toHaveLength(8);
+            expect(soundIcons()).toHaveLength(9);
             expect(screen.getByRole('link', { name: 'Sleep' })).toHaveClass('active');
 
             fireEvent.click(screen.getByRole('link', { name: 'Sleep' }));
-            expect(soundIcons()).toHaveLength(28);
+            expect(soundIcons()).toHaveLength(29);
         });
 
         it('clicking a sound plays it and shows the global pause button', async () => {
@@ -322,10 +322,59 @@ describe('App', () => {
             const { store } = await renderApp({ path: '/share/kbcezz' });
 
             await waitFor(() => expect(Object.keys(store.getState().main.sounds)).toEqual(['keyboard', 'campfire']));
-            await waitFor(() => expect(soundIcons()).toHaveLength(28));
+            await waitFor(() => expect(soundIcons()).toHaveLength(29));
             expect(playingNow()).toEqual(['keyboard', 'campfire']);
             //shared sounds wait for the user to press play
             expect(globalButton()).toHaveAttribute('alt', 'Play');
+        });
+    });
+
+    describe('generated sounds', () => {
+        //jsdom has no Web Audio: record which noise sources are playing
+        const playingNoise = new Set<object>();
+        const node = () => ({ gain: { value: 1 }, connect: (next: unknown) => next });
+        class FakeAudioContext {
+            state = 'running';
+            sampleRate = 100;
+            destination = {};
+            createGain = node;
+            resume = () => Promise.resolve();
+            createBuffer = (channels: number, length: number) => ({
+                numberOfChannels: channels,
+                getChannelData: () => new Float32Array(length),
+            });
+            createBufferSource = () => {
+                const source = {
+                    connect: () => {},
+                    disconnect: () => {},
+                    start: () => playingNoise.add(source),
+                    stop: () => playingNoise.delete(source),
+                };
+                return source;
+            };
+        }
+
+        beforeEach(() => {
+            playingNoise.clear();
+            vi.stubGlobal('AudioContext', FakeAudioContext);
+        });
+        afterEach(() => vi.unstubAllGlobals());
+
+        it('plays brown noise without an mp3, shares and pauses it like the others', async () => {
+            const { store } = await renderApp();
+
+            toggleSound('brown_noise');
+
+            await waitFor(() => expect(store.getState().main.sounds.brown_noise?.isLoaded).toBe(true));
+            expect(playingNoise.size).toBe(1);
+            expect(playingSounds()).toEqual([]);
+            expect(playingNow()).toEqual(['brown_noise']);
+
+            fireEvent.click(screen.getByText('Share'));
+            expect(await screen.findByDisplayValue('https://monotones.app/share/bn')).toBeInTheDocument();
+
+            clickGlobalButton();
+            await waitFor(() => expect(playingNoise.size).toBe(0));
         });
     });
 
@@ -430,7 +479,7 @@ describe('App', () => {
             await act(() => Promise.resolve());
 
             expect(store.getState().main.sounds).toEqual({});
-            expect(soundIcons()).toHaveLength(28);
+            expect(soundIcons()).toHaveLength(29);
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
         });
@@ -466,7 +515,7 @@ describe('App', () => {
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
             await screen.findByRole('heading', { name: 'Your subtle companion' });
             fireEvent.click($('header a[href="/"]'));
-            await waitFor(() => expect(soundIcons()).toHaveLength(28));
+            await waitFor(() => expect(soundIcons()).toHaveLength(29));
 
             expect(playingSounds()).toEqual(['campfire']);
         });

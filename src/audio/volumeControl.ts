@@ -29,15 +29,15 @@ export const supportsElementVolume = (): boolean => {
 
 // One context for all sounds; created on the first play because iOS only allows it in a user gesture
 let sharedContext: AudioContext | undefined;
-const getAudioContext = (): AudioContext => (sharedContext ??= new AudioContext());
+export const getAudioContext = (): AudioContext => (sharedContext ??= new AudioContext());
 
 const elementOutput = (audio: HTMLAudioElement): VolumeOutput => ({
     apply: (volume) => { audio.volume = volume; },
     beforePlay: () => {},
 });
 
-// Routes the element through a Web Audio gain node, which controls the volume instead
-const gainOutput = (audio: HTMLAudioElement, getContext: () => AudioContext): VolumeOutput => {
+// Routes the source through a Web Audio gain node, which controls the volume instead
+const gainOutput = (createSource: (context: AudioContext) => AudioNode, getContext: () => AudioContext): VolumeOutput => {
     let gain: GainNode | undefined;
     let volume = 1;
 
@@ -53,7 +53,7 @@ const gainOutput = (audio: HTMLAudioElement, getContext: () => AudioContext): Vo
             if (!gain) {
                 gain = context.createGain();
                 gain.gain.value = volume;
-                context.createMediaElementSource(audio).connect(gain).connect(context.destination);
+                createSource(context).connect(gain).connect(context.destination);
             }
             if (context.state !== 'running') {
                 void context.resume();
@@ -62,11 +62,7 @@ const gainOutput = (audio: HTMLAudioElement, getContext: () => AudioContext): Vo
     };
 };
 
-export const createVolumeControl = (
-    audio: HTMLAudioElement,
-    { useElementVolume = supportsElementVolume(), getContext = getAudioContext } = {},
-): VolumeControl => {
-    const output = useElementVolume ? elementOutput(audio) : gainOutput(audio, getContext);
+const withFade = (output: VolumeOutput): VolumeControl => {
     let volume = 1;
     let fade = 1;
     let ramp: ReturnType<typeof setInterval> | undefined;
@@ -101,3 +97,16 @@ export const createVolumeControl = (
         beforePlay: () => output.beforePlay(),
     };
 };
+
+export const createVolumeControl = (
+    audio: HTMLAudioElement,
+    { useElementVolume = supportsElementVolume(), getContext = getAudioContext } = {},
+): VolumeControl => withFade(useElementVolume
+    ? elementOutput(audio)
+    : gainOutput(context => context.createMediaElementSource(audio), getContext));
+
+/** Volume of a sound generated with Web Audio; createSource is called once, on the first play */
+export const createGainVolumeControl = (
+    createSource: (context: AudioContext) => AudioNode,
+    getContext: () => AudioContext = getAudioContext,
+): VolumeControl => withFade(gainOutput(createSource, getContext));
