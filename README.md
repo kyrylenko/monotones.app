@@ -21,7 +21,7 @@ npm run preview    # serve the production build
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
 - `src/utils` – pure helpers (share links, sound catalogue, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
-- `src/audio` – volume handling (Web Audio fallback for iOS)
+- `src/audio` – volume handling (Web Audio fallback for iOS), sleep timer fade-out
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
 - `src/types` – shared TypeScript types
 - `src/test` – test helpers; `src/App.test.tsx` covers the app end to end

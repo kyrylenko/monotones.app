@@ -1,6 +1,7 @@
 import { screen, fireEvent, waitFor, within, act } from '@testing-library/react';
 import { renderApp, seedPersistedState, readPersistedState, playingSounds } from './test/renderApp';
 import { $ } from './test/dom';
+import { timerActions } from './store/timerSlice';
 import type { SoundId } from './constants/soundIds';
 
 const soundIcons = () => document.querySelectorAll('img.sound-icon');
@@ -219,6 +220,55 @@ describe('App', () => {
             await waitFor(() => expect(playingSounds()).toEqual([]));
             expect(globalButton()).toHaveAttribute('alt', 'Play');
             expect(document.querySelector('.timer-div')).toBeNull();
+        });
+
+        it('fades the sounds out during the last seconds and restores the volume for the next play', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            const [audio] = window.__playing;
+            const volume = store.getState().main.sounds.campfire!.volume;
+            expect(audio.volume).toBeCloseTo(volume);
+
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            act(() => store.dispatch(timerActions.timerStart(60)));
+            const tick = (seconds: number) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
+
+            tick(30);
+            expect(audio.volume).toBeCloseTo(volume);
+
+            tick(15);
+            expect(audio.volume).toBeLessThan(volume / 2);
+            expect(audio.volume).toBeGreaterThan(0);
+
+            tick(14);
+            expect(audio.volume).toBeLessThan(volume / 100);
+            expect(playingSounds()).toEqual(['campfire']);
+
+            tick(1);
+            expect(playingSounds()).toEqual([]);
+            tick(1);
+            expect(audio.volume).toBeCloseTo(volume);
+            expect(store.getState().main.sounds.campfire!.volume).toBe(volume);
+        });
+
+        it('restores the full volume when cancelled during the fade', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            const [audio] = window.__playing;
+            const volume = audio.volume;
+
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            act(() => store.dispatch(timerActions.timerStart(20)));
+            for (let i = 0; i < 2; i++) act(() => vi.advanceTimersByTime(1000));
+            expect(audio.volume).toBeLessThan(volume);
+
+            act(() => store.dispatch(timerActions.timerStop()));
+            act(() => vi.advanceTimersByTime(1000));
+
+            expect(audio.volume).toBeCloseTo(volume);
+            expect(playingSounds()).toEqual(['campfire']);
         });
 
         it('can be cancelled', async () => {

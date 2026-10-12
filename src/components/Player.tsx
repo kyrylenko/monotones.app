@@ -36,11 +36,13 @@ interface PlayerProps {
     id: SoundId;
     isPlay: boolean;
     volume: number;
+    /** Sleep timer fade-out, applied on top of the volume */
+    fade: number;
     isGlobalPlay: boolean;
 }
 
 // Invisible <audio> for one sound
-const Player = ({ id, isPlay, volume, isGlobalPlay }: PlayerProps) => {
+const Player = ({ id, isPlay, volume, fade, isGlobalPlay }: PlayerProps) => {
     const dispatch = useAppDispatch();
     const soundRef = useRef<Sound>(null);
 
@@ -54,6 +56,10 @@ const Player = ({ id, isPlay, volume, isGlobalPlay }: PlayerProps) => {
     useEffect(() => {
         soundRef.current!.volume.setVolume(volume);
     }, [volume]);
+
+    useEffect(() => {
+        soundRef.current!.volume.setFade(fade);
+    }, [fade]);
 
     // Runs synchronously after a click (React flushes effects of discrete events), so play() stays in the user gesture
     useEffect(() => {
