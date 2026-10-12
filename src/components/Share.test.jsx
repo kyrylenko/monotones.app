@@ -1,12 +1,9 @@
 import React from 'react';
-import Enzyme, { shallow } from 'enzyme';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Share from './Share';
-import Adapter from 'enzyme-adapter-react-16';
-
-Enzyme.configure({ adapter: new Adapter() })
 
 describe('Share test', () => {
-    xit('Share works', () => {
+    it('Share builds a link from the playing sounds', async () => {
         const reduxSounds = {
             campfire: {
                 isPlay: true,
@@ -14,7 +11,10 @@ describe('Share test', () => {
                 volume: 1
             }
         };
-        const wrapper = shallow(<Share reduxSounds={reduxSounds} className='top-bar-item px-lg-5 px-4' />);
-        const actual = wrapper.instance().share();
+        render(<Share reduxSounds={reduxSounds} className='top-bar-item px-lg-5 px-4' />);
+
+        fireEvent.click(screen.getByText('share'));
+
+        expect(await screen.findByDisplayValue('https://monotones.app/share/ce')).toBeInTheDocument();
     });
 });

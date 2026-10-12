@@ -120,7 +120,7 @@ i18n.use(LanguageDetector).init({
     },
   },
   fallbackLng: "en",
-  debug: true,
+  debug: import.meta.env.DEV,
 
   // have a common namespace used around the full app
   ns: ["translations"],
@@ -132,10 +132,6 @@ i18n.use(LanguageDetector).init({
     escapeValue: false, // not needed for react!!
     formatSeparator: ","
   },
-
-  react: {
-    wait: true
-  }
 });
 
 export default i18n;

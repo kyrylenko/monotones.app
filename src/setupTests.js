@@ -1,10 +1,12 @@
-//red: https://facebook.github.io/create-react-app/docs/running-tests#src-setuptestsjs
-window.matchMedia = jest.fn().mockImplementation(query => {
+//ref: https://vitest.dev/config/#setupfiles
+import '@testing-library/jest-dom/vitest';
+
+window.matchMedia = vi.fn().mockImplementation(query => {
     return {
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
     };
 });

@@ -1,5 +1,5 @@
-import React, { Component, Suspense, lazy } from 'react';
-import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
+import React, { Component, Suspense, lazy, useEffect } from 'react';
+import { Route, Navigate, Routes, useLocation, useParams } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
 import { connect } from 'react-redux';
@@ -14,6 +14,19 @@ const About = lazy(() => import(/* webpackChunkName: "about" */ './screens/About
 const Terms = lazy(() => import(/* webpackChunkName: "terms" */ './screens/Terms'));
 
 const mediaQuery = window.matchMedia('(max-width: 768px)')
+
+//Applies the sounds from a shared link (e.g. /share/kbce) and goes home
+const ShareRoute = ({ setSounds }) => {
+  const { sounds } = useParams();
+
+  useEffect(() => {
+    if (sounds !== undefined) {
+      setSounds(sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g) || []);
+    }
+  }, [sounds, setSounds]);
+
+  return <Navigate to='/' replace />;
+};
 
 class App extends Component {
 
@@ -70,7 +83,8 @@ class App extends Component {
       isPlay={x.isPlay}
       volume={x.volume} />);
 
-    const renderHome = props => <Home {...props}
+    const home = <Home
+      location={this.props.location}
       isMobile={this.state.isMobile}
       readySounds={readySounds}
       activeSounds={activeSounds} />;
@@ -78,21 +92,15 @@ class App extends Component {
     return (
       <Layout reduxSounds={this.props.sounds} isMobile={this.state.isMobile}>
         <Suspense fallback={<div>Loading...</div>}>
-          <Switch>
-            <Route exact path='/' render={renderHome} />
-            <Route exact path='/relax' render={renderHome} />
-            <Route exact path='/sleep' render={renderHome} />
-            <Route exact path='/focus' render={renderHome} />
-            <Route exact path='/about' render={props => <About {...props} />} />
-            <Route exact path='/terms' render={props => <Terms {...props} />} />
-            <Route exact path='/share/:sounds?' render={props => {
-              if (props.match.params.sounds !== undefined) {
-                const sounds = props.match.params.sounds.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g);
-                this.props.setSounds(sounds);
-              }
-              return <Redirect to='/' />;
-            }} />
-          </Switch>
+          <Routes>
+            <Route path='/' element={home} />
+            <Route path='/relax' element={home} />
+            <Route path='/sleep' element={home} />
+            <Route path='/focus' element={home} />
+            <Route path='/about' element={<About />} />
+            <Route path='/terms' element={<Terms />} />
+            <Route path='/share/:sounds?' element={<ShareRoute setSounds={this.props.setSounds} />} />
+          </Routes>
         </Suspense>
         {players}
         {activeSounds.length > 0 && <GlobalPlayPause isGlobPlay={this.props.isGlobalPlay || false}
@@ -114,8 +122,12 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({ setSounds, setSoundLoaded, globalPlayPause, timerStop }, dispatch);
 };
 
-export default withRouter(connect(
+const ConnectedApp = connect(
   //state => ({ ...state.main, ...state.loading }),
   state => state.main,
   mapDispatchToProps
-)(App));
+)(App);
+
+const AppWithLocation = () => <ConnectedApp location={useLocation()} />;
+
+export default AppWithLocation;

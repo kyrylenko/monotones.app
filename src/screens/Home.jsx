@@ -22,6 +22,10 @@ class Home extends Component {
         this.setupTimer();
     };
 
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    };
+
     componentDidUpdate(prevProps) {
         if (prevProps.timerRun !== this.props.timerRun) {
             this.setupTimer();

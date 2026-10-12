@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Share from '../components/Share';
 import constants from '../constants/defaultValues';
 import logo from '../logo.png';
-import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next';
 
 const HeaderWeb = (props) => {
@@ -39,10 +38,5 @@ const HeaderMobile = (props) => {
 }
 
 const Header = (props) => props.isMobile ? <HeaderMobile {...props} /> : <HeaderWeb {...props} />;
-
-Header.propTypes = {
-    isMobile: PropTypes.bool.isRequired,
-    reduxSounds: PropTypes.object.isRequired
-}
 
 export default Header;

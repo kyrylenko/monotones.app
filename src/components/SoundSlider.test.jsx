@@ -1,15 +1,12 @@
 import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import SoundSlider from './SoundSlider';
-import Enzyme, { shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('SoundSlider test', () => {
     it('Should call playPauseVolume() on click', () => {
-        const playPauseVolumeMock = jest.fn();
+        const playPauseVolumeMock = vi.fn();
 
-        const wrapper = shallow(<SoundSlider
+        const { container } = render(<SoundSlider
             id={'campfire'}
             isGlobalPlay={true}
             isPlay={true}
@@ -17,14 +14,13 @@ describe('SoundSlider test', () => {
             volume={1}
             title={'Sound title'}
             playPauseVolume={playPauseVolumeMock} />);
-        //console.log(wrapper.instance());
-        const soundIcon = wrapper.find('.sound-icon');
-        
+        const soundIcon = container.querySelectorAll('.sound-icon');
+
         expect(soundIcon).toHaveLength(1);
 
-        soundIcon.simulate('click');
+        fireEvent.click(soundIcon[0]);
 
         expect(playPauseVolumeMock).toHaveBeenCalledTimes(1);
-        expect(soundIcon.prop('style').opacity).toEqual(1);
+        expect(soundIcon[0]).toHaveStyle({ opacity: '1' });
     });
 });

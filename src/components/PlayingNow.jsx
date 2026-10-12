@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { TransitionGroup } from 'react-transition-group';
+import MixAnim from './MixAnim';
+import { iconUrl } from '../assets';
 import utils from '../utils/StringUtils';
 import colors from '../constants/colors';
 
@@ -7,26 +9,23 @@ export default class PlayingNow extends Component {
 
     render() {                
         const sounds = this.props.activeSounds.map(x =>
-            <div className='mixture-item' key={x.id}>
+            <MixAnim key={x.id}><div className='mixture-item'>
                 <img
                     className='mixture-img'
-                    src={require(`../assets/icons/white/${x.id}.webp`)}
+                    src={iconUrl(x.id)}
                     id={x.id}
                     alt={x.id}
                     title={`${utils.idToTitle(x.id)} - Pause`}
                     onClick={() => this.props.pauseSound(x.id)}></img>
-            </div>);
+            </div></MixAnim>);
 
         return (
             <div className='container-fluid'>
                 <div style={{ marginTop: '5px' }} className='row'>
                     <div style={{ overflow: 'hidden', backgroundColor: colors.themeActive }} className='col'>
-                        <CSSTransitionGroup className='d-flex justify-content-center'
-                            transitionName='mixanim'
-                            transitionEnterTimeout={400}
-                            transitionLeaveTimeout={400}>
+                        <TransitionGroup className='d-flex justify-content-center'>
                             {sounds}
-                        </CSSTransitionGroup>
+                        </TransitionGroup>
                     </div>
                 </div>
             </div>

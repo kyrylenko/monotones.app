@@ -1,9 +1,10 @@
 import React from 'react';
 import trash from '../assets/icons/delete.svg';
 
-const Mixture = (props) => {
+const Mixture = ({ ref, ...props }) => {
     return (
         <div
+            ref={ref}
             title={props.isActive ? 'Pause mixture' : 'Play mixture'}
             onClick={props.isActive ? () => props.deactivate() : () => props.switch(props.id)}
             className={`list-group-item d-flex justify-content-between align-items-center ${props.isActive ? 'active' : ''}`}>

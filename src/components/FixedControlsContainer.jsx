@@ -6,7 +6,7 @@ const FixedControlsContainer = (props) => (
             <div className='col-md-3'>
                 {props.left}
             </div>
-            <div className='col-md-3 ml-md-auto'>
+            <div className='col-md-3 ms-md-auto'>
                 {props.right}
             </div>
         </div>

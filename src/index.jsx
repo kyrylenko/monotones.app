@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/es/integration/react'
+import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
@@ -28,7 +28,7 @@ const config = {
   onUpdateFound: () => store.dispatch(loadingActions.cachingStart()),
 };
 
-ReactDOM.render(
+createRoot(rootElement).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter basename={baseUrl}>
@@ -39,8 +39,8 @@ ReactDOM.render(
         </ErrorBoundary>
       </BrowserRouter>
     </PersistGate>
-  </Provider>,
-  rootElement);
+  </Provider>
+);
 
 serviceWorker.register(config);
 

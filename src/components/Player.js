@@ -1,4 +1,5 @@
 import { PureComponent } from 'react';
+import { soundUrl } from '../assets';
 
 const isFirefox = typeof InstallTrigger !== 'undefined';
 
@@ -19,7 +20,7 @@ class Player extends PureComponent {
     //}
 
     initSound = () => {
-        this.audio = new Audio(require(`../assets/sounds/${this.props.id}.mp3`));
+        this.audio = new Audio(soundUrl(this.props.id));
         this.audio.crossOrigin = 'anonymous';
         this.audio.loop = isFirefox;
         //this.audio.autoplay = true;

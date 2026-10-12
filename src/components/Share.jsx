@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import SharePopover from './SharePopover';
 import { all } from '../constants/soundIds';
 import { withTranslation } from 'react-i18next';
@@ -9,6 +9,8 @@ class Share extends Component {
         popover: false,
         shareUrl: window.location.origin,
     };
+
+    targetRef = createRef();
 
     togglePopover = () => this.setState({ popover: !this.state.popover });
 
@@ -36,10 +38,10 @@ class Share extends Component {
         const { t } = this.props;
         return (
             <>
-                <div className={this.props.className} title={t('share_sounds')} id='popover' onClick={this.share} style={{ cursor: 'pointer' }}>
+                <div ref={this.targetRef} className={this.props.className} title={t('share_sounds')} onClick={this.share} style={{ cursor: 'pointer' }}>
                     {t('share')}
                 </div>
-                <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} url={this.state.shareUrl} />
+                <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} target={this.targetRef} url={this.state.shareUrl} />
             </>
         );
     }
