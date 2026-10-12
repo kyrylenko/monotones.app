@@ -108,10 +108,10 @@ div.play-div {
 .mixanim-enter.mixanim-enter-active {
   animation: grow 0.4s;
 }
-.mixanim-leave {
+.mixanim-exit {
   scale: 1;
 }
-.mixanim-leave.mixanim-leave-active {
+.mixanim-exit.mixanim-exit-active {
   animation: collaps 0.4s;
 }
 
@@ -267,6 +267,7 @@ div.play-div {
 header .top-bar-item {
     font-weight: 500;
     color: inherit;
+    text-decoration: none;
 }
 header .top-bar-item.active,
 header .top-bar-item:hover {

@@ -2,6 +2,32 @@
 
 [monotones.app](https://monotones.app) is a simple Progressive Web Application built with React.js
 
-### What is missing?
+### Development
 
-- Not supported by the Safari browser yet
+```sh
+npm start          # dev server on http://localhost:3000
+npm test           # unit and integration tests (Vitest, watch mode)
+npm run lint       # ESLint
+npm run typecheck  # TypeScript (app and service worker)
+npm run build      # type check + production build to build/ (includes the service worker)
+npm run preview    # serve the production build
+```
+
+### Structure
+
+- `src/screens` – pages (sound board, About, Terms)
+- `src/components` – UI components, they read the store with `useSelector`
+- `src/hooks` – mobile layout, space key shortcut, sleep timer
+- `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
+- `src/utils` – pure helpers (share links, sound catalogue, time formatting)
+- `src/i18n` – translations (English, Ukrainian)
+- `src/audio` – volume handling (Web Audio fallback for iOS)
+- `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
+- `src/types` – shared TypeScript types
+- `src/test` – test helpers; `src/App.test.tsx` covers the app end to end
+
+### Browser notes
+
+- Safari plays media from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
+- iOS ignores `audio.volume`, so there the volume goes through a Web Audio gain node (`src/audio/volumeControl.ts`).
+  Web Audio on iOS may pause when the screen locks or the app goes to the background.
