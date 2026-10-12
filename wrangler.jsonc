@@ -8,5 +8,7 @@
     "directory": "./build",
     // Unknown paths like /sleep or /share/kbce get index.html (client-side routing)
     "not_found_handling": "single-page-application"
-  }
+  },
+  // Required by `wrangler preview`, the deploy command of pull request builds; assets above apply to previews too
+  "previews": {}
 }
