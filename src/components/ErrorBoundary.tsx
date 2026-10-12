@@ -1,14 +1,22 @@
-import React, { Component } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+
+interface ErrorBoundaryProps {
+    children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+    hasError: boolean;
+}
 
 // Stays a class: React has no hook for error boundaries
-class ErrorBoundary extends Component {
-    state = { hasError: false };
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+    state: ErrorBoundaryState = { hasError: false };
 
-    static getDerivedStateFromError() {
+    static getDerivedStateFromError(): ErrorBoundaryState {
         return { hasError: true };
     }
 
-    componentDidCatch(error, info) {
+    componentDidCatch(error: Error, info: ErrorInfo) {
         console.error('Error boundary: ', error, info);
     }
 

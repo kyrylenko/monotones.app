@@ -1,9 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Service worker caching progress (dispatched from src/index.jsx, not displayed yet)
+export interface LoadingState {
+    isCaching: boolean;
+}
+
+const initialState: LoadingState = { isCaching: false };
+
+// Service worker caching progress (dispatched from src/index.tsx, not displayed yet)
 const loadingSlice = createSlice({
     name: 'loading',
-    initialState: { isCaching: false },
+    initialState,
     reducers: {
         cachingStart(state) {
             state.isCaching = true;

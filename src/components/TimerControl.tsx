@@ -1,13 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import timer from '../assets/icons/timer.webp';
 import timerEmpty from '../assets/icons/timer_empty.webp';
 import { secToMin } from '../utils/time';
 import { selectTimer } from '../store/selectors';
+import { useAppSelector } from '../store/hooks';
 
 // Timer icon, shows the countdown while the sleep timer runs
-const TimerControl = ({ onClick }) => {
-    const { timerRun, interval } = useSelector(selectTimer);
+const TimerControl = ({ onClick }: { onClick: () => void }) => {
+    const { timerRun, interval } = useAppSelector(selectTimer);
 
     if (!timerRun) {
         return <img src={timer} alt='Timer' title='Set pause interval' onClick={onClick} />;

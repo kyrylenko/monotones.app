@@ -1,11 +1,11 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { Category } from '../constants/soundIds';
 
-const CATEGORIES = ['sleep', 'relax', 'focus'];
+const CATEGORIES: Category[] = ['sleep', 'relax', 'focus'];
 
 // Clicking the active category goes back to all sounds
-const CategoryLink = ({ category }) => {
+const CategoryLink = ({ category }: { category: Category }) => {
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const path = `/${category}`;

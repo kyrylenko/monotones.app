@@ -19,7 +19,7 @@ describe('aggregateSounds', () => {
         const { relax, sleep } = aggregateSounds({ campfire: { id: 'campfire', isPlay: true, volume: 1, isLoaded: true } });
 
         expect(relax.find(x => x.id === 'campfire')).toEqual({ id: 'campfire', isPlay: true, volume: 1, isLoaded: true });
-        expect(sleep.find(x => x.id === 'summer_night').isPlay).toBe(false);
+        expect(sleep.find(x => x.id === 'summer_night')?.isPlay).toBe(false);
     });
 });
 

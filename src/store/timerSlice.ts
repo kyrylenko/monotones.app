@@ -1,15 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+export interface TimerState {
+    timerRun: boolean;
+    /** Seconds left */
+    interval: number;
+}
+
+const initialState: TimerState = {
     timerRun: false,
-    interval: 1, // seconds left
+    interval: 1,
 };
 
 const timerSlice = createSlice({
     name: 'timer',
     initialState,
     reducers: {
-        timerStart(state, { payload: interval }) {
+        timerStart(state, { payload: interval }: PayloadAction<number>) {
             state.timerRun = interval > 0;
             state.interval = interval;
         },
@@ -21,4 +27,3 @@ const timerSlice = createSlice({
 
 export const timerActions = timerSlice.actions;
 export const timerReducer = timerSlice.reducer;
-

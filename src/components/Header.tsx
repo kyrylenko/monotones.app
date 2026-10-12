@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Share from './Share';
@@ -8,7 +7,7 @@ import useIsMobile from '../hooks/useIsMobile';
 
 const DONATE_URL = 'https://www.patreon.com/monotones';
 
-const DonateLink = ({ className }) => {
+const DonateLink = ({ className }: { className: string }) => {
     const { t } = useTranslation();
     return <a href={DONATE_URL} target='_blank' rel='noopener noreferrer' className={className} title={t('buy_us_coffee')}>{t('donate')}</a>;
 };

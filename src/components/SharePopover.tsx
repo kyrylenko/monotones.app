@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, type FocusEvent, type RefObject } from 'react';
 import Overlay from 'react-bootstrap/Overlay';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
@@ -11,11 +11,18 @@ import {
 } from 'react-share';
 import { useTranslation } from 'react-i18next';
 
-const SharePopover = ({ isOpen, onClose, target, url }) => {
+interface SharePopoverProps {
+    isOpen: boolean;
+    onClose: () => void;
+    target: RefObject<HTMLElement | null>;
+    url: string;
+}
+
+const SharePopover = ({ isOpen, onClose, target, url }: SharePopoverProps) => {
     const { t } = useTranslation();
     const [copied, setCopied] = useState(false);
 
-    const selectAndCopy = (e) => {
+    const selectAndCopy = (e: FocusEvent<HTMLInputElement>) => {
         e.target.select();
         document.execCommand('copy');
         setCopied(true);

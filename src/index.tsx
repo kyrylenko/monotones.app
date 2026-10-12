@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './i18n';
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/es/integration/react';
@@ -13,10 +13,10 @@ import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
 import * as serviceWorker from './registerServiceWorker';
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+const baseUrl = document.querySelector('base')?.getAttribute('href') ?? '/';
 const { persistor, store } = createAppStore();
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

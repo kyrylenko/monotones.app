@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { useStore } from 'react-redux';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharePopover from './SharePopover';
 import { buildShareUrl } from '../utils/shareCode';
 import { selectSounds } from '../store/selectors';
+import { useAppStore } from '../store/hooks';
 
-const Share = ({ className }) => {
+const Share = ({ className }: { className: string }) => {
     const { t } = useTranslation();
-    const store = useStore();
-    const targetRef = useRef(null);
+    const store = useAppStore();
+    const targetRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [shareUrl, setShareUrl] = useState(window.location.origin);
 

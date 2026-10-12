@@ -1,16 +1,23 @@
-import React from 'react';
-import SoundSlider from './SoundSlider';
+import { memo } from 'react';
+import SoundSlider, { type PlayPauseVolume } from './SoundSlider';
+import type { SoundState } from '../types';
 
 // Pairs of sounds: one row with a left and a right sound
-const toPairs = (sounds) => {
-    const pairs = [];
+const toPairs = (sounds: SoundState[]): [SoundState, SoundState][] => {
+    const pairs: [SoundState, SoundState][] = [];
     for (let i = 0; i < sounds.length - 1; i += 2) {
         pairs.push([sounds[i], sounds[i + 1]]);
     }
     return pairs;
 };
 
-const SoundCell = ({ sound, isGlobalPlay, playPauseVolume }) => (
+interface CellProps {
+    sound: SoundState;
+    isGlobalPlay: boolean;
+    playPauseVolume: PlayPauseVolume;
+}
+
+const SoundCell = ({ sound, isGlobalPlay, playPauseVolume }: CellProps) => (
     <div className='text-center col-6 col-sm-4 col-md-3 col-lg-3'>
         <SoundSlider
             id={sound.id}
@@ -23,7 +30,13 @@ const SoundCell = ({ sound, isGlobalPlay, playPauseVolume }) => (
     </div>
 );
 
-const RowsView = React.memo(({ sounds, isGlobalPlay, playPauseVolume }) => (
+interface RowsViewProps {
+    sounds: SoundState[];
+    isGlobalPlay: boolean;
+    playPauseVolume: PlayPauseVolume;
+}
+
+const RowsView = memo(({ sounds, isGlobalPlay, playPauseVolume }: RowsViewProps) => (
     <div className='container'>
         {toPairs(sounds).map(([left, right]) => (
             <div key={left.id} className='sounds-row row justify-content-center'>

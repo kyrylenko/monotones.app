@@ -5,11 +5,12 @@
 ### Development
 
 ```sh
-npm start        # dev server on http://localhost:3000
-npm test         # unit and integration tests (Vitest, watch mode)
-npm run lint     # ESLint
-npm run build    # production build to build/ (includes the service worker)
-npm run preview  # serve the production build
+npm start          # dev server on http://localhost:3000
+npm test           # unit and integration tests (Vitest, watch mode)
+npm run lint       # ESLint
+npm run typecheck  # TypeScript (app and service worker)
+npm run build      # type check + production build to build/ (includes the service worker)
+npm run preview    # serve the production build
 ```
 
 ### Structure
@@ -20,8 +21,13 @@ npm run preview  # serve the production build
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
 - `src/utils` – pure helpers (share links, sound catalogue, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
-- `src/test` – test helpers; `src/App.test.jsx` covers the app end to end
+- `src/audio` – volume handling (Web Audio fallback for iOS)
+- `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
+- `src/types` – shared TypeScript types
+- `src/test` – test helpers; `src/App.test.tsx` covers the app end to end
 
-### What is missing?
+### Browser notes
 
-- Not supported by the Safari browser yet
+- Safari plays media from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
+- iOS ignores `audio.volume`, so there the volume goes through a Web Audio gain node (`src/audio/volumeControl.ts`).
+  Web Audio on iOS may pause when the screen locks or the app goes to the background.

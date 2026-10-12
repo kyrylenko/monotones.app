@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../store/hooks';
 import { toggleGlobalPlay } from '../store/thunks';
 
 // Play / pause everything with the space key, unless the user is typing
 const useSpaceToggle = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const onKeyDown = (event) => {
-            if (event.key === ' ' && event.target.tagName !== 'INPUT') {
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === ' ' && (event.target as HTMLElement).tagName !== 'INPUT') {
                 dispatch(toggleGlobalPlay());
                 event.preventDefault();
             }

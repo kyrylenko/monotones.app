@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import RowsView from './RowsView';
 import { aggregateSounds } from '../utils/sounds';

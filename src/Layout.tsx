@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
@@ -7,7 +7,7 @@ import background from './assets/icons/background.webp';
 import './App.css';
 import './Breathing.css';
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation();
 
   return (

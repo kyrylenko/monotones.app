@@ -1,11 +1,10 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
 import Player from './Player';
 import { selectAllSounds, selectIsGlobalPlay } from '../store/selectors';
+import { useAppSelector } from '../store/hooks';
 
 const SoundPlayers = () => {
-    const sounds = useSelector(selectAllSounds);
-    const isGlobalPlay = useSelector(selectIsGlobalPlay);
+    const sounds = useAppSelector(selectAllSounds);
+    const isGlobalPlay = useAppSelector(selectIsGlobalPlay);
 
     return sounds.map(({ id, isPlay, volume }) => (
         <Player key={id} id={id} isPlay={isPlay} volume={volume} isGlobalPlay={isGlobalPlay} />

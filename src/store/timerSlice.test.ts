@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { timerReducer as reducer, timerActions as actions } from './timerSlice';
+import { timerReducer as reducer, timerActions as actions, type TimerState } from './timerSlice';
+import { loadingReducer } from './loadingSlice';
 import { timerTick } from './thunks';
 import { mainReducer } from './mainSlice';
 
@@ -19,8 +20,8 @@ describe('timerSlice', () => {
 });
 
 describe('timerTick', () => {
-    const createStore = (timer) => configureStore({
-        reducer: { main: mainReducer, timer: reducer },
+    const createStore = (timer: TimerState) => configureStore({
+        reducer: { main: mainReducer, timer: reducer, loading: loadingReducer },
         preloadedState: { main: { isGlobalPlay: true, sounds: {}, mixtures: [] }, timer },
     });
 

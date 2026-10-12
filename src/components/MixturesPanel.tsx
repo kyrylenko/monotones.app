@@ -1,5 +1,3 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { TransitionGroup } from 'react-transition-group';
 import MixAnim from './MixAnim';
@@ -7,13 +5,14 @@ import Mixture from './Mixture';
 import PlayingNowPanel from './PlayingNowPanel';
 import { mainActions } from '../store/mainSlice';
 import { selectActiveSounds, selectMixtures } from '../store/selectors';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 // Desktop side panel: what is playing now and the saved mixtures
-const MixturesPanel = ({ onSaveClick }) => {
+const MixturesPanel = ({ onSaveClick }: { onSaveClick: () => void }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
-    const hasActiveSounds = useSelector(selectActiveSounds).length > 0;
-    const mixtures = useSelector(selectMixtures);
+    const dispatch = useAppDispatch();
+    const hasActiveSounds = useAppSelector(selectActiveSounds).length > 0;
+    const mixtures = useAppSelector(selectMixtures);
 
     return (
         <>

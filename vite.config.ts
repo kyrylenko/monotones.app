@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -6,18 +6,17 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      // Registration is done manually in src/registerServiceWorker.js
+      // Custom service worker: src/service-worker.ts (built to service-worker.js, the name existing clients know)
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'service-worker.ts',
+      // Registration is done manually in src/registerServiceWorker.ts
       injectRegister: null,
       // public/manifest.json is used as is
       manifest: false,
-      // Keep the CRA file name so already installed clients pick up the update
-      filename: 'service-worker.js',
-      workbox: {
+      injectManifest: {
         globPatterns: ['**/*.{html,js,css,mp3,gif,svg,webp,png,ico}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        clientsClaim: true,
-        navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/_/, /\/[^/]+\.[^/]+$/],
       },
     }),
   ],

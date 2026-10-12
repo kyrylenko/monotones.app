@@ -1,6 +1,8 @@
 import { encodeShareCode, decodeShareCode, buildShareUrl } from './shareCode';
+import type { SoundId } from '../constants/soundIds';
+import type { Sounds } from '../types';
 
-const playing = (...ids) => Object.fromEntries(ids.map(id => [id, { id, isPlay: true, volume: 0.3 }]));
+const playing = (...ids: SoundId[]): Sounds => Object.fromEntries(ids.map(id => [id, { id, isPlay: true, volume: 0.3 }]));
 
 describe('encodeShareCode', () => {
     it('encodes playing sounds in catalogue order', () => {
@@ -8,7 +10,7 @@ describe('encodeShareCode', () => {
     });
 
     it('skips paused sounds', () => {
-        const sounds = { ...playing('campfire'), farm: { id: 'farm', isPlay: false, volume: 0.3 } };
+        const sounds = { ...playing('campfire'), farm: { id: 'farm' as const, isPlay: false, volume: 0.3 } };
         expect(encodeShareCode(sounds)).toBe('ce');
     });
 

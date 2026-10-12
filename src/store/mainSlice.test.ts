@@ -1,15 +1,17 @@
-import { mainReducer as reducer, mainActions as actions } from './mainSlice';
+import { mainReducer as reducer, mainActions as actions, type MainState } from './mainSlice';
+import type { SoundId } from '../constants/soundIds';
+import type { Mixture, SoundSetting, Sounds } from '../types';
 
-const deepFreeze = (obj) => {
+const deepFreeze = <T extends object>(obj: T): T => {
     Object.values(obj).forEach(v => typeof v === 'object' && v !== null && deepFreeze(v));
     return Object.freeze(obj);
 };
 
-const sound = (id, extra = {}) => ({ id, isPlay: true, volume: 0.3, ...extra });
+const sound = (id: SoundId, extra: Partial<SoundSetting> = {}): SoundSetting => ({ id, isPlay: true, volume: 0.3, ...extra });
 
-const mixture = (id, sounds, isActive = false) => ({ id, sounds, isActive });
+const mixture = (id: string, sounds: Sounds, isActive = false): Mixture => ({ id, sounds, isActive });
 
-const baseState = {
+const baseState: MainState = {
     isGlobalPlay: false,
     sounds: {},
     mixtures: [],
@@ -117,8 +119,8 @@ describe('mainReducer', () => {
             };
             const next = reducer(state, actions.pauseSound('campfire'));
 
-            expect(next.sounds.campfire.isPlay).toBe(false);
-            expect(next.sounds.farm.isPlay).toBe(true);
+            expect(next.sounds.campfire?.isPlay).toBe(false);
+            expect(next.sounds.farm?.isPlay).toBe(true);
             expect(next.isGlobalPlay).toBe(true);
             expect(next.mixtures[0].isActive).toBe(false);
         });

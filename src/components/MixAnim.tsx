@@ -1,13 +1,20 @@
-import React, { cloneElement, useRef } from 'react';
+import { cloneElement, useRef, type ReactElement, type Ref } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-//Grow / collapse animation for items of a <TransitionGroup>.
-//The child must accept a `ref` (DOM element or component forwarding it to its root element).
-const MixAnim = ({ children, ...props }) => {
-    const nodeRef = useRef(null);
+interface MixAnimProps {
+    /** Must accept a `ref` (DOM element or component passing it to its root element) */
+    children: ReactElement<{ ref?: Ref<HTMLDivElement> }>;
+    // Injected by <TransitionGroup>
+    in?: boolean;
+    onExited?: () => void;
+}
+
+// Grow / collapse animation for items of a <TransitionGroup>
+const MixAnim = ({ children, ...transitionProps }: MixAnimProps) => {
+    const nodeRef = useRef<HTMLDivElement>(null);
 
     return (
-        <CSSTransition nodeRef={nodeRef} classNames='mixanim' timeout={400} {...props}>
+        <CSSTransition nodeRef={nodeRef} classNames='mixanim' timeout={400} {...transitionProps}>
             {cloneElement(children, { ref: nodeRef })}
         </CSSTransition>
     );

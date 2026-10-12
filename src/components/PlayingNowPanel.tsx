@@ -1,15 +1,14 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import ActiveSoundIcons from './ActiveSoundIcons';
 import save from '../assets/icons/save.svg';
 import reset from '../assets/icons/reset.svg';
 import { mainActions } from '../store/mainSlice';
+import { useAppDispatch } from '../store/hooks';
 
 // Desktop: playing sounds with "save mixture" and "reset" actions
-const PlayingNowPanel = ({ onSaveClick }) => {
+const PlayingNowPanel = ({ onSaveClick }: { onSaveClick: () => void }) => {
     const { t } = useTranslation();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     return (
         <>

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { timerTick } from '../store/thunks';
 
 // Ticks the sleep timer every second while it runs
 const useSleepTimer = () => {
-    const dispatch = useDispatch();
-    const timerRun = useSelector(state => state.timer.timerRun);
+    const dispatch = useAppDispatch();
+    const timerRun = useAppSelector(state => state.timer.timerRun);
 
     useEffect(() => {
         if (!timerRun) {

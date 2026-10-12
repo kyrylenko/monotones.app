@@ -1,4 +1,3 @@
-import React from 'react';
 import ActiveSoundIcons from './ActiveSoundIcons';
 import colors from '../constants/colors';
 

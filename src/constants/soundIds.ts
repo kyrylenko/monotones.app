@@ -13,7 +13,7 @@ export const relax = {
     ts: 'tropical_birds',    
     //paris_cafe: 'paris_cafe',
     //birds_in_park: 'birds_in_park',
-};
+} as const;
 export const sleep = {
     st: 'summer_night',
     on: 'october_rain',
@@ -28,7 +28,7 @@ export const sleep = {
     //crickets: 'crickets',
     //REASON: too big size
     //desert: 'desert',
-};
+} as const;
 export const focus = {
     tm: 'thunderstorm',
     in: 'inside_train',
@@ -38,13 +38,21 @@ export const focus = {
     gy: 'ghosty',
     tr: 'typewriter',
     kb: 'keyboard'
-};
+} as const;
 
 export const all = {
     ...relax,
     ...sleep,
     ...focus
-};
+} as const;
 
 // Order defines the "all sounds" page order
-export const categories = { relax, sleep, focus };
+export const categories = { relax, sleep, focus } as const;
+
+/** Two-letter code used in share links, e.g. 'ce' */
+export type ShareCode = keyof typeof all;
+/** Sound id, also the file name of its mp3 and icon, e.g. 'campfire' */
+export type SoundId = (typeof all)[ShareCode];
+export type Category = keyof typeof categories;
+
+export const isShareCode = (code: string): code is ShareCode => code in all;

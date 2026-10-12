@@ -1,16 +1,15 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 import MixAnim from './MixAnim';
 import { iconUrl } from '../assets';
 import { idToTitle } from '../utils/sounds';
 import { mainActions } from '../store/mainSlice';
 import { selectActiveSounds } from '../store/selectors';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 // Icons of the playing sounds, clicking one pauses it
-const ActiveSoundIcons = ({ className }) => {
-    const dispatch = useDispatch();
-    const activeSounds = useSelector(selectActiveSounds);
+const ActiveSoundIcons = ({ className }: { className: string }) => {
+    const dispatch = useAppDispatch();
+    const activeSounds = useAppSelector(selectActiveSounds);
 
     return (
         <TransitionGroup className={className}>

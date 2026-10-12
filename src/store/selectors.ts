@@ -1,15 +1,16 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { aggregateSounds } from '../utils/sounds';
+import type { RootState } from './index';
+import type { SoundSetting } from '../types';
 
-// Play state is not persisted, so it is undefined right after a reload
-export const selectIsGlobalPlay = (state) => state.main.isGlobalPlay === true;
-export const selectSounds = (state) => state.main.sounds;
-export const selectMixtures = (state) => state.main.mixtures || [];
-export const selectTimer = (state) => state.timer;
+export const selectIsGlobalPlay = (state: RootState) => state.main.isGlobalPlay;
+export const selectSounds = (state: RootState) => state.main.sounds;
+export const selectMixtures = (state: RootState) => state.main.mixtures;
+export const selectTimer = (state: RootState) => state.timer;
 
 export const selectActiveSounds = createSelector(
     [selectSounds],
-    (sounds) => Object.values(sounds).filter(s => s.isPlay)
+    (sounds) => Object.values(sounds).filter((s): s is SoundSetting => !!s?.isPlay)
 );
 
 // Every sound of the catalogue with its current settings, grouped by category

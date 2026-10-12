@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Slider from 'rc-slider';
 import { secToMin } from '../utils/time';
 import { timerActions } from '../store/timerSlice';
 import { selectTimer } from '../store/selectors';
-import { sliderStyles } from './sliderStyles';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { sliderStyles, sliderValue } from './sliderStyles';
+import type { ModalProps } from './modalProps';
 
 const DEFAULT_DURATION = 300; // seconds
 
-const SleepTimerModal = ({ isOpen, onClose }) => {
-    const dispatch = useDispatch();
-    const { timerRun, interval: timeLeft } = useSelector(selectTimer);
+const SleepTimerModal = ({ isOpen, onClose }: ModalProps) => {
+    const dispatch = useAppDispatch();
+    const { timerRun, interval: timeLeft } = useAppSelector(selectTimer);
     const [duration, setDuration] = useState(DEFAULT_DURATION);
     const { minutes, seconds } = secToMin(timerRun ? timeLeft : duration);
 
@@ -36,7 +37,7 @@ const SleepTimerModal = ({ isOpen, onClose }) => {
                     min={30}
                     max={3600}
                     step={30}
-                    onChange={setDuration}
+                    onChange={(value) => setDuration(sliderValue(value))}
                     value={duration}
                     styles={sliderStyles}
                     style={{ width: '90%' }} />}

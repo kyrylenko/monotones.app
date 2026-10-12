@@ -1,8 +1,17 @@
-import React from 'react';
+import type { Ref } from 'react';
 import trash from '../assets/icons/delete.svg';
 
-// `ref` is used by the list animation (MixAnim)
-const Mixture = ({ ref, title, isActive, onPlay, onPause, onDelete }) => (
+interface MixtureProps {
+    /** Used by the list animation (MixAnim) */
+    ref?: Ref<HTMLDivElement>;
+    title: string;
+    isActive: boolean;
+    onPlay: () => void;
+    onPause: () => void;
+    onDelete: () => void;
+}
+
+const Mixture = ({ ref, title, isActive, onPlay, onPause, onDelete }: MixtureProps) => (
     <div
         ref={ref}
         title={isActive ? 'Pause mixture' : 'Play mixture'}

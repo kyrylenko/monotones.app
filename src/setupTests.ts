@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/vitest';
 
 //Tests switch to the mobile layout with window.__isMobile = true
-window.matchMedia = vi.fn().mockImplementation(query => {
+window.matchMedia = vi.fn().mockImplementation((query: string) => {
     return {
         get matches() { return window.__isMobile === true; },
         media: query,

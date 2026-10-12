@@ -1,13 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { soundUrl } from '../assets';
+import { createVolumeControl, type VolumeControl } from '../audio/volumeControl';
 import { mainActions } from '../store/mainSlice';
+import { useAppDispatch } from '../store/hooks';
+import type { SoundId } from '../constants/soundIds';
 
+// Firefox-only global, used to detect the browser
+declare const InstallTrigger: unknown;
 const isFirefox = typeof InstallTrigger !== 'undefined';
 // Seconds before the end to jump back to the start: avoids an audible gap where `loop` is not seamless
 const LOOP_BUFFER = 0.44;
 
-const createAudio = (id) => {
+interface Sound {
+    audio: HTMLAudioElement;
+    volume: VolumeControl;
+}
+
+const createSound = (id: SoundId): Sound => {
     const audio = new Audio(soundUrl(id));
     audio.crossOrigin = 'anonymous';
     audio.loop = isFirefox;
@@ -20,28 +29,37 @@ const createAudio = (id) => {
         }
     });
 
-    return audio;
+    return { audio, volume: createVolumeControl(audio) };
 };
 
-// Invisible <audio> for one sound
-const Player = ({ id, isPlay, volume, isGlobalPlay }) => {
-    const dispatch = useDispatch();
-    const audioRef = useRef(null);
+interface PlayerProps {
+    id: SoundId;
+    isPlay: boolean;
+    volume: number;
+    isGlobalPlay: boolean;
+}
 
-    // Effects run in order: the audio exists before the ones below use it
+// Invisible <audio> for one sound
+const Player = ({ id, isPlay, volume, isGlobalPlay }: PlayerProps) => {
+    const dispatch = useAppDispatch();
+    const soundRef = useRef<Sound>(null);
+
+    // Effects run in order: the sound exists before the ones below use it
     useEffect(() => {
-        const audio = createAudio(id);
-        audioRef.current = audio;
-        return () => audio.pause();
+        const sound = createSound(id);
+        soundRef.current = sound;
+        return () => sound.audio.pause();
     }, [id]);
 
     useEffect(() => {
-        audioRef.current.volume = volume;
+        soundRef.current!.volume.setVolume(volume);
     }, [volume]);
 
+    // Runs synchronously after a click (React flushes effects of discrete events), so play() stays in the user gesture
     useEffect(() => {
-        const audio = audioRef.current;
+        const { audio, volume: volumeControl } = soundRef.current!;
         if (isPlay && isGlobalPlay) {
+            volumeControl.beforePlay();
             audio.play()
                 .then(() => dispatch(mainActions.setSoundLoaded(id)))
                 .catch(error => console.log('Error while loading sound ', id, error));

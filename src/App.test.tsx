@@ -1,14 +1,17 @@
 import { screen, fireEvent, waitFor, within, act } from '@testing-library/react';
 import { renderApp, seedPersistedState, readPersistedState, playingSounds } from './test/renderApp';
+import { $ } from './test/dom';
+import type { SoundId } from './constants/soundIds';
 
 const soundIcons = () => document.querySelectorAll('img.sound-icon');
-const soundIcon = (id) => document.querySelector(`img.sound-icon[alt=${id}]`);
+const soundIcon = (id: SoundId) => $(`img.sound-icon[alt=${id}]`);
 const globalButton = () => document.querySelector('.play-div img');
+const clickGlobalButton = () => fireEvent.click($('.play-div img'));
 const playingNow = () => [...document.querySelectorAll('.mixture-block img')].map(i => i.id);
 
-const toggleSound = (id) => fireEvent.click(soundIcon(id));
+const toggleSound = (id: SoundId) => fireEvent.click(soundIcon(id));
 
-const saveMixture = async (name) => {
+const saveMixture = async (name: string) => {
     fireEvent.click(screen.getByAltText('Save mixture'));
     const input = await screen.findByPlaceholderText('Mixture name');
     fireEvent.change(input, { target: { value: name } });
@@ -77,10 +80,10 @@ describe('App', () => {
             const { store } = await renderApp();
             toggleSound('campfire');
 
-            const slider = soundIcon('campfire').parentElement.querySelector('[role=slider]');
+            const slider = $('[role=slider]', soundIcon('campfire').parentElement!);
             fireEvent.keyDown(slider, { key: 'ArrowRight', keyCode: 39 });
 
-            await waitFor(() => expect(store.getState().main.sounds.campfire.volume).toBeCloseTo(0.31));
+            await waitFor(() => expect(store.getState().main.sounds.campfire?.volume).toBeCloseTo(0.31));
             const audio = [...window.__playing][0];
             expect(audio.volume).toBeCloseTo(0.31);
         });
@@ -91,11 +94,11 @@ describe('App', () => {
             toggleSound('farm');
             await waitFor(() => expect(playingSounds()).toHaveLength(2));
 
-            fireEvent.click(globalButton());
+            clickGlobalButton();
             await waitFor(() => expect(playingSounds()).toEqual([]));
             expect(globalButton()).toHaveAttribute('alt', 'Play');
 
-            fireEvent.click(globalButton());
+            clickGlobalButton();
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'farm']));
         });
 
@@ -122,7 +125,7 @@ describe('App', () => {
             toggleSound('campfire');
             toggleSound('farm');
 
-            fireEvent.click(document.querySelector('.mixture-block img#campfire'));
+            fireEvent.click($('.mixture-block img#campfire'));
 
             await waitFor(() => expect(playingSounds()).toEqual(['farm']));
         });
@@ -130,7 +133,7 @@ describe('App', () => {
         it('"Reset all" removes every sound', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
-            await waitFor(() => expect(store.getState().main.sounds.campfire.isLoaded).toBe(true));
+            await waitFor(() => expect(store.getState().main.sounds.campfire?.isLoaded).toBe(true));
 
             fireEvent.click(screen.getByAltText('Reset all'));
 
@@ -162,7 +165,7 @@ describe('App', () => {
             fireEvent.click(screen.getByText('Evening'));
             await waitFor(() => expect(playingSounds()).toEqual([]));
 
-            const morning = screen.getByText('Morning').parentElement;
+            const morning = screen.getByText('Morning').parentElement!;
             fireEvent.click(within(morning).getByAltText('Delete mixture'));
             await waitFor(() => expect(mixtureNames()).toEqual(['Evening']));
         });
@@ -208,7 +211,7 @@ describe('App', () => {
             fireEvent.click(screen.getByRole('button', { name: 'Start' }));
 
             //one act() per second: the app re-renders between ticks like in a browser
-            const tick = (seconds) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
+            const tick = (seconds: number) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
             tick(2);
             expect(document.querySelector('.timer .clock')).toHaveTextContent('04:58');
 
@@ -226,7 +229,7 @@ describe('App', () => {
             fireEvent.click(await screen.findByRole('button', { name: 'Start' }));
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(true));
 
-            fireEvent.click(document.querySelector('.timer'));
+            fireEvent.click($('.timer'));
             fireEvent.click(await screen.findByRole('button', { name: 'Cancel Timer' }));
 
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(false));
@@ -240,7 +243,7 @@ describe('App', () => {
             fireEvent.click(await screen.findByRole('button', { name: 'Start' }));
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(true));
 
-            fireEvent.click(globalButton());
+            clickGlobalButton();
 
             expect(store.getState().timer.timerRun).toBe(false);
         });
@@ -291,12 +294,12 @@ describe('App', () => {
         it('switches the language', async () => {
             await renderApp();
 
-            fireEvent.change(document.querySelector('#i18nextLng'), { target: { value: 'uk-UA' } });
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
             expect(await screen.findByRole('link', { name: 'Про нас' })).toBeInTheDocument();
             expect(screen.getByRole('link', { name: 'Сон' })).toBeInTheDocument();
             expect(document.querySelector('#i18nextLng')).toHaveValue('uk-UA');
 
-            fireEvent.change(document.querySelector('#i18nextLng'), { target: { value: 'en-US' } });
+            fireEvent.change($('#i18nextLng'), { target: { value: 'en-US' } });
             expect(await screen.findByRole('link', { name: 'About' })).toBeInTheDocument();
         });
     });
@@ -313,9 +316,9 @@ describe('App', () => {
 
             toggleSound('campfire');
 
-            const bar = document.querySelector('.fixed-bottom');
+            const bar = $('.fixed-bottom');
             expect([...bar.querySelectorAll('img')].map(i => i.id)).toEqual(['campfire']);
-            fireEvent.click(bar.querySelector('img#campfire'));
+            fireEvent.click($('img#campfire', bar));
             await waitFor(() => expect(document.querySelector('.fixed-bottom')).toBeNull());
         });
     });
@@ -340,7 +343,9 @@ describe('App', () => {
             //play state is not persisted: the user has to press play
             expect(globalButton()).toHaveAttribute('alt', 'Play');
             expect(playingSounds()).toEqual([]);
-            expect(store.getState().timer.timerRun).toBeFalsy();
+            //fields that are not saved get their defaults back
+            expect(store.getState().main.isGlobalPlay).toBe(false);
+            expect(store.getState().timer).toEqual({ timerRun: false, interval: 1 });
             expect(document.querySelector('.timer-div')).toBeNull();
         });
 
@@ -355,8 +360,8 @@ describe('App', () => {
             await persistor.flush();
             const saved = readPersistedState();
 
-            expect(saved.main.sounds.campfire).toMatchObject({ id: 'campfire', isPlay: true });
-            expect(saved.main.mixtures.map(m => m.id)).toEqual(['Evening']);
+            expect(saved.main.sounds?.campfire).toMatchObject({ id: 'campfire', isPlay: true });
+            expect(saved.main.mixtures?.map(m => m.id)).toEqual(['Evening']);
             expect(saved.main).not.toHaveProperty('isGlobalPlay');
             expect(saved.timer).not.toHaveProperty('timerRun');
             expect(saved.timer).not.toHaveProperty('interval');
@@ -406,11 +411,11 @@ describe('App', () => {
             act(() => vi.advanceTimersByTime(1000));
             await waitFor(() => expect(playingSounds()).toEqual([]));
 
-            fireEvent.click(globalButton());
+            clickGlobalButton();
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
             await screen.findByRole('heading', { name: 'Your subtle companion' });
-            fireEvent.click(document.querySelector('header a[href="/"]'));
+            fireEvent.click($('header a[href="/"]'));
             await waitFor(() => expect(soundIcons()).toHaveLength(28));
 
             expect(playingSounds()).toEqual(['campfire']);
@@ -449,7 +454,7 @@ describe('App', () => {
             await saveMixture('B');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'farm']));
 
-            const active = screen.getByText('B').parentElement;
+            const active = screen.getByText('B').parentElement!;
             fireEvent.click(within(active).getByAltText('Delete mixture'));
 
             await waitFor(() => expect(mixtureNames()).toEqual(['A']));
