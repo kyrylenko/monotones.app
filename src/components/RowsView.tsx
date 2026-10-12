@@ -2,10 +2,10 @@ import { memo } from 'react';
 import SoundSlider, { type PlayPauseVolume } from './SoundSlider';
 import type { SoundState } from '../types';
 
-// Pairs of sounds: one row with a left and a right sound
-const toPairs = (sounds: SoundState[]): [SoundState, SoundState][] => {
-    const pairs: [SoundState, SoundState][] = [];
-    for (let i = 0; i < sounds.length - 1; i += 2) {
+// Pairs of sounds: one row with a left and a right sound. With an odd count the last row has only the left one.
+const toPairs = (sounds: SoundState[]): [SoundState, SoundState | undefined][] => {
+    const pairs: [SoundState, SoundState | undefined][] = [];
+    for (let i = 0; i < sounds.length; i += 2) {
         pairs.push([sounds[i], sounds[i + 1]]);
     }
     return pairs;
@@ -41,8 +41,10 @@ const RowsView = memo(({ sounds, isGlobalPlay, playPauseVolume }: RowsViewProps)
         {toPairs(sounds).map(([left, right]) => (
             <div key={left.id} className='sounds-row row justify-content-center'>
                 <SoundCell sound={left} isGlobalPlay={isGlobalPlay} playPauseVolume={playPauseVolume} />
-                <div className='d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2'></div>
-                <SoundCell sound={right} isGlobalPlay={isGlobalPlay} playPauseVolume={playPauseVolume} />
+                {right && <>
+                    <div className='d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2'></div>
+                    <SoundCell sound={right} isGlobalPlay={isGlobalPlay} playPauseVolume={playPauseVolume} />
+                </>}
             </div>
         ))}
     </div>

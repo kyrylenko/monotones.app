@@ -329,6 +329,55 @@ describe('App', () => {
         });
     });
 
+    describe('generated sounds', () => {
+        //jsdom has no Web Audio: record which noise sources are playing
+        const playingNoise = new Set<object>();
+        const node = () => ({ gain: { value: 1 }, connect: (next: unknown) => next });
+        class FakeAudioContext {
+            state = 'running';
+            sampleRate = 100;
+            destination = {};
+            createGain = node;
+            resume = () => Promise.resolve();
+            createBuffer = (channels: number, length: number) => ({
+                numberOfChannels: channels,
+                getChannelData: () => new Float32Array(length),
+            });
+            createBufferSource = () => {
+                const source = {
+                    connect: () => {},
+                    disconnect: () => {},
+                    start: () => playingNoise.add(source),
+                    stop: () => playingNoise.delete(source),
+                };
+                return source;
+            };
+        }
+
+        beforeEach(() => {
+            playingNoise.clear();
+            vi.stubGlobal('AudioContext', FakeAudioContext);
+        });
+        afterEach(() => vi.unstubAllGlobals());
+
+        it('plays brown noise without an mp3, shares and pauses it like the others', async () => {
+            const { store } = await renderApp();
+
+            toggleSound('brown_noise');
+
+            await waitFor(() => expect(store.getState().main.sounds.brown_noise?.isLoaded).toBe(true));
+            expect(playingNoise.size).toBe(1);
+            expect(playingSounds()).toEqual([]);
+            expect(playingNow()).toEqual(['brown_noise']);
+
+            fireEvent.click(screen.getByText('Share'));
+            expect(await screen.findByDisplayValue('https://monotones.app/share/bn')).toBeInTheDocument();
+
+            clickGlobalButton();
+            await waitFor(() => expect(playingNoise.size).toBe(0));
+        });
+    });
+
     describe('pages and language', () => {
         it('opens About and Terms from the footer', async () => {
             await renderApp();
@@ -399,6 +448,27 @@ describe('App', () => {
             expect(document.querySelector('.timer-div')).toBeNull();
         });
 
+        it('replaces the removed pink noise with brown noise in saved sounds and mixtures', async () => {
+            const campfire = { id: 'campfire', isPlay: true, volume: 0.5, isLoaded: true };
+            const pinkNoise = { id: 'pink_noise', isPlay: true, volume: 0.7, isLoaded: true };
+            seedPersistedState({
+                main: {
+                    sounds: { campfire, pink_noise: pinkNoise },
+                    mixtures: [{ id: 'Night', sounds: { pink_noise: pinkNoise }, isActive: true }],
+                },
+                timer: {},
+                loading: {},
+            });
+
+            const { store } = await renderApp();
+
+            const brownNoise = { id: 'brown_noise', isPlay: true, volume: 0.7, isLoaded: false };
+            expect(store.getState().main.sounds).toEqual({ campfire, brown_noise: brownNoise });
+            expect(store.getState().main.mixtures[0].sounds).toEqual({ brown_noise: brownNoise });
+            expect(playingNow()).toEqual(['campfire', 'brown_noise']);
+            expect(document.querySelector('img.sound-icon[alt=pink_noise]')).toBeNull();
+        });
+
         it('saves sounds and mixtures but not the play and timer state', async () => {
             const { persistor, store } = await renderApp();
             toggleSound('campfire');
@@ -415,7 +485,7 @@ describe('App', () => {
             expect(saved.main).not.toHaveProperty('isGlobalPlay');
             expect(saved.timer).not.toHaveProperty('timerRun');
             expect(saved.timer).not.toHaveProperty('interval');
-            expect(saved._persist).toMatchObject({ version: 1 });
+            expect(saved._persist).toMatchObject({ version: 2 });
         });
     });
 

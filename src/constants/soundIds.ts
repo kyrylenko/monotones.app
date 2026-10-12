@@ -20,7 +20,9 @@ export const sleep = {
     ht: 'heartbeat',
     vs: 'vinyl_cracks',
     wn: 'white_noise',
-    pe: 'pink_noise',
+    //REASON: replaced by brown noise, old 'pe' links open it (see utils/shareCode.ts)
+    //pe: 'pink_noise',
+    bn: 'brown_noise',
     se: 'space_drone',
     ws: 'wind_chimes',
     //REASON:incorreact clock phase because trimmed sound
@@ -51,7 +53,7 @@ export const categories = { relax, sleep, focus } as const;
 
 /** Two-letter code used in share links, e.g. 'ce' */
 export type ShareCode = keyof typeof all;
-/** Sound id, also the file name of its mp3 and icon, e.g. 'campfire' */
+/** Sound id, also the file name of its icon and mp3 (generated sounds have none), e.g. 'campfire' */
 export type SoundId = (typeof all)[ShareCode];
 export type Category = keyof typeof categories;
 

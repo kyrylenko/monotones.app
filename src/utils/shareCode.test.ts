@@ -14,6 +14,10 @@ describe('encodeShareCode', () => {
         expect(encodeShareCode(sounds)).toBe('ce');
     });
 
+    it('encodes generated sounds like the others', () => {
+        expect(encodeShareCode(playing('brown_noise', 'white_noise'))).toBe('wnbn');
+    });
+
     it('is empty when nothing plays', () => {
         expect(encodeShareCode({})).toBe('');
     });
@@ -26,6 +30,10 @@ describe('decodeShareCode', () => {
 
     it('puts the odd letter first', () => {
         expect(decodeShareCode('xcekb')).toEqual(['x', 'ce', 'kb']);
+    });
+
+    it('opens brown noise for old pink noise links', () => {
+        expect(decodeShareCode('cepe')).toEqual(['ce', 'bn']);
     });
 
     it('handles empty input', () => {

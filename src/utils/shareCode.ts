@@ -9,8 +9,14 @@ const SHARE_CODES = Object.keys(all) as ShareCode[];
 export const encodeShareCode = (sounds: Sounds): string =>
     SHARE_CODES.filter(code => sounds[all[code]]?.isPlay).join('');
 
+// Codes of removed sounds => the sound that replaced them, so old links keep working
+const LEGACY_CODES: Record<string, ShareCode> = {
+    pe: 'bn', // pink noise => brown noise
+};
+
 // 'cekb' => ['ce', 'kb']. Odd length strings start with a one-letter chunk.
-export const decodeShareCode = (code: string): string[] => code.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g) ?? [];
+export const decodeShareCode = (code: string): string[] =>
+    (code.match(/.{1,2}(?=(.{2})+(?!.))|.{1,2}$/g) ?? []).map(chunk => LEGACY_CODES[chunk] ?? chunk);
 
 export const buildShareUrl = (sounds: Sounds): string => {
     const code = encodeShareCode(sounds);
