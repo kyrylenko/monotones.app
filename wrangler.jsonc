@@ -1,0 +1,12 @@
+// Cloudflare Workers: serves the static build (no server code)
+// https://developers.cloudflare.com/workers/static-assets/
+{
+  // Must match the Worker name in the Cloudflare dashboard
+  "name": "monotones-app",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./build",
+    // Unknown paths like /sleep or /share/kbce get index.html (client-side routing)
+    "not_found_handling": "single-page-application"
+  }
+}
