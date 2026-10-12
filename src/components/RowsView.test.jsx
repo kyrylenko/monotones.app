@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import RowsView from './RowsView';
-import { aggregateSounds } from '../utils/Utils';
+import { aggregateSounds } from '../utils/sounds';
 
 describe('RowsView', () => {
     it('snapshot is correct', () => {
-        const { relaxSounds } = aggregateSounds();
+        const { relax } = aggregateSounds();
         const { asFragment } = render(<RowsView
-            sounds={relaxSounds}
+            sounds={relax}
             playPauseVolume={() => { }}
             isGlobalPlay={true} />);
         expect(asFragment()).toMatchSnapshot();

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Overlay from 'react-bootstrap/Overlay';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
@@ -9,52 +9,38 @@ import {
     FacebookIcon,
     TwitterIcon,
 } from 'react-share';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-class SharePopover extends Component {
+const SharePopover = ({ isOpen, onClose, target, url }) => {
+    const { t } = useTranslation();
+    const [copied, setCopied] = useState(false);
 
-    state = {
-        copied: false,
-    };
-
-    selectAndCopy = (e) => {
+    const selectAndCopy = (e) => {
         e.target.select();
         document.execCommand('copy');
-        this.setState({ copied: true });
+        setCopied(true);
     };
 
-    render() {
-        const { t } = this.props;
-        return (
-            <Overlay placement='left' show={this.props.isOpen} target={this.props.target} rootClose onHide={this.props.toggle}>
-                <Popover id='share-popover'>
-                    <Popover.Header style={{ color: 'black' }}>{t('share_sounds')}</Popover.Header>
-                    <Popover.Body>
-                        <OverlayTrigger placement='top' overlay={<Tooltip id='copy-tooltip'>{this.state.copied ? 'Copied!' : 'Click to copy'}</Tooltip>}>
-                            <input type='url' className='form-control' onFocus={this.selectAndCopy} onBlur={() => this.setState({ copied: false })} defaultValue={this.props.url}></input>
-                        </OverlayTrigger>
-                        <div className='d-flex justify-content-center my-2'>
-                            <FacebookShareButton
-                                url={this.props.url}
-                                className='share-button mx-1'>
-                                <FacebookIcon
-                                    size={32}
-                                    round />
-                            </FacebookShareButton>
-                            <TwitterShareButton
-                                url={this.props.url}
-                                className='share-button mx-1'>
-                                <TwitterIcon
-                                    size={32}
-                                    round />
-                            </TwitterShareButton>
-                        </div>
-                    </Popover.Body>
-                </Popover>
-            </Overlay>
-        );
-    }
+    return (
+        <Overlay placement='left' show={isOpen} target={target} rootClose onHide={onClose}>
+            <Popover id='share-popover'>
+                <Popover.Header style={{ color: 'black' }}>{t('share_sounds')}</Popover.Header>
+                <Popover.Body>
+                    <OverlayTrigger placement='top' overlay={<Tooltip id='copy-tooltip'>{copied ? 'Copied!' : 'Click to copy'}</Tooltip>}>
+                        <input type='url' className='form-control' onFocus={selectAndCopy} onBlur={() => setCopied(false)} defaultValue={url} />
+                    </OverlayTrigger>
+                    <div className='d-flex justify-content-center my-2'>
+                        <FacebookShareButton url={url} className='share-button mx-1'>
+                            <FacebookIcon size={32} round />
+                        </FacebookShareButton>
+                        <TwitterShareButton url={url} className='share-button mx-1'>
+                            <TwitterIcon size={32} round />
+                        </TwitterShareButton>
+                    </div>
+                </Popover.Body>
+            </Popover>
+        </Overlay>
+    );
 };
 
-export default withTranslation()(SharePopover);
-
+export default SharePopover;

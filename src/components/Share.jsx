@@ -1,50 +1,31 @@
-import React, { Component, createRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useStore } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import SharePopover from './SharePopover';
-import { all } from '../constants/soundIds';
-import { withTranslation } from 'react-i18next';
+import { buildShareUrl } from '../utils/shareCode';
+import { selectSounds } from '../store/selectors';
 
-class Share extends Component {
+const Share = ({ className }) => {
+    const { t } = useTranslation();
+    const store = useStore();
+    const targetRef = useRef(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [shareUrl, setShareUrl] = useState(window.location.origin);
 
-    state = {
-        popover: false,
-        shareUrl: window.location.origin,
+    // The link is built on click, so the header does not re-render on every sound change
+    const open = () => {
+        setShareUrl(buildShareUrl(selectSounds(store.getState())));
+        setIsOpen(true);
     };
 
-    targetRef = createRef();
+    return (
+        <>
+            <div ref={targetRef} className={className} title={t('share_sounds')} onClick={open} style={{ cursor: 'pointer' }}>
+                {t('share')}
+            </div>
+            <SharePopover isOpen={isOpen} onClose={() => setIsOpen(false)} target={targetRef} url={shareUrl} />
+        </>
+    );
+};
 
-    togglePopover = () => this.setState({ popover: !this.state.popover });
-
-    share = () => {
-        const activeIds = Object.values(this.props.reduxSounds).filter(x => x.isPlay).map(x => x.id);
-
-        if (activeIds.length > 0) {
-            const activeAbbrs = Object.entries(all)
-                .filter(x => activeIds.some(s => s === x[1])).map(x => x[0]);
-
-            const parameter = activeAbbrs.reduce((acc, item) => acc += item);
-            this.setState({
-                shareUrl: `https://monotones.app/share/${parameter}`,
-                popover: true
-            });
-        } else {
-            this.setState({
-                shareUrl: `https://monotones.app`,
-                popover: true
-            });
-        }
-    };
-
-    render() {
-        const { t } = this.props;
-        return (
-            <>
-                <div ref={this.targetRef} className={this.props.className} title={t('share_sounds')} onClick={this.share} style={{ cursor: 'pointer' }}>
-                    {t('share')}
-                </div>
-                <SharePopover isOpen={this.state.popover} toggle={this.togglePopover} target={this.targetRef} url={this.state.shareUrl} />
-            </>
-        );
-    }
-}
-
-export default withTranslation()(Share);
+export default Share;

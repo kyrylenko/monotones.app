@@ -1,42 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Share from '../components/Share';
+import { useTranslation } from 'react-i18next';
+import Share from './Share';
 import constants from '../constants/defaultValues';
 import logo from '../logo.png';
-import { useTranslation } from 'react-i18next';
+import useIsMobile from '../hooks/useIsMobile';
 
-const HeaderWeb = (props) => {
+const DONATE_URL = 'https://www.patreon.com/monotones';
+
+const DonateLink = ({ className }) => {
     const { t } = useTranslation();
-    return (
-        <header className='container-fluid'>
-            <div className='row justify-content-end'>
-                <div className='col-4'>
-                    <Link to='/' title={constants.appName}>
-                        <img src={logo} className='app-logo' alt={constants.appName} />
-                    </Link>
-                </div>
-                <div className='col-4 d-flex justify-content-end align-items-center app-title'>
-                    <Share reduxSounds={props.reduxSounds} className='top-bar-item px-lg-5 px-4' />                    
-                    <a href='https://www.patreon.com/monotones' target='_blank' rel='noopener noreferrer' className='top-bar-item px-lg-5 px-4' title={t('buy_us_coffee')}>{t('donate')}</a>
-                </div>
+    return <a href={DONATE_URL} target='_blank' rel='noopener noreferrer' className={className} title={t('buy_us_coffee')}>{t('donate')}</a>;
+};
+
+const HeaderWeb = () => (
+    <header className='container-fluid'>
+        <div className='row justify-content-end'>
+            <div className='col-4'>
+                <Link to='/' title={constants.appName}>
+                    <img src={logo} className='app-logo' alt={constants.appName} />
+                </Link>
             </div>
-        </header>
-    );
-}
+            <div className='col-4 d-flex justify-content-end align-items-center app-title'>
+                <Share className='top-bar-item px-lg-5 px-4' />
+                <DonateLink className='top-bar-item px-lg-5 px-4' />
+            </div>
+        </div>
+    </header>
+);
 
-const HeaderMobile = (props) => {
-    const { t } = useTranslation();
-    return (
-        <header className='d-flex justify-content-around align-items-center'>
-            <Share reduxSounds={props.reduxSounds} className='top-bar-item' />
-            <Link to='/' title={constants.appName}>
-                <img src={logo} alt={constants.appName} style={{ height: '45px' }} />
-            </Link>            
-            <a href='https://www.patreon.com/monotones' target='_blank' rel='noopener noreferrer' className='top-bar-item' title={t('buy_us_coffee')}>{t('donate')}</a>
-        </header>
-    );
-}
+const HeaderMobile = () => (
+    <header className='d-flex justify-content-around align-items-center'>
+        <Share className='top-bar-item' />
+        <Link to='/' title={constants.appName}>
+            <img src={logo} alt={constants.appName} style={{ height: '45px' }} />
+        </Link>
+        <DonateLink className='top-bar-item' />
+    </header>
+);
 
-const Header = (props) => props.isMobile ? <HeaderMobile {...props} /> : <HeaderWeb {...props} />;
+const Header = () => useIsMobile() ? <HeaderMobile /> : <HeaderWeb />;
 
 export default Header;

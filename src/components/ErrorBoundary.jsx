@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 
+// Stays a class: React has no hook for error boundaries
 class ErrorBoundary extends Component {
     state = { hasError: false };
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError() {
         return { hasError: true };
     }
 
     componentDidCatch(error, info) {
-        console.log('Error boundary: ', error, info);
+        console.error('Error boundary: ', error, info);
     }
 
     render() {

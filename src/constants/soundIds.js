@@ -45,3 +45,6 @@ export const all = {
     ...sleep,
     ...focus
 };
+
+// Order defines the "all sounds" page order
+export const categories = { relax, sleep, focus };

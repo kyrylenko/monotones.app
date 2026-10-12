@@ -1,19 +1,15 @@
 import React from 'react';
-import i18n from "i18next";
-
-const lookupLocalStorage = 'i18nextLng';
+import { useTranslation } from 'react-i18next';
 
 const LanguagePicker = () => {
-    const language = window ? window.localStorage.getItem(lookupLocalStorage) || 'en-US' : 'en-US';
-
-    function handleChange(e) {
-        i18n.changeLanguage(e.target.value);
-    };
+    const { i18n } = useTranslation();
+    // Any detected English variant (en-GB, en...) shows as "Eng"
+    const value = i18n.resolvedLanguage === 'uk' ? 'uk-UA' : 'en-US';
 
     return (
-        <select id={lookupLocalStorage} onChange={handleChange} value={language}>
-            <option value="uk-UA" >Ukr</option>
-            <option value="en-US">Eng</option>
+        <select id='i18nextLng' onChange={e => i18n.changeLanguage(e.target.value)} value={value}>
+            <option value='uk-UA'>Ukr</option>
+            <option value='en-US'>Eng</option>
         </select>
     );
 };

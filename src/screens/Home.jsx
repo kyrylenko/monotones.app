@@ -1,86 +1,49 @@
-import React, { Component } from 'react';
+import React, { lazy, useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import RowsView from '../components/RowsView';
-import PlayingNow from '../components/PlayingNow';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { actionCreators as mainActions } from '../store/mainReducer';
-import { actionCreators as timerActions } from '../store/timerReducer';
+import PlayingNowBar from '../components/PlayingNowBar';
 import TimerControl from '../components/TimerControl';
-import { CategoriesMobile, CategoriesWeb } from '../components/Categories';
-import MixtureContainer from '../components/MixtureContainer';
+import { CategoryNavMobile, CategoryNavWeb } from '../components/CategoryNav';
+import MixturesPanel from '../components/MixturesPanel';
 import FixedControlsContainer from '../components/FixedControlsContainer';
-const SaveMixtureModal = React.lazy(() => import(/* webpackChunkName: "modals" */ '../components/Modals'));
-const TimerModal = React.lazy(() => import(/* webpackChunkName: "timerModal" */'../components/TimerModal'));
+import useIsMobile from '../hooks/useIsMobile';
+import { mainActions } from '../store/mainSlice';
+import { selectActiveSounds, selectAllSounds, selectIsGlobalPlay, selectSoundsByCategory } from '../store/selectors';
 
-class Home extends Component {
-    state = {
-        saveModal: false,
-        timerModal: false,
-    };
+const SaveMixtureModal = lazy(() => import('../components/SaveMixtureModal'));
+const SleepTimerModal = lazy(() => import('../components/SleepTimerModal'));
 
-    componentDidMount() {
-        this.setupTimer();
-    };
+// Sound board. `category` (relax, sleep, focus) limits the sounds, all of them are shown without it.
+const Home = ({ category }) => {
+    const dispatch = useDispatch();
+    const isMobile = useIsMobile();
+    const isGlobalPlay = useSelector(selectIsGlobalPlay);
+    const hasActiveSounds = useSelector(selectActiveSounds).length > 0;
+    const allSounds = useSelector(selectAllSounds);
+    const soundsByCategory = useSelector(selectSoundsByCategory);
+    const sounds = category ? soundsByCategory[category] : allSounds;
 
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    };
+    const [isSaveModalOpen, setSaveModalOpen] = useState(false);
+    const [isTimerModalOpen, setTimerModalOpen] = useState(false);
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.timerRun !== this.props.timerRun) {
-            this.setupTimer();
-        }
-    };
-//MOVE TIMER TICK TO REDUX THUNK
-    setupTimer = () => {
-        if (this.props.timerRun) {
-            this.timer = setInterval(() => {
-                this.props.timerStart(this.props.interval - 1)
-            }, 1000);
-        } else {
-            clearInterval(this.timer);
-            if (this.props.interval === 0) {
-                this.props.globalPlayPause(false);
-            }
-        }
-    };
+    const playPauseVolume = useCallback((sound) => dispatch(mainActions.playPauseVolume(sound)), [dispatch]);
 
-    toggleModal = () => this.setState({ saveModal: !this.state.saveModal });
-    toggleTimerModal = () => this.setState({ timerModal: !this.state.timerModal });
-
-    render() {
-        const hasActiveSounds = this.props.activeSounds.length > 0;
-
-        return (
-            <>
-                {hasActiveSounds && this.props.isGlobalPlay && <div className='timer-div'>
-                    <TimerControl onClick={this.toggleTimerModal} interval={this.props.interval} timerRun={this.props.timerRun} />
-                </div>}
-                {this.props.isMobile && <CategoriesMobile pathname={this.props.location.pathname} />}
-                {!this.props.isMobile && <FixedControlsContainer
-                    left={<CategoriesWeb pathname={this.props.location.pathname} />}
-                    right={<MixtureContainer activeSounds={this.props.activeSounds} toggleModal={this.toggleModal} />}
-                />}
-                <RowsView sounds={this.props.readySounds} playPauseVolume={this.props.playPauseVolume} isGlobalPlay={this.props.isGlobalPlay || false} />
-                <SaveMixtureModal isOpen={this.state.saveModal} toggle={this.toggleModal} save={this.props.addMixture} />
-                <TimerModal isOpen={this.state.timerModal}
-                    toggle={this.toggleTimerModal}
-                    start={this.props.timerStart}
-                    stop={this.props.timerStop}
-                    timerRun={this.props.timerRun}
-                    interval={this.props.interval} />
-                {hasActiveSounds && this.props.isMobile && <div className='fixed-bottom'>
-                    <PlayingNow activeSounds={this.props.activeSounds} pauseSound={this.props.pauseSound} saveClick={this.toggleModal} />
-                </div>}
-            </>
-        );
-    };
+    return (
+        <>
+            {hasActiveSounds && isGlobalPlay && <div className='timer-div'>
+                <TimerControl onClick={() => setTimerModalOpen(open => !open)} />
+            </div>}
+            {isMobile
+                ? <CategoryNavMobile />
+                : <FixedControlsContainer
+                    left={<CategoryNavWeb />}
+                    right={<MixturesPanel onSaveClick={() => setSaveModalOpen(true)} />} />}
+            <RowsView sounds={sounds} playPauseVolume={playPauseVolume} isGlobalPlay={isGlobalPlay} />
+            <SaveMixtureModal isOpen={isSaveModalOpen} onClose={() => setSaveModalOpen(false)} />
+            <SleepTimerModal isOpen={isTimerModalOpen} onClose={() => setTimerModalOpen(false)} />
+            {hasActiveSounds && isMobile && <PlayingNowBar />}
+        </>
+    );
 };
 
-export default connect(
-    state => ({ ...state.main, ...state.timer }),
-    dispatch => bindActionCreators({
-        ...mainActions,//TODO: do not connect redundant action creators
-        ...timerActions,
-    }, dispatch)
-)(Home);
+export default Home;

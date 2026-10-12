@@ -1,21 +1,25 @@
-
 import React from 'react';
+import { useSelector } from 'react-redux';
 import timer from '../assets/icons/timer.webp';
 import timerEmpty from '../assets/icons/timer_empty.webp';
-import { secToMin } from '../utils/Utils';
+import { secToMin } from '../utils/time';
+import { selectTimer } from '../store/selectors';
 
-const TimerControl = ({ timerRun, interval, onClick }) => {
+// Timer icon, shows the countdown while the sleep timer runs
+const TimerControl = ({ onClick }) => {
+    const { timerRun, interval } = useSelector(selectTimer);
+
+    if (!timerRun) {
+        return <img src={timer} alt='Timer' title='Set pause interval' onClick={onClick} />;
+    }
+
     const { minutes, seconds } = secToMin(interval);
-
-    const element = timerRun ?
+    return (
         <div className='timer' title='Stop timer' style={{ cursor: 'pointer' }} onClick={onClick}>
-            <img src={timerEmpty} alt='Timer' ></img>
+            <img src={timerEmpty} alt='Timer' />
             <div className='clock'>{`${minutes}:${seconds}`}</div>
         </div>
-        :
-        <img src={timer} alt='Timer' title='Set pause interval' onClick={onClick}></img>;
-
-    return element;
+    );
 };
 
 export default TimerControl;
