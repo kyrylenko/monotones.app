@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from './components/Header';
 import LanguagePicker from './components/LanguagePicker';
+import ThemeToggle from './components/ThemeToggle';
 import background from './assets/icons/background.webp';
 import './App.css';
 import './Breathing.css';
@@ -25,6 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 <li><NavLink to='/terms'>{t('terms')}</NavLink> </li>
                 <li><a target='_blank' rel='noopener noreferrer' href='mailto:contact@monotones.app'>{t('contact')}</a></li>
                 <li><LanguagePicker /></li>
+                <li><ThemeToggle /></li>
               </ul>
             </nav>
           </div>

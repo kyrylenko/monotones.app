@@ -11,6 +11,16 @@
     gtag('config', 'UA-63400746-3');
   </script>
   <meta charset="utf-8">
+  <script>
+    // Applies the dark theme before the first paint, so the page does not flash white at night (see src/hooks/useTheme.ts)
+    try {
+      var theme = localStorage.getItem('theme');
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-bs-theme', theme);
+    } catch (e) { }
+  </script>
   <!-- <meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale=1.0, user-scalable=no" /> -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
   <meta name="theme-color" content="#000000">
@@ -32,7 +42,7 @@
   <meta property="og:image" content="/og.webp">
 </head>
 
-<body style="background-color: #ffffff; color: #4A4A4A" class='h-100'>
+<body class='h-100'>
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>

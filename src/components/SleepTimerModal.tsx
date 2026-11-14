@@ -30,7 +30,7 @@ const SleepTimerModal = ({ isOpen, onClose }: ModalProps) => {
     return (
         <Modal show={isOpen} onHide={onClose} size='sm' autoFocus={false} centered={true}>
             <Modal.Header closeButton className='py-2'></Modal.Header>
-            <Modal.Body style={{ color: 'black' }}>
+            <Modal.Body>
                 <h5 className='text-center mb-3'>{`Pause in ${minutes}:${seconds} min`}</h5>
                 {!timerRun && <Slider
                     className='mx-auto'
