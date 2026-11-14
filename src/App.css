@@ -199,6 +199,26 @@ div.play-div {
   100% {transform:scale(1); }
 }
 
+/* MIX OPENED FROM A SHARE LINK */
+.shared-mix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-width: 50vw;
+  margin: 1rem auto 0;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--blue);
+  border-radius: 6px;
+}
+@media (max-width: 768px) {
+  .shared-mix {
+    max-width: none;
+    margin: 0.5rem 1rem 0;
+  }
+}
+
 /* STARTER MIXES */
 .starter-mixes {
   display: flex;

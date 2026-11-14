@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Route, Navigate, Routes, useParams } from 'react-router-dom';
+import { Route, Navigate, Routes, useParams, useSearchParams } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
 import SoundPlayers from './components/SoundPlayers';
@@ -10,20 +10,24 @@ import { categories, type Category } from './constants/soundIds';
 import { useAppDispatch } from './store/hooks';
 import { mainActions } from './store/mainSlice';
 import { decodeShareCode } from './utils/shareCode';
+import defaultValues from './constants/defaultValues';
 
 const About = lazy(() => import('./screens/About'));
 const Terms = lazy(() => import('./screens/Terms'));
 
-// Applies the sounds from a shared link (e.g. /share/kbce) and goes home
+// Applies the sounds and volumes from a shared link (e.g. /share/kb6ce8?name=Evening, old links: /share/kbce) and goes home
 const ShareRoute = () => {
   const dispatch = useAppDispatch();
   const { sounds } = useParams();
+  const [searchParams] = useSearchParams();
+  const name = searchParams.get('name')?.trim().slice(0, defaultValues.mixtureNameMaxLength) || null;
 
   useEffect(() => {
     if (sounds !== undefined) {
       dispatch(mainActions.setSounds(decodeShareCode(sounds)));
+      dispatch(mainActions.setSharedMixName(name));
     }
-  }, [sounds, dispatch]);
+  }, [sounds, name, dispatch]);
 
   return <Navigate to='/' replace />;
 };

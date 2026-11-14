@@ -5,6 +5,8 @@
   "focus": "Фокус",
   "share": "Поширити",
   "share_sounds": "Поширити звуки",
+  "shared_with_you": "З вами поділилися міксом «{{name}}»",
+  "close": "Закрити",
   "donate": "Пожертва",
   "playing_now": "Грають зараз",
   "save_mixture": "Зберегти мікс",

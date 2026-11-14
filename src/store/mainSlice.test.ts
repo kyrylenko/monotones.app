@@ -1,6 +1,6 @@
 import { mainReducer as reducer, mainActions as actions, type MainState } from './mainSlice';
 import type { SoundId } from '../constants/soundIds';
-import type { Mixture, SoundSetting, Sounds } from '../types';
+import type { Mixture, SharedSound, SoundSetting, Sounds } from '../types';
 
 const deepFreeze = <T extends object>(obj: T): T => {
     Object.values(obj).forEach(v => typeof v === 'object' && v !== null && deepFreeze(v));
@@ -11,11 +11,14 @@ const sound = (id: SoundId, extra: Partial<SoundSetting> = {}): SoundSetting => 
 
 const mixture = (id: string, sounds: Sounds, isActive = false): Mixture => ({ id, sounds, isActive });
 
+const shared = (...codes: string[]): SharedSound[] => codes.map(code => ({ code, volume: 0.3 }));
+
 const baseState: MainState = {
     isGlobalPlay: false,
     sounds: {},
     mixtures: [],
     activeStarterMix: null,
+    sharedMixName: null,
 };
 
 describe('mainReducer', () => {
@@ -66,18 +69,18 @@ describe('mainReducer', () => {
     });
 
     describe('setSounds', () => {
-        it('maps share codes to playing sounds with the default volume', () => {
-            const next = reducer(baseState, actions.setSounds(['kb', 'ce']));
+        it('maps share codes to playing sounds with their volumes', () => {
+            const next = reducer(baseState, actions.setSounds([{ code: 'kb', volume: 0.4 }, { code: 'ce', volume: 0 }]));
 
             expect(next.sounds).toEqual({
-                keyboard: sound('keyboard'),
-                campfire: sound('campfire'),
+                keyboard: sound('keyboard', { volume: 0.4 }),
+                campfire: sound('campfire', { volume: 0 }),
             });
         });
 
         it('ignores unknown codes and replaces previous sounds', () => {
             const state = { ...baseState, sounds: { farm: sound('farm') } };
-            const next = reducer(state, actions.setSounds(['zz', 'ce']));
+            const next = reducer(state, actions.setSounds(shared('zz', 'ce')));
 
             expect(next.sounds).toEqual({ campfire: sound('campfire') });
         });
@@ -89,10 +92,28 @@ describe('mainReducer', () => {
 
         it('does not change isGlobalPlay and deactivates mixtures', () => {
             const state = { ...baseState, mixtures: [mixture('A', {}, true)] };
-            const next = reducer(state, actions.setSounds(['ce']));
+            const next = reducer(state, actions.setSounds(shared('ce')));
 
             expect(next.isGlobalPlay).toBe(false);
             expect(next.mixtures[0].isActive).toBe(false);
+        });
+    });
+
+    describe('setSharedMixName', () => {
+        it('sets and clears the name', () => {
+            const next = reducer(baseState, actions.setSharedMixName('Evening'));
+            expect(next.sharedMixName).toBe('Evening');
+            expect(reducer(next, actions.setSharedMixName(null)).sharedMixName).toBeNull();
+        });
+
+        it.each([
+            ['a sound change', actions.playPauseVolume(sound('campfire'))],
+            ['another shared link', actions.setSounds(shared('kb'))],
+            ['saving it', actions.addMixture('Evening')],
+            ['a starter mix', actions.playStarterMix('deep_work')],
+        ])('is cleared by %s', (_, action) => {
+            const state = reducer(baseState, actions.setSharedMixName('Evening'));
+            expect(reducer(state, action).sharedMixName).toBeNull();
         });
     });
 
@@ -269,7 +290,7 @@ describe('mainReducer', () => {
         it.each([
             ['a sound change', actions.playPauseVolume(sound('campfire'))],
             ['pausing a sound', actions.pauseSound('deep_space')],
-            ['a shared link', actions.setSounds(['kb'])],
+            ['a shared link', actions.setSounds(shared('kb'))],
             ['saving a mixture', actions.addMixture('Mine')],
             ['deactivating', actions.deactivateMixtures()],
         ])('is deactivated by %s', (_, action) => {
@@ -291,17 +312,19 @@ describe('mainReducer', () => {
             sounds: sA,
             mixtures: [mixture('A', sA, true), mixture('B', sB)],
             activeStarterMix: null,
+            sharedMixName: null,
         });
 
         expect(() => [
             actions.playStarterMix('deep_work'),
+            actions.setSharedMixName('X'),
             actions.addMixture('C'),
             actions.deleteMixture('A'),
             actions.switchMixture('B'),
             actions.deactivateMixtures(),
             actions.playPauseVolume(sound('subway')),
             actions.pauseSound('campfire'),
-            actions.setSounds(['kb']),
+            actions.setSounds(shared('kb')),
             actions.setSoundLoaded('campfire'),
             actions.globalPlayPause(false),
         ].forEach(action => reducer(state, action))).not.toThrow();

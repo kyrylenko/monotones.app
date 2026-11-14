@@ -2,7 +2,8 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharePopover from './SharePopover';
 import { buildShareUrl } from '../utils/shareCode';
-import { selectSounds } from '../store/selectors';
+import { starterMixes } from '../constants/starterMixes';
+import { selectActiveStarterMix, selectMixtures, selectSharedMixName, selectSounds } from '../store/selectors';
 import { useAppStore } from '../store/hooks';
 
 const Share = ({ className }: { className: string }) => {
@@ -12,9 +13,14 @@ const Share = ({ className }: { className: string }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [shareUrl, setShareUrl] = useState(window.location.origin);
 
-    // The link is built on click, so the header does not re-render on every sound change
+    // The link is built on click, so the header does not re-render on every sound change.
+    // It carries the name of the active mix: a saved mixture, a starter mix or a mix opened from a link.
     const open = () => {
-        setShareUrl(buildShareUrl(selectSounds(store.getState())));
+        const state = store.getState();
+        const starterMix = starterMixes.find(mix => mix.id === selectActiveStarterMix(state));
+        const name = selectMixtures(state).find(mixture => mixture.isActive)?.id
+            ?? (starterMix ? t(`starter_${starterMix.id}`) : selectSharedMixName(state) ?? undefined);
+        setShareUrl(buildShareUrl(selectSounds(state), name));
         setIsOpen(true);
     };
 

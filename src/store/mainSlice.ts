@@ -1,8 +1,7 @@
 import { createSlice, current, type PayloadAction } from '@reduxjs/toolkit';
-import { all, isShareCode, type SoundId } from '../constants/soundIds';
-import defaultValues from '../constants/defaultValues';
+import { all, isShareCode, type ShareCode, type SoundId } from '../constants/soundIds';
 import { starterMixes, type StarterMixId } from '../constants/starterMixes';
-import type { Mixture, SoundSetting, Sounds } from '../types';
+import type { Mixture, SharedSound, SoundSetting, Sounds } from '../types';
 
 // State shape is persisted to localStorage (see store/index.ts), keep it backward compatible.
 export interface MainState {
@@ -11,6 +10,8 @@ export interface MainState {
     mixtures: Mixture[];
     /** Id of the playing starter mix (see constants/starterMixes.ts), it is active like a saved mixture */
     activeStarterMix: string | null;
+    /** Name of a mix opened from a share link, until it is saved, changed or dismissed */
+    sharedMixName: string | null;
 }
 
 const initialState: MainState = {
@@ -18,11 +19,18 @@ const initialState: MainState = {
     sounds: {},
     mixtures: [],
     activeStarterMix: null,
+    sharedMixName: null,
+};
+
+// Starter and shared mixes are not saved mixtures, but are active like them
+const clearUnsavedMix = (state: MainState) => {
+    state.activeStarterMix = null;
+    state.sharedMixName = null;
 };
 
 const deactivateAll = (state: MainState) => {
     state.mixtures = state.mixtures.map(m => ({ ...m, isActive: false }));
-    state.activeStarterMix = null;
+    clearUnsavedMix(state);
 };
 
 const mainSlice = createSlice({
@@ -45,12 +53,15 @@ const mainSlice = createSlice({
             state.sounds[id] = { ...state.sounds[id]!, isPlay: false };
             deactivateAll(state);
         },
-        // Replaces all sounds with the given share codes (see utils/shareCode.ts), unknown codes are ignored
-        setSounds(state, { payload: codes }: PayloadAction<string[]>) {
-            state.sounds = Object.fromEntries(codes
-                .filter(isShareCode)
-                .map(code => [all[code], { id: all[code], isPlay: true, volume: defaultValues.defaultVolume }]));
+        // Replaces all sounds with the ones of a share link (see utils/shareCode.ts), unknown codes are ignored
+        setSounds(state, { payload: shared }: PayloadAction<SharedSound[]>) {
+            const known = shared.filter((sound): sound is SharedSound & { code: ShareCode } => isShareCode(sound.code));
+            state.sounds = Object.fromEntries(known.map(({ code, volume }) => [all[code], { id: all[code], isPlay: true, volume }]));
             deactivateAll(state);
+        },
+        // Set after setSounds when the link has a name, null when the user dismisses it
+        setSharedMixName(state, { payload: name }: PayloadAction<string | null>) {
+            state.sharedMixName = name;
         },
         setSoundLoaded(state, { payload: id }: PayloadAction<SoundId>) {
             // The sound may have been removed while its file was loading
@@ -65,7 +76,7 @@ const mainSlice = createSlice({
                 .map(m => ({ ...m, isActive: false }));
 
             state.mixtures = [{ sounds: { ...state.sounds }, id: title, isActive: true }, ...others];
-            state.activeStarterMix = null;
+            clearUnsavedMix(state);
         },
         // Deleting the active mixture activates the first remaining one and loads its sounds
         deleteMixture(state, { payload: id }: PayloadAction<string>) {
@@ -77,7 +88,7 @@ const mainSlice = createSlice({
             const active = state.mixtures.find(m => m.isActive);
             if (active) {
                 state.sounds = { ...current(active).sounds };
-                state.activeStarterMix = null;
+                clearUnsavedMix(state);
             }
         },
         switchMixture(state, { payload: id }: PayloadAction<string>) {
@@ -89,7 +100,7 @@ const mainSlice = createSlice({
             state.isGlobalPlay = true;
             state.sounds = { ...current(target).sounds };
             state.mixtures.forEach(m => { m.isActive = m.id === id; });
-            state.activeStarterMix = null;
+            clearUnsavedMix(state);
         },
         // Same as switching to a saved mixture: loads the sounds with their tuned volumes and plays them
         playStarterMix(state, { payload: id }: PayloadAction<StarterMixId>) {
