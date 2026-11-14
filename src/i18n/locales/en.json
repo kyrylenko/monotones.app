@@ -5,6 +5,8 @@
   "focus": "Focus",
   "share": "Share",
   "share_sounds": "Share sounds",
+  "shared_with_you": "\"{{name}}\" was shared with you",
+  "close": "Close",
   "donate": "Donate",
   "playing_now": "Playing now",
   "save_mixture": "Save mixture",

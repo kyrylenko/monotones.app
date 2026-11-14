@@ -12,6 +12,12 @@ export interface SoundSetting {
 /** Settings by sound id. Only sounds the user touched have an entry. */
 export type Sounds = Partial<Record<SoundId, SoundSetting>>;
 
+/** A sound decoded from a share link (see utils/shareCode.ts), the code may be unknown */
+export interface SharedSound {
+    code: string;
+    volume: number;
+}
+
 /** A saved set of sounds; the title is used as the id */
 export interface Mixture {
     id: string;

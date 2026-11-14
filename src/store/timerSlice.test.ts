@@ -22,7 +22,7 @@ describe('timerSlice', () => {
 describe('timerTick', () => {
     const createStore = (timer: TimerState) => configureStore({
         reducer: { main: mainReducer, timer: reducer, loading: loadingReducer },
-        preloadedState: { main: { isGlobalPlay: true, sounds: {}, mixtures: [], activeStarterMix: null }, timer },
+        preloadedState: { main: { isGlobalPlay: true, sounds: {}, mixtures: [], activeStarterMix: null, sharedMixName: null }, timer },
     });
 
     it('counts one second down', () => {

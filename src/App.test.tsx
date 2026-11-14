@@ -430,7 +430,55 @@ describe('App', () => {
 
             fireEvent.click(screen.getByText('Share'));
 
-            expect(await screen.findByDisplayValue('https://monotones.app/share/cekb')).toBeInTheDocument();
+            expect(await screen.findByDisplayValue('https://monotones.app/share/ce6kb6')).toBeInTheDocument();
+        });
+
+        it('adds the name of the active saved mixture', async () => {
+            await renderApp();
+            toggleSound('campfire');
+            await saveMixture('Evening');
+
+            fireEvent.click(screen.getByText('Share'));
+
+            expect(await screen.findByDisplayValue('https://monotones.app/share/ce6?name=Evening')).toBeInTheDocument();
+        });
+
+        it('adds the name of the active starter mix', async () => {
+            await renderApp();
+            fireEvent.click(screen.getByRole('button', { name: 'Rainy evening' }));
+
+            fireEvent.click(screen.getByText('Share'));
+
+            expect(await screen.findByDisplayValue('https://monotones.app/share/ce6on8vs2?name=Rainy%20evening')).toBeInTheDocument();
+        });
+
+        it('opening a link with volumes and a name shows the name and lets the recipient save the mix', async () => {
+            const { store } = await renderApp({ path: '/share/ce8kb2?name=Evening%20tea' });
+
+            await waitFor(() => expect(store.getState().main.sounds).toEqual({
+                campfire: { id: 'campfire', isPlay: true, volume: 0.4 },
+                keyboard: { id: 'keyboard', isPlay: true, volume: 0.1 },
+            }));
+            expect(await screen.findByRole('status')).toHaveTextContent('"Evening tea" was shared with you');
+            expect(globalButton()).toHaveAttribute('alt', 'Play');
+
+            fireEvent.click(within(screen.getByRole('status')).getByRole('button', { name: 'Save mixture' }));
+            expect(await screen.findByPlaceholderText('Mixture name')).toHaveValue('Evening tea');
+            fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+            await waitFor(() => expect(mixtureNames()).toEqual(['Evening tea']));
+            expect(screen.queryByRole('status')).toBeNull();
+            expect(store.getState().main.mixtures[0].sounds.campfire?.volume).toBe(0.4);
+        });
+
+        it('the shared mix name can be dismissed', async () => {
+            await renderApp({ path: '/share/ce8?name=Evening' });
+            await screen.findByRole('status');
+
+            fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+            expect(screen.queryByRole('status')).toBeNull();
+            expect(playingNow()).toEqual(['campfire']);
         });
 
         it('shares the home page when nothing plays', async () => {
@@ -494,7 +542,7 @@ describe('App', () => {
             expect(playingNow()).toEqual(['brown_noise']);
 
             fireEvent.click(screen.getByText('Share'));
-            expect(await screen.findByDisplayValue('https://monotones.app/share/bn')).toBeInTheDocument();
+            expect(await screen.findByDisplayValue('https://monotones.app/share/bn6')).toBeInTheDocument();
 
             clickGlobalButton();
             await waitFor(() => expect(playingNoise.size).toBe(0));
