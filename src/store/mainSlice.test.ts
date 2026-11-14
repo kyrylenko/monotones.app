@@ -15,6 +15,7 @@ const baseState: MainState = {
     isGlobalPlay: false,
     sounds: {},
     mixtures: [],
+    activeStarterMix: null,
 };
 
 describe('mainReducer', () => {
@@ -246,6 +247,42 @@ describe('mainReducer', () => {
         });
     });
 
+    describe('playStarterMix', () => {
+        it('loads the mix with its tuned volumes, activates it and starts playing', () => {
+            const state = { ...baseState, sounds: { campfire: sound('campfire') }, mixtures: [mixture('A', {}, true)] };
+            const next = reducer(state, actions.playStarterMix('deep_work'));
+
+            expect(next.sounds).toEqual({
+                deep_space: { id: 'deep_space', isPlay: true, volume: 0.3 },
+                thunderstorm: { id: 'thunderstorm', isPlay: true, volume: 0.3 },
+            });
+            expect(next.isGlobalPlay).toBe(true);
+            expect(next.activeStarterMix).toBe('deep_work');
+            expect(next.mixtures[0].isActive).toBe(false);
+        });
+
+        it('does nothing when the mix is already active', () => {
+            const state = reducer(baseState, actions.playStarterMix('deep_work'));
+            expect(reducer(state, actions.playStarterMix('deep_work'))).toBe(state);
+        });
+
+        it.each([
+            ['a sound change', actions.playPauseVolume(sound('campfire'))],
+            ['pausing a sound', actions.pauseSound('deep_space')],
+            ['a shared link', actions.setSounds(['kb'])],
+            ['saving a mixture', actions.addMixture('Mine')],
+            ['deactivating', actions.deactivateMixtures()],
+        ])('is deactivated by %s', (_, action) => {
+            const state = reducer(baseState, actions.playStarterMix('deep_work'));
+            expect(reducer(state, action).activeStarterMix).toBeNull();
+        });
+
+        it('is deactivated by switching to a saved mixture', () => {
+            const state = reducer({ ...baseState, mixtures: [mixture('A', { farm: sound('farm') })] }, actions.playStarterMix('deep_work'));
+            expect(reducer(state, actions.switchMixture('A')).activeStarterMix).toBeNull();
+        });
+    });
+
     it('never mutates the previous state', () => {
         const sA = { campfire: sound('campfire') };
         const sB = { farm: sound('farm') };
@@ -253,9 +290,11 @@ describe('mainReducer', () => {
             isGlobalPlay: true,
             sounds: sA,
             mixtures: [mixture('A', sA, true), mixture('B', sB)],
+            activeStarterMix: null,
         });
 
         expect(() => [
+            actions.playStarterMix('deep_work'),
             actions.addMixture('C'),
             actions.deleteMixture('A'),
             actions.switchMixture('B'),

@@ -1,6 +1,7 @@
 import { createSlice, current, type PayloadAction } from '@reduxjs/toolkit';
 import { all, isShareCode, type SoundId } from '../constants/soundIds';
 import defaultValues from '../constants/defaultValues';
+import { starterMixes, type StarterMixId } from '../constants/starterMixes';
 import type { Mixture, SoundSetting, Sounds } from '../types';
 
 // State shape is persisted to localStorage (see store/index.ts), keep it backward compatible.
@@ -8,16 +9,20 @@ export interface MainState {
     isGlobalPlay: boolean;
     sounds: Sounds;
     mixtures: Mixture[];
+    /** Id of the playing starter mix (see constants/starterMixes.ts), it is active like a saved mixture */
+    activeStarterMix: string | null;
 }
 
 const initialState: MainState = {
     isGlobalPlay: false,
     sounds: {},
     mixtures: [],
+    activeStarterMix: null,
 };
 
 const deactivateAll = (state: MainState) => {
     state.mixtures = state.mixtures.map(m => ({ ...m, isActive: false }));
+    state.activeStarterMix = null;
 };
 
 const mainSlice = createSlice({
@@ -60,6 +65,7 @@ const mainSlice = createSlice({
                 .map(m => ({ ...m, isActive: false }));
 
             state.mixtures = [{ sounds: { ...state.sounds }, id: title, isActive: true }, ...others];
+            state.activeStarterMix = null;
         },
         // Deleting the active mixture activates the first remaining one and loads its sounds
         deleteMixture(state, { payload: id }: PayloadAction<string>) {
@@ -71,6 +77,7 @@ const mainSlice = createSlice({
             const active = state.mixtures.find(m => m.isActive);
             if (active) {
                 state.sounds = { ...current(active).sounds };
+                state.activeStarterMix = null;
             }
         },
         switchMixture(state, { payload: id }: PayloadAction<string>) {
@@ -82,7 +89,22 @@ const mainSlice = createSlice({
             state.isGlobalPlay = true;
             state.sounds = { ...current(target).sounds };
             state.mixtures.forEach(m => { m.isActive = m.id === id; });
+            state.activeStarterMix = null;
         },
+        // Same as switching to a saved mixture: loads the sounds with their tuned volumes and plays them
+        playStarterMix(state, { payload: id }: PayloadAction<StarterMixId>) {
+            const mix = starterMixes.find(m => m.id === id);
+            if (!mix || state.activeStarterMix === id) {
+                return;
+            }
+
+            deactivateAll(state);
+            state.isGlobalPlay = true;
+            state.sounds = Object.fromEntries(Object.entries(mix.volumes)
+                .map(([soundId, volume]) => [soundId, { id: soundId as SoundId, isPlay: true, volume }]));
+            state.activeStarterMix = id;
+        },
+        // Clicking the active saved mixture or starter mix: deactivates it and pauses
         deactivateMixtures(state) {
             deactivateAll(state);
             state.isGlobalPlay = false;

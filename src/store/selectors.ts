@@ -7,6 +7,7 @@ import type { SoundSetting } from '../types';
 export const selectIsGlobalPlay = (state: RootState) => state.main.isGlobalPlay;
 export const selectSounds = (state: RootState) => state.main.sounds;
 export const selectMixtures = (state: RootState) => state.main.mixtures;
+export const selectActiveStarterMix = (state: RootState) => state.main.activeStarterMix;
 export const selectTimer = (state: RootState) => state.timer;
 
 // Volume multiplier while the sleep timer fades out; full volume when the timer is stopped or cancelled

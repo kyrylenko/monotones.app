@@ -2,14 +2,23 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
+import { starterMixes } from '../constants/starterMixes';
 import { mainActions } from '../store/mainSlice';
-import { useAppDispatch } from '../store/hooks';
+import { selectActiveStarterMix } from '../store/selectors';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import type { ModalProps } from './modalProps';
 
 const SaveMixtureModal = ({ isOpen, onClose }: ModalProps) => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
+    const activeStarterMix = useAppSelector(selectActiveStarterMix);
     const [name, setName] = useState('');
+
+    // Saving a playing starter mix suggests its title, so it becomes the user's own mixture
+    const suggestName = () => {
+        const starterMix = starterMixes.find(mix => mix.id === activeStarterMix);
+        setName(starterMix ? t(`starter_${starterMix.id}`) : '');
+    };
 
     const close = () => {
         setName('');
@@ -24,7 +33,7 @@ const SaveMixtureModal = ({ isOpen, onClose }: ModalProps) => {
     };
 
     return (
-        <Modal show={isOpen} onHide={close} size='sm' autoFocus={false}>
+        <Modal show={isOpen} onShow={suggestName} onHide={close} size='sm' autoFocus={false}>
             <Modal.Header closeButton className='py-2'>{t('save_mixture')}</Modal.Header>
             <Modal.Body>
                 <input type='text' name='text' id='mixture-name' placeholder={t('mixture_name')} maxLength={25} autoFocus

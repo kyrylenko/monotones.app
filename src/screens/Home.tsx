@@ -1,6 +1,7 @@
 import { lazy, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import RowsView from '../components/RowsView';
+import StarterMixes from '../components/StarterMixes';
 import PlayingNowBar from '../components/PlayingNowBar';
 import TimerControl from '../components/TimerControl';
 import { CategoryNavMobile, CategoryNavWeb } from '../components/CategoryNav';
@@ -53,6 +54,7 @@ const Home = ({ category }: { category?: Category }) => {
                 : <FixedControlsContainer
                     left={<CategoryNavWeb />}
                     right={<MixturesPanel onSaveClick={() => setSaveModalOpen(true)} />} />}
+            <StarterMixes category={category} />
             <RowsView sounds={sounds} playPauseVolume={playPauseVolume} isGlobalPlay={isGlobalPlay} />
             <SaveMixtureModal isOpen={isSaveModalOpen} onClose={() => setSaveModalOpen(false)} />
             <SleepTimerModal isOpen={isTimerModalOpen} onClose={() => setTimerModalOpen(false)} />
