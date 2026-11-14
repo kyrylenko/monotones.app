@@ -197,6 +197,59 @@ describe('App', () => {
         });
     });
 
+    describe('starter mixes', () => {
+        const starterMix = (name: string) => screen.getByRole('button', { name });
+        const starterMixNames = () => within(screen.getByRole('group', { name: 'Starter mixes' })).getAllByRole('button').map(b => b.textContent);
+
+        it('shows all mixes on the home page and the matching ones on a category page', async () => {
+            await renderApp();
+            expect(starterMixNames()).toEqual(['Baby\'s first night', 'Starry night', 'Rainy evening', 'Summer meadow', 'Deep work', 'Night train']);
+            expect(soundIcons()).toHaveLength(28);
+
+            fireEvent.click(screen.getByRole('link', { name: 'Focus' }));
+            expect(starterMixNames()).toEqual(['Deep work', 'Night train']);
+        });
+
+        it('a tap plays the mix with its volumes like a saved mixture, a second tap pauses it', async () => {
+            const { store } = await renderApp();
+
+            fireEvent.click(starterMix('Rainy evening'));
+
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
+            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'true');
+            expect(store.getState().main.sounds.october_rain?.volume).toBe(0.4);
+            expect(globalButton()).toHaveAttribute('alt', 'Pause');
+
+            fireEvent.click(starterMix('Night train'));
+            await waitFor(() => expect(playingSounds()).toEqual(['inside_train', 'october_rain']));
+            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'false');
+
+            fireEvent.click(starterMix('Night train'));
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            expect(starterMix('Night train')).toHaveAttribute('aria-pressed', 'false');
+        });
+
+        it('can be saved as an own mixture and changed', async () => {
+            await renderApp();
+            fireEvent.click(starterMix('Rainy evening'));
+
+            fireEvent.click(screen.getByAltText('Save mixture'));
+            expect(await screen.findByPlaceholderText('Mixture name')).toHaveValue('Rainy evening');
+            fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+            await waitFor(() => expect(mixtureNames()).toEqual(['Rainy evening']));
+            expect(screen.getByText('Rainy evening', { selector: '.mixtures span' }).parentElement).toHaveClass('active');
+            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'false');
+
+            //changing a sound detaches from the mix, saving under the same name updates the own mixture
+            toggleSound('vinyl_cracks');
+            await saveMixture('Rainy evening');
+            expect(mixtureNames()).toEqual(['Rainy evening']);
+            fireEvent.click(starterMix('Deep work'));
+            fireEvent.click(screen.getByText('Rainy evening', { selector: '.mixtures span' }));
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain']));
+        });
+    });
+
     describe('sleep timer', () => {
         afterEach(() => vi.useRealTimers());
 
