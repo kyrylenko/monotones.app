@@ -25,7 +25,7 @@ const SaveMixtureModal = ({ isOpen, onClose }: ModalProps) => {
 
     return (
         <Modal show={isOpen} onHide={close} size='sm' autoFocus={false}>
-            <Modal.Header closeButton style={{ color: 'black' }} className='py-2'>{t('save_mixture')}</Modal.Header>
+            <Modal.Header closeButton className='py-2'>{t('save_mixture')}</Modal.Header>
             <Modal.Body>
                 <input type='text' name='text' id='mixture-name' placeholder={t('mixture_name')} maxLength={25} autoFocus
                     value={name}

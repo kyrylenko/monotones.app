@@ -17,7 +17,7 @@ npm run preview    # serve the production build
 
 - `src/screens` – pages (sound board, About, Terms)
 - `src/components` – UI components, they read the store with `useSelector`
-- `src/hooks` – mobile layout, space key shortcut, sleep timer
+- `src/hooks` – mobile layout, space key shortcut, sleep timer, light/dark theme (an inline script in `index.html` applies the theme before the first paint)
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
 - `src/utils` – pure helpers (share links, sound catalogue, time formatting)
 - `src/i18n` – translations (English, Ukrainian)

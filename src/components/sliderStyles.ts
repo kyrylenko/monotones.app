@@ -1,9 +1,9 @@
 import type { SliderProps } from 'rc-slider';
 
-// Shared look of the volume and timer sliders
+// Shared look of the volume and timer sliders, colors depend on the theme (see App.css)
 export const sliderStyles: SliderProps['styles'] = {
-    track: { height: '6px', backgroundColor: '#A3D9F0' },
-    rail: { height: '6px', backgroundColor: '#CBE7F3' },
+    track: { height: '6px', backgroundColor: 'var(--slider-track)' },
+    rail: { height: '6px', backgroundColor: 'var(--slider-rail)' },
     handle: {
         height: 24,
         width: 24,

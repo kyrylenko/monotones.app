@@ -23,11 +23,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -63,11 +63,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -104,11 +104,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -144,11 +144,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -185,11 +185,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -225,11 +225,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -266,11 +266,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -306,11 +306,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -347,11 +347,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -387,11 +387,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -428,11 +428,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"
@@ -468,11 +468,11 @@ exports[`RowsView > snapshot is correct 1`] = `
         >
           <div
             class="rc-slider-rail"
-            style="height: 6px; background-color: rgb(203, 231, 243);"
+            style="height: 6px; background-color: var(--slider-rail);"
           />
           <div
             class="rc-slider-track"
-            style="left: 0%; width: 30%; height: 6px; background-color: rgb(163, 217, 240);"
+            style="left: 0%; width: 30%; height: 6px; background-color: var(--slider-track);"
           />
           <div
             class="rc-slider-step"

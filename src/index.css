@@ -1,4 +1,16 @@
+/* Page colors, Bootstrap components follow data-bs-theme on <html> (see src/hooks/useTheme.ts) */
+:root {
+  --page-bg: #ffffff;
+  --page-text: #4A4A4A;
+}
+[data-bs-theme=dark] {
+  --page-bg: #111418;
+  --page-text: #b0b5bb;
+}
+
 body {
+  background-color: var(--page-bg);
+  color: var(--page-text);
   margin: 0;
   padding: 0;
   font-family: 'Comfortaa', sans-serif;

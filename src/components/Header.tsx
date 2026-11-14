@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Share from './Share';
 import constants from '../constants/defaultValues';
-import logo from '../logo.png';
+import logoLight from '../logo.png';
+import logoDark from '../logo-dark.png';
 import useIsMobile from '../hooks/useIsMobile';
+import useTheme from '../hooks/useTheme';
 
 const DONATE_URL = 'https://www.patreon.com/monotones';
 
@@ -12,7 +14,7 @@ const DonateLink = ({ className }: { className: string }) => {
     return <a href={DONATE_URL} target='_blank' rel='noopener noreferrer' className={className} title={t('buy_us_coffee')}>{t('donate')}</a>;
 };
 
-const HeaderWeb = () => (
+const HeaderWeb = ({ logo }: { logo: string }) => (
     <header className='container-fluid'>
         <div className='row justify-content-end'>
             <div className='col-4'>
@@ -28,7 +30,7 @@ const HeaderWeb = () => (
     </header>
 );
 
-const HeaderMobile = () => (
+const HeaderMobile = ({ logo }: { logo: string }) => (
     <header className='d-flex justify-content-around align-items-center'>
         <Share className='top-bar-item' />
         <Link to='/' title={constants.appName}>
@@ -38,6 +40,10 @@ const HeaderMobile = () => (
     </header>
 );
 
-const Header = () => useIsMobile() ? <HeaderMobile /> : <HeaderWeb />;
+const Header = () => {
+    // The logo lettering is dark, the dark theme uses a copy with light lettering
+    const logo = useTheme().theme === 'dark' ? logoDark : logoLight;
+    return useIsMobile() ? <HeaderMobile logo={logo} /> : <HeaderWeb logo={logo} />;
+};
 
 export default Header;

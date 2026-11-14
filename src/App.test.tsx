@@ -299,6 +299,76 @@ describe('App', () => {
         });
     });
 
+    describe('night mode', () => {
+        const theme = () => document.documentElement.getAttribute('data-bs-theme');
+        const logo = () => $<HTMLImageElement>('header img[alt=Monotones]').src;
+
+        it('follows the system theme', async () => {
+            window.__prefersDark = true;
+            await renderApp();
+
+            expect(theme()).toBe('dark');
+            expect(logo()).toContain('logo-dark');
+            expect(screen.getByRole('button', { name: 'Light theme' })).toBeInTheDocument();
+        });
+
+        it('can be toggled, the choice is remembered and wins over the system theme', async () => {
+            const { unmount } = await renderApp();
+            expect(theme()).toBe('light');
+
+            fireEvent.click(screen.getByRole('button', { name: 'Dark theme' }));
+
+            expect(theme()).toBe('dark');
+            expect(logo()).toContain('logo-dark');
+            expect(localStorage.getItem('theme')).toBe('dark');
+
+            unmount();
+            document.documentElement.removeAttribute('data-bs-theme');
+            await renderApp();
+            expect(theme()).toBe('dark');
+
+            fireEvent.click(screen.getByRole('button', { name: 'Light theme' }));
+            unmount();
+            window.__prefersDark = true;
+            await renderApp();
+            expect(theme()).toBe('light');
+        });
+
+        it('the sleep screen shows only play/pause and the timer and closes with one tap', async () => {
+            await renderApp();
+            expect(screen.queryByAltText('Sleep screen')).toBeNull();
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+
+            fireEvent.click(screen.getByAltText('Sleep screen'));
+            const sleepScreen = screen.getByRole('dialog', { name: 'Sleep screen' });
+            expect([...sleepScreen.querySelectorAll('img')].map(i => i.alt)).toEqual(['Pause', 'Timer']);
+
+            //the controls work and keep the screen open
+            fireEvent.click(within(sleepScreen).getByAltText('Pause'));
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            fireEvent.click(within(sleepScreen).getByAltText('Play'));
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            fireEvent.click(within(sleepScreen).getByAltText('Timer'));
+            expect(await screen.findByText('Pause in 05:00 min')).toBeInTheDocument();
+            expect(screen.getByRole('dialog', { name: 'Sleep screen' })).toBeInTheDocument();
+
+            fireEvent.click(sleepScreen);
+            expect(screen.queryByRole('dialog', { name: 'Sleep screen' })).toBeNull();
+            expect(playingSounds()).toEqual(['campfire']);
+        });
+
+        it('Escape closes the sleep screen', async () => {
+            await renderApp();
+            toggleSound('campfire');
+            fireEvent.click(screen.getByAltText('Sleep screen'));
+
+            fireEvent.keyDown(document, { key: 'Escape' });
+
+            expect(screen.queryByRole('dialog', { name: 'Sleep screen' })).toBeNull();
+        });
+    });
+
     describe('sharing', () => {
         it('builds a share link from the playing sounds', async () => {
             await renderApp();
