@@ -77,6 +77,23 @@ describe('App', () => {
             await waitFor(() => expect(playingNow()).toEqual(['farm']));
         });
 
+        it('loops mp3 files seamlessly with Web Audio and frees the decoded audio on pause', async () => {
+            await renderApp();
+            vi.mocked(fetch).mockClear();
+
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            const [source] = window.__playing;
+            expect(source).toMatchObject({ loop: true, loopEnd: 1 });
+            expect(source.loopStart).toBeGreaterThan(0);
+
+            clickGlobalButton();
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            clickGlobalButton();
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            expect(fetch).toHaveBeenCalledTimes(2);
+        });
+
         it('the volume slider changes the audio volume', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
@@ -501,43 +518,13 @@ describe('App', () => {
     });
 
     describe('generated sounds', () => {
-        //jsdom has no Web Audio: record which noise sources are playing
-        const playingNoise = new Set<object>();
-        const node = () => ({ gain: { value: 1 }, connect: (next: unknown) => next });
-        class FakeAudioContext {
-            state = 'running';
-            sampleRate = 100;
-            destination = {};
-            createGain = node;
-            resume = () => Promise.resolve();
-            createBuffer = (channels: number, length: number) => ({
-                numberOfChannels: channels,
-                getChannelData: () => new Float32Array(length),
-            });
-            createBufferSource = () => {
-                const source = {
-                    connect: () => {},
-                    disconnect: () => {},
-                    start: () => playingNoise.add(source),
-                    stop: () => playingNoise.delete(source),
-                };
-                return source;
-            };
-        }
-
-        beforeEach(() => {
-            playingNoise.clear();
-            vi.stubGlobal('AudioContext', FakeAudioContext);
-        });
-        afterEach(() => vi.unstubAllGlobals());
-
         it('plays brown noise without an mp3, shares and pauses it like the others', async () => {
             const { store } = await renderApp();
 
             toggleSound('brown_noise');
 
             await waitFor(() => expect(store.getState().main.sounds.brown_noise?.isLoaded).toBe(true));
-            expect(playingNoise.size).toBe(1);
+            expect(window.__playing.size).toBe(1);
             expect(playingSounds()).toEqual([]);
             expect(playingNow()).toEqual(['brown_noise']);
 
@@ -545,7 +532,7 @@ describe('App', () => {
             expect(await screen.findByDisplayValue('https://monotones.app/share/bn6')).toBeInTheDocument();
 
             clickGlobalButton();
-            await waitFor(() => expect(playingNoise.size).toBe(0));
+            await waitFor(() => expect(window.__playing.size).toBe(0));
         });
     });
 

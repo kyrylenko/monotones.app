@@ -21,13 +21,15 @@ npm run preview    # serve the production build
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
 - `src/utils` – pure helpers (share links, sound catalogue, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
-- `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
+- `src/audio` – sound players: every sound (mp3 files and generated ones, like brown noise) loops seamlessly with Web Audio; loop preparation (silence trimming and crossfade at the loop point), volume, sleep timer fade-out
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
 - `src/types` – shared TypeScript types
 - `src/test` – test helpers; `src/App.test.tsx` covers the app end to end
 
 ### Browser notes
 
-- Safari plays media from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
-- iOS ignores `audio.volume`, so there the volume goes through a Web Audio gain node (`src/audio/volumeControl.ts`).
+- Sounds are decoded to PCM to loop without a gap: about 350 KB per second of audio while a sound plays (a 2 minute sound takes ~40 MB).
+  The decoded audio is dropped on pause and decoded again on the next play.
+- Volume goes through Web Audio gain nodes (`src/audio/volumeControl.ts`); `audio.volume` would not work on iOS anyway.
   Web Audio on iOS may pause when the screen locks or the app goes to the background.
+- Safari plays media elements from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
