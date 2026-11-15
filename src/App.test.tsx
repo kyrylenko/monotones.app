@@ -594,6 +594,46 @@ describe('App', () => {
         });
     });
 
+    describe('accessibility', () => {
+        it('keeps the focus inside an open dialog', async () => {
+            await renderApp();
+            openMenu();
+            const dialog = screen.getByRole('dialog', { name: 'How it works' });
+            const close = within(dialog).getByRole('button', { name: 'Close' });
+            const donate = within(dialog).getByRole('link', { name: 'Donate' });
+
+            donate.focus();
+            fireEvent.keyDown(document, { key: 'Tab' });
+            expect(close).toHaveFocus();
+
+            fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+            expect(donate).toHaveFocus();
+        });
+
+        it('sets the page language', async () => {
+            await renderApp({ language: 'uk-UA' });
+            expect(document.documentElement).toHaveAttribute('lang', 'uk');
+
+            await renderApp({ language: 'en-US' });
+            expect(document.documentElement).toHaveAttribute('lang', 'en');
+        });
+
+        it('offers a 5 minute timer and Off only while one runs', async () => {
+            await renderApp();
+            toggleSound('campfire');
+            openTimer();
+            expect(screen.queryByRole('button', { name: 'Off' })).toBeNull();
+
+            fireEvent.click(screen.getByRole('button', { name: '5 min' }));
+            openTimer();
+
+            const dialog = screen.getByRole('dialog', { name: 'Sleep timer' });
+            expect(within(dialog).getByRole('button', { name: '5 min' })).toHaveAttribute('aria-pressed', 'true');
+            expect(within(dialog).getByRole('button', { name: 'Off' })).toBeInTheDocument();
+            expect(within(dock()).getByRole('button', { name: '5 min' })).toBeInTheDocument();
+        });
+    });
+
     describe('pages and language', () => {
         it('opens About and Terms from the menu', async () => {
             await renderApp();
