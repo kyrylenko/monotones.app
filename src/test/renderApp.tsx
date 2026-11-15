@@ -48,7 +48,7 @@ export const renderApp = async ({ path = '/', language = 'en-US' } = {}) => {
     );
     //PersistGate renders nothing until the stored state is loaded, lazy chunks show a fallback
     await waitFor(() => {
-        expect(document.querySelector('footer')).not.toBeNull();
+        expect(document.querySelector('main')).not.toBeNull();
         expect(document.body).not.toHaveTextContent('Loading...');
     });
 
