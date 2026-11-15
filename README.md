@@ -15,7 +15,7 @@ npm run preview    # serve the production build
 
 ### Structure
 
-- `src/screens` – pages (the sound screen, About, Terms); `/sleep`, `/relax` and `/focus` show the same sound screen
+- `src/screens` – pages (the sound screen, About, Terms)
 - `src/components` – UI components, they read the store with `useSelector`; no component library. The sound screen is the orbit (`Orbit`, `SoundOrb`: closer to the moon is louder), the sound tray (`SoundTray`, up to 6 sounds in a mix) and the dock (`Dock`); `Dialog` is a bottom sheet on phones
 - `src/index.css` – design tokens (colours, fonts, spacing) of the single dark theme; fonts are self-hosted with Fontsource
 - `src/hooks` – mobile layout, space key shortcut, sleep timer
@@ -24,7 +24,7 @@ npm run preview    # serve the production build
 - `src/utils` – pure helpers (share links, sound catalogue, orbit geometry, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
 - `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
-- `src/seo.ts`, `src/prerender.tsx`, `scripts/prerender.mjs` – the indexable pages (`/`, `/sleep`, `/relax`, `/focus`, `/about`, `/terms`): `npm run build` renders each to static HTML with its own title, description and canonical URL (`build/about.html` is served at `/about`); `public/sitemap.xml` lists them
+- `src/seo.ts`, `src/prerender.tsx`, `scripts/prerender.mjs` – the indexable pages: `/`, one page per starter mix (`/mix/rainy-evening`, …), `/about`, `/terms`. `npm run build` renders each to static HTML with its own title, description and canonical URL (`build/mix/rainy-evening.html` is served at `/mix/rainy-evening`); `public/sitemap.xml` lists them. The former `/sleep`, `/relax`, `/focus` redirect to a mix page (`public/_redirects`)
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
 - `src/types` – shared TypeScript types
 - `src/test` – test helpers; `src/App.test.tsx` covers the app end to end

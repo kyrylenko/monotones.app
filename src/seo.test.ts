@@ -1,8 +1,10 @@
 import sitemap from '../public/sitemap.xml?raw';
 import robots from '../public/robots.txt?raw';
 import headers from '../public/_headers?raw';
+import redirects from '../public/_redirects?raw';
+import { mixPath } from './constants/starterMixes';
 import i18n from './i18n';
-import { PAGES, SITE_URL, pageMeta } from './seo';
+import { LEGACY_PAGES, PAGES, SITE_URL, pageMeta } from './seo';
 
 describe('seo', () => {
     it('gives every page its own title and description in both languages', async () => {
@@ -18,13 +20,20 @@ describe('seo', () => {
 
     it('uses canonical URLs without a trailing slash, share links point to the home page', () => {
         expect(pageMeta('/', i18n.t).canonical).toBe(`${SITE_URL}/`);
-        expect(pageMeta('/sleep', i18n.t).canonical).toBe(`${SITE_URL}/sleep`);
+        expect(pageMeta('/mix/deep-work', i18n.t).canonical).toBe(`${SITE_URL}/mix/deep-work`);
+        expect(pageMeta('/about', i18n.t).canonical).toBe(`${SITE_URL}/about`);
         expect(pageMeta('/share/ce6', i18n.t).canonical).toBe(`${SITE_URL}/`);
     });
 
     it('lists the same pages in the sitemap', () => {
         const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
         expect(urls).toEqual(PAGES.map(page => pageMeta(page, i18n.t).canonical));
+    });
+
+    it('redirects the former category pages to their starter mix pages', () => {
+        const rules = [...redirects.matchAll(/^(\/\S+) (\S+) 301$/gm)].map(m => [m[1], m[2]]);
+        expect(rules).toEqual(Object.entries(LEGACY_PAGES).map(([path, id]) => [path, mixPath(id)]));
+        rules.forEach(([, target]) => expect(PAGES).toContain(target));
     });
 
     it('keeps share links out of search results but open to link previews', () => {

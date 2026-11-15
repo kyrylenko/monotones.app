@@ -1,9 +1,9 @@
-// Writes the indexable pages into the build as static HTML: build/index.html, build/sleep.html, build/about.html, ...
-// Cloudflare serves /about from about.html. Every page keeps the app's scripts, which take over in the browser.
+// Writes the indexable pages into the build as static HTML: build/index.html, build/mix/rainy-evening.html, build/about.html, ...
+// Cloudflare serves /about from about.html and /mix/rainy-evening from mix/rainy-evening.html. Every page keeps the app's scripts, which take over in the browser.
 // Run after `vite build` and `vite build --ssr src/prerender.tsx --outDir build-ssr` (see "build" in package.json).
-import { readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const { PAGES, renderPage } = await import(pathToFileURL(resolve(root, 'build-ssr/prerender.js')).href);
@@ -31,6 +31,7 @@ for (const path of PAGES) {
     page = replaceOnce(page, /<div id="root"><\/div>/, `<div id="root">${html}</div>`);
 
     const file = path === '/' ? 'index.html' : `${path.slice(1)}.html`;
+    await mkdir(dirname(resolve(root, 'build', file)), { recursive: true });
     await writeFile(resolve(root, 'build', file), page);
     console.log(`prerendered ${path} -> build/${file}`);
 }

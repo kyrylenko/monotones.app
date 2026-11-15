@@ -20,3 +20,8 @@ export const starterMixes = [
 ] as const satisfies readonly StarterMix[];
 
 export type StarterMixId = (typeof starterMixes)[number]['id'];
+
+// Each starter mix has its own page, e.g. /mix/babys-first-night (see src/seo.ts)
+export const mixSlug = (id: StarterMixId): string => id.replace(/_/g, '-');
+export const mixPath = (id: StarterMixId): string => `/mix/${mixSlug(id)}`;
+export const starterMixBySlug = (slug: string | undefined) => starterMixes.find(mix => mixSlug(mix.id) === slug);

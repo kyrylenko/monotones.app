@@ -2,9 +2,12 @@
 <!-- The indexable pages, the same list as PAGES in src/seo.ts -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://monotones.app/</loc></url>
-  <url><loc>https://monotones.app/sleep</loc></url>
-  <url><loc>https://monotones.app/relax</loc></url>
-  <url><loc>https://monotones.app/focus</loc></url>
+  <url><loc>https://monotones.app/mix/babys-first-night</loc></url>
+  <url><loc>https://monotones.app/mix/starry-night</loc></url>
+  <url><loc>https://monotones.app/mix/rainy-evening</loc></url>
+  <url><loc>https://monotones.app/mix/summer-meadow</loc></url>
+  <url><loc>https://monotones.app/mix/deep-work</loc></url>
+  <url><loc>https://monotones.app/mix/night-train</loc></url>
   <url><loc>https://monotones.app/about</loc></url>
   <url><loc>https://monotones.app/terms</loc></url>
 </urlset>

@@ -131,6 +131,20 @@ const mainSlice = createSlice({
                 .map(([soundId, volume]) => [soundId, { id: soundId as SoundId, isPlay: true, volume }]));
             state.activeStarterMix = id;
         },
+        // A starter mix page (/mix/...): loads the mix like playStarterMix, paused until the user presses play.
+        // Browsers start audio only after a tap. A mix that is already active keeps playing.
+        openStarterMix(state, { payload: id }: PayloadAction<StarterMixId>) {
+            const mix = starterMixes.find(m => m.id === id);
+            if (!mix || state.activeStarterMix === id) {
+                return;
+            }
+
+            deactivateAll(state);
+            state.isGlobalPlay = false;
+            state.sounds = Object.fromEntries(Object.entries(mix.volumes)
+                .map(([soundId, volume]) => [soundId, { id: soundId as SoundId, isPlay: true, volume }]));
+            state.activeStarterMix = id;
+        },
         // Clicking the active saved mixture or starter mix: deactivates it and pauses
         deactivateMixtures(state) {
             deactivateAll(state);

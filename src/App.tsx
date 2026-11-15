@@ -1,13 +1,15 @@
-import { Suspense, lazy, useEffect } from 'react';
-import { Route, Navigate, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { Suspense, lazy, useEffect, useRef } from 'react';
+import { Route, Navigate, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
 import SoundPlayers from './components/SoundPlayers';
 import useSpaceToggle from './hooks/useSpaceToggle';
 import useSleepTimer from './hooks/useSleepTimer';
 import usePageMeta from './hooks/usePageMeta';
-import { categories } from './constants/soundIds';
-import { useAppDispatch } from './store/hooks';
+import { mixPath, starterMixBySlug } from './constants/starterMixes';
+import { LEGACY_PAGES } from './seo';
+import { selectActiveStarterMix } from './store/selectors';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import { mainActions } from './store/mainSlice';
 import { decodeShareCode } from './utils/shareCode';
 import defaultValues from './constants/defaultValues';
@@ -32,8 +34,33 @@ const ShareRoute = () => {
   return <Navigate to='/' replace />;
 };
 
-// One set of sounds: /sleep, /relax and /focus show the same screen, the URLs stay for search engines (issue #39)
-const SOUND_PATHS = ['/', ...Object.keys(categories).map(category => `/${category}`)];
+// A starter mix page, e.g. /mix/rainy-evening: the sound screen with that mix in the orbit, paused until play.
+// Once the user changes the mix (or picks another one) the page is left for the home page.
+const MixRoute = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const mix = starterMixBySlug(useParams().slug);
+  const activeStarterMix = useAppSelector(selectActiveStarterMix);
+  const wasOpened = useRef(false);
+
+  useEffect(() => {
+    if (mix) {
+      dispatch(mainActions.openStarterMix(mix.id));
+    }
+  }, [mix, dispatch]);
+
+  useEffect(() => {
+    if (mix && activeStarterMix === mix.id) {
+      wasOpened.current = true;
+    } else if (wasOpened.current) {
+      navigate('/', { replace: true });
+    }
+  }, [mix, activeStarterMix, navigate]);
+
+  return mix ? <Home /> : <Navigate to='/' replace />;
+};
+
+const isSoundScreen = (pathname: string) => pathname === '/' || pathname.startsWith('/mix/');
 
 const App = () => {
   useSpaceToggle();
@@ -42,11 +69,12 @@ const App = () => {
   const { pathname } = useLocation();
 
   return (
-    <Layout isSoundScreen={SOUND_PATHS.includes(pathname)}>
+    <Layout isSoundScreen={isSoundScreen(pathname)}>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path='/' element={<Home />} />
-          {SOUND_PATHS.slice(1).map(path => <Route key={path} path={path} element={<Home />} />)}
+          <Route path='/mix/:slug' element={<MixRoute />} />
+          {Object.entries(LEGACY_PAGES).map(([path, id]) => <Route key={path} path={path} element={<Navigate to={mixPath(id)} replace />} />)}
           <Route path='/about' element={<About />} />
           <Route path='/terms' element={<Terms />} />
           <Route path='/share/:sounds?' element={<ShareRoute />} />
