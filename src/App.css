@@ -175,6 +175,11 @@
   touch-action: none;
   transition: transform 0.5s ease, width 0.3s, height 0.3s;
 }
+.orb::before {
+  content: '';
+  position: absolute;
+  inset: min(0px, calc((100% - var(--tap)) / 2));
+}
 .orb.dragging {
   cursor: grabbing;
   transition: none;
@@ -282,8 +287,8 @@
   opacity: 1;
   filter: none;
 }
-.tray.is-full .chip[aria-pressed='false'] {
-  opacity: 0.35;
+.tray.is-full .chip[aria-pressed='false'] img {
+  opacity: 0.2;
 }
 
 /* DOCK: the one control area */
@@ -418,6 +423,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-2);
+}
+.timer-options .timer-off {
+  grid-column: 1 / -1;
 }
 .timer-options .button[aria-pressed='true'] {
   background: var(--moon);

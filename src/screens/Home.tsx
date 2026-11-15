@@ -55,12 +55,13 @@ const Home = () => {
             <Sky isPlaying={isPlaying} isDim={isDim} />
             <SharedMixBanner />
             <Orbit onNotice={onNotice} />
-            <SoundTray onNotice={onNotice} />
+            {/* The dock comes right after the orbit in the tab order; the grid places it at the bottom */}
             <Dock
                 onMixesClick={isMobile ? () => setSheet('mixes') : undefined}
                 onTimerClick={() => setSheet('timer')}
                 onDimClick={() => setDim(true)}
                 onNotice={onNotice} />
+            <SoundTray onNotice={onNotice} />
             {!isMobile && <aside className='mixes-panel' aria-label={t('mixes')}>
                 <h2 className='panel-title'>{t('mixes')}</h2>
                 <MixesPanel />

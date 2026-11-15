@@ -42,7 +42,7 @@ export const slotAngle = (index: number, count: number): number => -Math.PI / 2 
 export const REMOVE_DISTANCE = 34;
 
 // The sleep timer starts from these durations; the moon wanes from the full chosen one
-export const TIMER_MINUTES = [15, 30, 45, 60, 90] as const;
+export const TIMER_MINUTES = [5, 15, 30, 45, 60, 90] as const;
 
 /** Part of the timer left, 1..0. The chosen duration is the smallest one that holds the seconds left. */
 export const timerFraction = (secondsLeft: number): number => {

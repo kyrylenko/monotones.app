@@ -21,6 +21,7 @@ describe('orbit', () => {
     it('measures the timer against the chosen duration', () => {
         expect(timerFraction(30 * 60)).toBe(1);
         expect(timerFraction(15 * 60)).toBe(1);
+        expect(timerFraction(4 * 60)).toBeCloseTo(4 / 5);
         expect(timerFraction(20 * 60)).toBeCloseTo(20 / 30);
         expect(timerFraction(0)).toBe(0);
     });

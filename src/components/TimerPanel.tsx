@@ -12,7 +12,7 @@ const TimerPanel = ({ onDone }: { onDone: () => void }) => {
     const dispatch = useAppDispatch();
     const { timerRun, interval } = useAppSelector(selectTimer);
     const hasSounds = useAppSelector(selectActiveSounds).length > 0;
-    const current = timerRun ? TIMER_MINUTES.find(m => m * 60 >= interval) ?? null : 0;
+    const current = timerRun ? TIMER_MINUTES.find(m => m * 60 >= interval) ?? null : null;
     const { minutes, seconds } = secToMin(interval);
 
     const choose = (duration: number) => {
@@ -31,11 +31,12 @@ const TimerPanel = ({ onDone }: { onDone: () => void }) => {
         <>
             {timerRun && <p className='timer-value'>{t('timer_left', { time: `${minutes}:${seconds}` })}</p>}
             <div className='timer-options'>
-                {[0, ...TIMER_MINUTES].map(duration => (
+                {TIMER_MINUTES.map(duration => (
                     <button key={duration} type='button' className='button' aria-pressed={current === duration} onClick={() => choose(duration)}>
-                        {duration ? t('minutes', { count: duration }) : t('timer_off')}
+                        {t('minutes', { count: duration })}
                     </button>
                 ))}
+                {timerRun && <button type='button' className='button timer-off' onClick={() => choose(0)}>{t('timer_off')}</button>}
             </div>
             <p className='dialog-note'>{t('timer_note')}</p>
         </>
