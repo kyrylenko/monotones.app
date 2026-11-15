@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 const Terms = () => {
     const { t } = useTranslation();
 
-    return <div style={{ textAlign: 'left' }} className='container about-text'>
+    return <div className='text-page'>
         <section>
             <h3 >{t('privacy_policy')}</h3>
             <p>{t('privacy_policy_content')}</p>

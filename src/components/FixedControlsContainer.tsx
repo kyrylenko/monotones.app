@@ -6,14 +6,12 @@ interface FixedControlsContainerProps {
 }
 
 const FixedControlsContainer = ({ left, right }: FixedControlsContainerProps) => (
-    <div className='container-fluid fixed-controlls mt-3' style={{ position: 'fixed' }}>
-        <div className='row'>
-            <div className='col-md-3'>
-                {left}
-            </div>
-            <div className='col-md-3 ms-md-auto'>
-                {right}
-            </div>
+    <div className='fixed-controlls'>
+        <div className='side-panel'>
+            {left}
+        </div>
+        <div className='side-panel'>
+            {right}
         </div>
     </div>
 );

@@ -12,28 +12,26 @@ const CategoryLink = ({ category }: { category: Category }) => {
     const isActive = pathname === path;
 
     return (
-        <Link to={isActive ? '/' : path} title={t(category)} className={`nav-link ${isActive ? 'active' : ''}`}>
+        <Link to={isActive ? '/' : path} title={t(category)} className={`category-link${isActive ? ' active' : ''}`}>
             {t(category)}
         </Link>
     );
 };
 
 export const CategoryNavWeb = () => (
-    <div className='mx-auto' style={{ width: '80px' }}>
-        <ul className='nav flex-column nav-pills web'>
-            {CATEGORIES.map((category, i) => (
-                <li key={category} className={`nav-item${i === 1 ? ' my-2' : ''}`}>
-                    <CategoryLink category={category} />
-                </li>
-            ))}
-        </ul>
-    </div>
+    <ul className='category-nav vertical'>
+        {CATEGORIES.map(category => (
+            <li key={category}>
+                <CategoryLink category={category} />
+            </li>
+        ))}
+    </ul>
 );
 
 export const CategoryNavMobile = () => (
-    <ul className='nav nav-pills' style={{ position: 'sticky', height: '44px' }}>
+    <ul className='category-nav horizontal'>
         {CATEGORIES.map(category => (
-            <li key={category} className='nav-item flex-fill'>
+            <li key={category}>
                 <CategoryLink category={category} />
             </li>
         ))}

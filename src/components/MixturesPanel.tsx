@@ -17,9 +17,9 @@ const MixturesPanel = ({ onSaveClick }: { onSaveClick: () => void }) => {
     return (
         <>
             {hasActiveSounds && <PlayingNowPanel onSaveClick={onSaveClick} />}
-            {mixtures.length > 0 && <div className='mixtures card mt-5'>
-                <div className='card-header'>{t('my_mixtures')}</div>
-                <div className='list-group'>
+            {mixtures.length > 0 && <div className='mixtures'>
+                <h2>{t('my_mixtures')}</h2>
+                <div className='mixture-list'>
                     <TransitionGroup>
                         {mixtures.map(({ id, isActive }) => (
                             <MixAnim key={id}>

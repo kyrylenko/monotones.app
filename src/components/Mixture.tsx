@@ -16,7 +16,7 @@ const Mixture = ({ ref, title, isActive, onPlay, onPause, onDelete }: MixturePro
         ref={ref}
         title={isActive ? 'Pause mixture' : 'Play mixture'}
         onClick={isActive ? onPause : onPlay}
-        className={`list-group-item d-flex justify-content-between align-items-center ${isActive ? 'active' : ''}`}>
+        className={`mixture${isActive ? ' active' : ''}`}>
         <span>{title}</span>
         <img onClick={onDelete} className='mixture-action-btn' src={trash} title='Delete mixture' alt='Delete mixture' />
     </div>

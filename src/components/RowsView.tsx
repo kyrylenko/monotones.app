@@ -18,7 +18,7 @@ interface CellProps {
 }
 
 const SoundCell = ({ sound, isGlobalPlay, playPauseVolume }: CellProps) => (
-    <div className='text-center col-6 col-sm-4 col-md-3 col-lg-3'>
+    <div className='sound-cell'>
         <SoundSlider
             id={sound.id}
             isGlobalPlay={isGlobalPlay}
@@ -37,12 +37,12 @@ interface RowsViewProps {
 }
 
 const RowsView = memo(({ sounds, isGlobalPlay, playPauseVolume }: RowsViewProps) => (
-    <div className='container'>
+    <div className='sound-board'>
         {toPairs(sounds).map(([left, right]) => (
-            <div key={left.id} className='sounds-row row justify-content-center'>
+            <div key={left.id} className='sounds-row'>
                 <SoundCell sound={left} isGlobalPlay={isGlobalPlay} playPauseVolume={playPauseVolume} />
                 {right && <>
-                    <div className='d-none d-sm-none d-md-block col-sm-2 col-md-2 col-lg-2'></div>
+                    <div className='sounds-row-gap'></div>
                     <SoundCell sound={right} isGlobalPlay={isGlobalPlay} playPauseVolume={playPauseVolume} />
                 </>}
             </div>

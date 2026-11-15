@@ -15,7 +15,7 @@ export default defineConfig({
       // public/manifest.json is used as is
       manifest: false,
       injectManifest: {
-        globPatterns: ['**/*.{html,js,css,mp3,gif,svg,webp,png,ico}'],
+        globPatterns: ['**/*.{html,js,css,mp3,gif,svg,webp,png,ico,woff2}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
     }),

@@ -1,11 +1,11 @@
 //ref: https://vitest.dev/config/#setupfiles
 import '@testing-library/jest-dom/vitest';
 
-//Tests switch to the mobile layout with window.__isMobile = true and to a dark system theme with window.__prefersDark = true
+//Tests switch to the mobile layout with window.__isMobile = true
 window.matchMedia = vi.fn().mockImplementation((query: string) => {
     return {
         get matches() {
-            return query.includes('prefers-color-scheme: dark') ? window.__prefersDark === true : window.__isMobile === true;
+            return window.__isMobile === true;
         },
         media: query,
         onchange: null,
@@ -30,8 +30,6 @@ HTMLMediaElement.prototype.pause = function () {
 
 beforeEach(() => {
     window.__isMobile = false;
-    window.__prefersDark = false;
-    document.documentElement.removeAttribute('data-bs-theme');
     window.__playing.clear();
     localStorage.clear();
 });

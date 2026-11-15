@@ -1,10 +1,9 @@
 import { memo } from 'react';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import { useTranslation } from 'react-i18next';
 import loading from '../assets/icons/loading.gif';
 import { iconUrl } from '../assets';
 import { idToTitle } from '../utils/sounds';
-import { sliderStyles, sliderValue } from './sliderStyles';
+import Slider from './Slider';
 import type { SoundId } from '../constants/soundIds';
 import type { SoundSetting } from '../types';
 
@@ -22,6 +21,7 @@ interface SoundSliderProps {
 
 // Sound icon (toggles playback) with its volume slider
 const SoundSlider = memo(({ id, title, isPlay, isLoaded, volume, isGlobalPlay, playPauseVolume }: SoundSliderProps) => {
+    const { t } = useTranslation();
     const isPlaying = isPlay && isGlobalPlay;
 
     return (
@@ -32,13 +32,11 @@ const SoundSlider = memo(({ id, title, isPlay, isLoaded, volume, isGlobalPlay, p
                 style={{ opacity: isPlay ? 1 : undefined }}
                 onClick={() => playPauseVolume({ id, isPlay: !isPlay, volume })} />
             <Slider
-                className='mx-auto'
-                max={1}
-                step={0.01}
-                onChange={(value) => playPauseVolume({ id, isPlay, volume: sliderValue(value), isLoaded })}
+                label={t('volume_of', { name: idToTitle(title) })}
                 value={volume}
-                styles={sliderStyles}
-                style={{ visibility: isPlay ? 'visible' : 'hidden', width: '80%' }} />
+                valueText={`${Math.round(volume * 100)}%`}
+                onChange={value => playPauseVolume({ id, isPlay, volume: value, isLoaded })}
+                style={{ visibility: isPlay ? 'visible' : 'hidden' }} />
         </>
     );
 });

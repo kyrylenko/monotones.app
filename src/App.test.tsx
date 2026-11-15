@@ -20,7 +20,7 @@ const saveMixture = async (name: string) => {
     await waitFor(() => expect(screen.queryByPlaceholderText('Mixture name')).not.toBeInTheDocument());
 };
 
-const mixtureNames = () => [...document.querySelectorAll('.mixtures .list-group-item span')].map(s => s.textContent);
+const mixtureNames = () => [...document.querySelectorAll('.mixtures .mixture span')].map(s => s.textContent);
 
 describe('App', () => {
     describe('sounds', () => {
@@ -81,8 +81,8 @@ describe('App', () => {
             const { store } = await renderApp();
             toggleSound('campfire');
 
-            const slider = $('[role=slider]', soundIcon('campfire').parentElement!);
-            fireEvent.keyDown(slider, { key: 'ArrowRight', keyCode: 39 });
+            const slider = screen.getByRole('slider', { name: 'Campfire volume' });
+            fireEvent.change(slider, { target: { value: '0.31' } });
 
             await waitFor(() => expect(store.getState().main.sounds.campfire?.volume).toBeCloseTo(0.31));
             const audio = [...window.__playing][0];
@@ -190,8 +190,8 @@ describe('App', () => {
             fireEvent.click(screen.getByAltText('Save mixture'));
             const input = await screen.findByPlaceholderText('Mixture name');
             fireEvent.change(input, { target: { value: 'Night' } });
-            fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13 });
-            fireEvent.keyPress(input, { key: 'Enter', code: 'Enter', charCode: 13 });
+            //Enter in a form field submits the form
+            fireEvent.submit(input);
 
             await waitFor(() => expect(mixtureNames()).toEqual(['Night']));
         });
@@ -353,38 +353,12 @@ describe('App', () => {
     });
 
     describe('night mode', () => {
-        const theme = () => document.documentElement.getAttribute('data-bs-theme');
-        const logo = () => $<HTMLImageElement>('header img[alt=Monotones]').src;
-
-        it('follows the system theme', async () => {
-            window.__prefersDark = true;
+        it('has one dark theme and no theme switch', async () => {
             await renderApp();
 
-            expect(theme()).toBe('dark');
-            expect(logo()).toContain('logo-dark');
-            expect(screen.getByRole('button', { name: 'Light theme' })).toBeInTheDocument();
-        });
-
-        it('can be toggled, the choice is remembered and wins over the system theme', async () => {
-            const { unmount } = await renderApp();
-            expect(theme()).toBe('light');
-
-            fireEvent.click(screen.getByRole('button', { name: 'Dark theme' }));
-
-            expect(theme()).toBe('dark');
-            expect(logo()).toContain('logo-dark');
-            expect(localStorage.getItem('theme')).toBe('dark');
-
-            unmount();
-            document.documentElement.removeAttribute('data-bs-theme');
-            await renderApp();
-            expect(theme()).toBe('dark');
-
-            fireEvent.click(screen.getByRole('button', { name: 'Light theme' }));
-            unmount();
-            window.__prefersDark = true;
-            await renderApp();
-            expect(theme()).toBe('light');
+            expect(screen.queryByRole('button', { name: /theme/i })).toBeNull();
+            expect(document.documentElement).not.toHaveAttribute('data-bs-theme');
+            expect(within(screen.getByRole('link', { name: 'Monotones' })).getByText('monotones')).toBeInTheDocument();
         });
 
         it('the sleep screen shows only play/pause and the timer and closes with one tap', async () => {
@@ -489,6 +463,37 @@ describe('App', () => {
             expect(await screen.findByDisplayValue('https://monotones.app')).toBeInTheDocument();
         });
 
+        it('uses the system share sheet where there is one', async () => {
+            const share = vi.fn().mockResolvedValue(undefined);
+            Object.defineProperty(navigator, 'share', { value: share, configurable: true });
+            try {
+                await renderApp();
+                toggleSound('campfire');
+
+                fireEvent.click(screen.getByText('Share'));
+
+                await waitFor(() => expect(share).toHaveBeenCalledWith({ title: 'Monotones', url: 'https://monotones.app/share/ce6' }));
+                expect(screen.queryByRole('dialog')).toBeNull();
+            } finally {
+                delete (navigator as { share?: unknown }).share;
+            }
+        });
+
+        it('copies the link when there is no share sheet', async () => {
+            const writeText = vi.fn().mockResolvedValue(undefined);
+            Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+            await renderApp();
+            toggleSound('campfire');
+
+            fireEvent.click(screen.getByText('Share'));
+            fireEvent.click(await screen.findByRole('button', { name: 'Copy' }));
+
+            expect(writeText).toHaveBeenCalledWith('https://monotones.app/share/ce6');
+            expect(await screen.findByText('Link copied')).toBeInTheDocument();
+            fireEvent.keyDown(document, { key: 'Escape' });
+            expect(screen.queryByRole('dialog')).toBeNull();
+        });
+
         it('opening a share link applies its sounds and redirects home', async () => {
             const { store } = await renderApp({ path: '/share/kbcezz' });
 
@@ -579,17 +584,16 @@ describe('App', () => {
             window.__isMobile = true;
             await renderApp();
 
-            expect(document.querySelector('header .app-logo')).toBeNull();
-            expect(document.querySelectorAll('.nav-pills .flex-fill')).toHaveLength(3);
+            expect(document.querySelectorAll('.category-nav.horizontal li')).toHaveLength(3);
             expect(document.querySelector('.fixed-controlls')).toBeNull();
-            expect(document.querySelector('.fixed-bottom')).toBeNull();
+            expect(document.querySelector('.playing-now-bar')).toBeNull();
 
             toggleSound('campfire');
 
-            const bar = $('.fixed-bottom');
+            const bar = $('.playing-now-bar');
             expect([...bar.querySelectorAll('img')].map(i => i.id)).toEqual(['campfire']);
             fireEvent.click($('img#campfire', bar));
-            await waitFor(() => expect(document.querySelector('.fixed-bottom')).toBeNull());
+            await waitFor(() => expect(document.querySelector('.playing-now-bar')).toBeNull());
         });
     });
 
