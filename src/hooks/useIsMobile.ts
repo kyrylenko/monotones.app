@@ -11,6 +11,9 @@ const subscribe = (onChange: () => void) => {
 
 const getSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
 
-const useIsMobile = () => useSyncExternalStore(subscribe, getSnapshot);
+// The build-time prerender has no screen: it renders the desktop layout, which lists every sound and mix
+const getServerSnapshot = () => false;
+
+const useIsMobile = () => useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
 export default useIsMobile;

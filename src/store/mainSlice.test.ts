@@ -290,6 +290,23 @@ describe('mainReducer', () => {
         });
     });
 
+    describe('openStarterMix', () => {
+        it('loads the mix with its volumes and activates it without playing', () => {
+            const state = { ...baseState, isGlobalPlay: true, sounds: { farm: sound('farm') }, mixtures: [mixture('A', {}, true)] };
+            const next = reducer(state, actions.openStarterMix('rainy_evening'));
+            expect(Object.keys(next.sounds)).toEqual(['october_rain', 'campfire', 'vinyl_cracks']);
+            expect(next.sounds.october_rain?.volume).toBe(0.4);
+            expect(next.activeStarterMix).toBe('rainy_evening');
+            expect(next.mixtures[0].isActive).toBe(false);
+            expect(next.isGlobalPlay).toBe(false);
+        });
+
+        it('keeps an active mix playing', () => {
+            const playing = reducer({ ...baseState, isGlobalPlay: true }, actions.playStarterMix('deep_work'));
+            expect(reducer(playing, actions.openStarterMix('deep_work'))).toBe(playing);
+        });
+    });
+
     describe('deactivateMixtures', () => {
         it('deactivates all mixtures and stops playing, keeping the sounds', () => {
             const sA = { campfire: sound('campfire') };

@@ -46,10 +46,16 @@ describe('App', () => {
             expect(screen.getByText('Tap a sound to place it in the sky')).toBeInTheDocument();
         });
 
-        it.each(['/sleep', '/relax', '/focus'])('%s shows the same sounds, there are no categories', async (path) => {
+        it.each([
+            ['/sleep', 'Baby\'s first night', ['brown_noise', 'heartbeat']],
+            ['/relax', 'Rainy evening', ['october_rain', 'campfire', 'vinyl_cracks']],
+            ['/focus', 'Deep work', ['deep_space', 'thunderstorm']],
+        ])('the former category page %s opens the closest starter mix', async (path, name, sounds) => {
             await renderApp({ path });
 
+            await waitFor(() => expect(orbit()).toEqual(sounds));
             expect(chips()).toHaveLength(28);
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
             expect(screen.queryByRole('link', { name: 'Sleep' })).toBeNull();
         });
 
@@ -168,6 +174,39 @@ describe('App', () => {
             fireEvent.keyDown(chip('farm'), { key: ' ', code: 'Space', keyCode: 32 });
             fireEvent.keyDown(screen.getByPlaceholderText('Mixture name'), { key: ' ', code: 'Space', keyCode: 32 });
             expect(playingSounds()).toEqual(['campfire']);
+        });
+    });
+
+    describe('mix pages', () => {
+        it('a starter mix page puts the mix in the orbit, paused until play', async () => {
+            const { store } = await renderApp({ path: '/mix/rainy-evening' });
+
+            await waitFor(() => expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']));
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Rainy evening');
+            expect(document.title).toBe('Rainy evening – rain, campfire and vinyl crackle to relax – Monotones');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
+            expect(playingSounds()).toEqual([]);
+
+            clickPlayButton();
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
+            expect(store.getState().main.activeStarterMix).toBe('rainy_evening');
+        });
+
+        it('changing the mix leaves the mix page for the home page', async () => {
+            await renderApp({ path: '/mix/deep-work' });
+            await waitFor(() => expect(orbit()).toEqual(['deep_space', 'thunderstorm']));
+
+            toggleSound('campfire');
+
+            await waitFor(() => expect(document.title).toBe('Monotones – calm sounds for sleep, relaxing and focus'));
+            expect(orbit()).toEqual(['deep_space', 'thunderstorm', 'campfire']);
+        });
+
+        it('an unknown mix page goes home', async () => {
+            await renderApp({ path: '/mix/unknown' });
+
+            await waitFor(() => expect(document.title).toBe('Monotones – calm sounds for sleep, relaxing and focus'));
+            expect(orbit()).toEqual([]);
         });
     });
 
@@ -647,6 +686,18 @@ describe('App', () => {
             openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'Terms' }));
             expect(await screen.findByRole('heading', { name: 'Privacy Policy' })).toBeInTheDocument();
+        });
+
+        it('sets the page title for each page and language', async () => {
+            await renderApp({ path: '/mix/night-train' });
+            expect(document.title).toBe('Night train – train and rain sounds for focus – Monotones');
+
+            openMenu();
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
+            await waitFor(() => expect(document.title).toBe('Нічний потяг – звуки потяга й дощу для зосередження – Monotones'));
+
+            fireEvent.click(screen.getByRole('link', { name: 'Про нас' }));
+            await waitFor(() => expect(document.title).toBe('Про Monotones'));
         });
 
         it('switches the language', async () => {
