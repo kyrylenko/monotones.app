@@ -15,12 +15,12 @@ npm run preview    # serve the production build
 
 ### Structure
 
-- `src/screens` – pages (sound board, About, Terms)
-- `src/components` – UI components, they read the store with `useSelector`; no component library: shared building blocks are `Dialog`, `Slider` and `Logo`
+- `src/screens` – pages (the sound screen, About, Terms); `/sleep`, `/relax` and `/focus` show the same sound screen
+- `src/components` – UI components, they read the store with `useSelector`; no component library. The sound screen is the orbit (`Orbit`, `SoundOrb`: closer to the moon is louder), the sound tray (`SoundTray`, up to 6 sounds in a mix) and the dock (`Dock`); `Dialog` is a bottom sheet on phones
 - `src/index.css` – design tokens (colours, fonts, spacing) of the single dark theme; fonts are self-hosted with Fontsource
 - `src/hooks` – mobile layout, space key shortcut, sleep timer
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
-- `src/utils` – pure helpers (share links, sound catalogue, time formatting)
+- `src/utils` – pure helpers (share links, sound catalogue, orbit geometry, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
 - `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires

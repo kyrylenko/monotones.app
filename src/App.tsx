@@ -1,12 +1,11 @@
 import { Suspense, lazy, useEffect } from 'react';
-import { Route, Navigate, Routes, useParams, useSearchParams } from 'react-router-dom';
+import { Route, Navigate, Routes, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
 import SoundPlayers from './components/SoundPlayers';
-import GlobalPlayPause from './components/GlobalPlayPause';
 import useSpaceToggle from './hooks/useSpaceToggle';
 import useSleepTimer from './hooks/useSleepTimer';
-import { categories, type Category } from './constants/soundIds';
+import { categories } from './constants/soundIds';
 import { useAppDispatch } from './store/hooks';
 import { mainActions } from './store/mainSlice';
 import { decodeShareCode } from './utils/shareCode';
@@ -32,25 +31,26 @@ const ShareRoute = () => {
   return <Navigate to='/' replace />;
 };
 
+// One set of sounds: /sleep, /relax and /focus show the same screen, the URLs stay for search engines (issue #39)
+const SOUND_PATHS = ['/', ...Object.keys(categories).map(category => `/${category}`)];
+
 const App = () => {
   useSpaceToggle();
   useSleepTimer();
+  const { pathname } = useLocation();
 
   return (
-    <Layout>
+    <Layout isSoundScreen={SOUND_PATHS.includes(pathname)}>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path='/' element={<Home />} />
-          {(Object.keys(categories) as Category[]).map(category => (
-            <Route key={category} path={`/${category}`} element={<Home category={category} />} />
-          ))}
+          {SOUND_PATHS.slice(1).map(path => <Route key={path} path={path} element={<Home />} />)}
           <Route path='/about' element={<About />} />
           <Route path='/terms' element={<Terms />} />
           <Route path='/share/:sounds?' element={<ShareRoute />} />
         </Routes>
       </Suspense>
       <SoundPlayers />
-      <GlobalPlayPause />
     </Layout>
   );
 };

@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
-const MOBILE_QUERY = '(max-width: 768px)';
+// Below this width the mixes open in a sheet; above it they stay in a side panel
+const MOBILE_QUERY = '(max-width: 959px)';
 
 const subscribe = (onChange: () => void) => {
     const mediaQuery = window.matchMedia(MOBILE_QUERY);

@@ -1,68 +1,77 @@
-import { lazy, useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import RowsView from '../components/RowsView';
-import StarterMixes from '../components/StarterMixes';
+import Orbit from '../components/Orbit';
+import SoundTray from '../components/SoundTray';
+import Dock from '../components/Dock';
+import Dialog from '../components/Dialog';
+import MixesPanel from '../components/MixesPanel';
+import TimerPanel from '../components/TimerPanel';
 import SharedMixBanner from '../components/SharedMixBanner';
-import PlayingNowBar from '../components/PlayingNowBar';
-import TimerControl from '../components/TimerControl';
-import { CategoryNavMobile, CategoryNavWeb } from '../components/CategoryNav';
-import MixturesPanel from '../components/MixturesPanel';
-import FixedControlsContainer from '../components/FixedControlsContainer';
-import SleepScreen from '../components/SleepScreen';
-import moon from '../assets/icons/moon.svg';
 import useIsMobile from '../hooks/useIsMobile';
-import { mainActions } from '../store/mainSlice';
-import { selectActiveSounds, selectAllSounds, selectIsGlobalPlay, selectSoundsByCategory } from '../store/selectors';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import type { Category } from '../constants/soundIds';
-import type { SoundSetting } from '../types';
+import { selectActiveSounds, selectIsGlobalPlay } from '../store/selectors';
+import { useAppSelector } from '../store/hooks';
 
-const SaveMixtureModal = lazy(() => import('../components/SaveMixtureModal'));
-const SleepTimerModal = lazy(() => import('../components/SleepTimerModal'));
+const NOTICE_MS = 2600;
 
-// Sound board. `category` (relax, sleep, focus) limits the sounds, all of them are shown without it.
-const Home = ({ category }: { category?: Category }) => {
+// The sound screen: the orbit, the sound tray and the dock; the mixes in a side panel on desktop, in a sheet on phones
+const Home = () => {
     const { t } = useTranslation();
-    const dispatch = useAppDispatch();
     const isMobile = useIsMobile();
     const isGlobalPlay = useAppSelector(selectIsGlobalPlay);
-    const hasActiveSounds = useAppSelector(selectActiveSounds).length > 0;
-    const allSounds = useAppSelector(selectAllSounds);
-    const soundsByCategory = useAppSelector(selectSoundsByCategory);
-    const sounds = category ? soundsByCategory[category] : allSounds;
+    const hasSounds = useAppSelector(selectActiveSounds).length > 0;
+    const isPlaying = isGlobalPlay && hasSounds;
+    const [sheet, setSheet] = useState<'mixes' | 'timer' | null>(null);
+    const [isDim, setDim] = useState(false);
+    const [notice, setNotice] = useState<{ text: string; id: number } | null>(null);
 
-    const [isSaveModalOpen, setSaveModalOpen] = useState(false);
-    const [isTimerModalOpen, setTimerModalOpen] = useState(false);
-    const [isSleepScreenOpen, setSleepScreenOpen] = useState(false);
+    const closeSheet = useCallback(() => setSheet(null), []);
+    const onNotice = useCallback((text: string) => setNotice({ text, id: Date.now() }), []);
 
-    const toggleTimerModal = useCallback(() => setTimerModalOpen(open => !open), []);
-    const closeSleepScreen = useCallback(() => setSleepScreenOpen(false), []);
+    useEffect(() => {
+        if (!notice) {
+            return;
+        }
+        const id = setTimeout(() => setNotice(null), NOTICE_MS);
+        return () => clearTimeout(id);
+    }, [notice]);
 
-    const playPauseVolume = useCallback((sound: SoundSetting) => dispatch(mainActions.playPauseVolume(sound)), [dispatch]);
+    // Dim screen: everything fades except the sky; a tap anywhere or Escape wakes it
+    useEffect(() => {
+        if (!isDim) {
+            return;
+        }
+        document.body.classList.add('is-dim');
+        const onKeyDown = (event: KeyboardEvent) => event.key === 'Escape' && setDim(false);
+        document.addEventListener('keydown', onKeyDown);
+        return () => {
+            document.body.classList.remove('is-dim');
+            document.removeEventListener('keydown', onKeyDown);
+        };
+    }, [isDim]);
 
     return (
-        <>
-            {hasActiveSounds && isGlobalPlay && <>
-                <div className='timer-div'>
-                    <TimerControl onClick={toggleTimerModal} />
-                </div>
-                <div className='sleep-div'>
-                    <img src={moon} alt={t('sleep_screen')} title={t('sleep_screen')} onClick={() => setSleepScreenOpen(true)} />
-                </div>
-            </>}
-            {isMobile
-                ? <CategoryNavMobile />
-                : <FixedControlsContainer
-                    left={<CategoryNavWeb />}
-                    right={<MixturesPanel onSaveClick={() => setSaveModalOpen(true)} />} />}
-            <SharedMixBanner onSave={() => setSaveModalOpen(true)} />
-            <StarterMixes category={category} />
-            <RowsView sounds={sounds} playPauseVolume={playPauseVolume} isGlobalPlay={isGlobalPlay} />
-            <SaveMixtureModal isOpen={isSaveModalOpen} onClose={() => setSaveModalOpen(false)} />
-            <SleepTimerModal isOpen={isTimerModalOpen} onClose={() => setTimerModalOpen(false)} />
-            {isSleepScreenOpen && <SleepScreen onClose={closeSleepScreen} onTimerClick={toggleTimerModal} />}
-            {hasActiveSounds && isMobile && <PlayingNowBar />}
-        </>
+        <div className={`home${isPlaying ? ' is-playing' : ''}`}>
+            <SharedMixBanner />
+            <Orbit onNotice={onNotice} />
+            <SoundTray onNotice={onNotice} />
+            <Dock
+                onMixesClick={isMobile ? () => setSheet('mixes') : undefined}
+                onTimerClick={() => setSheet('timer')}
+                onDimClick={() => setDim(true)}
+                onNotice={onNotice} />
+            {!isMobile && <aside className='mixes-panel' aria-label={t('mixes')}>
+                <h2 className='panel-title'>{t('mixes')}</h2>
+                <MixesPanel />
+            </aside>}
+            <Dialog isOpen={isMobile && sheet === 'mixes'} onClose={closeSheet} title={t('mixes')}>
+                <MixesPanel onPicked={closeSheet} />
+            </Dialog>
+            <Dialog isOpen={sheet === 'timer'} onClose={closeSheet} title={t('sleep_timer')}>
+                <TimerPanel onDone={closeSheet} />
+            </Dialog>
+            {isDim && <button type='button' className='wake' onClick={() => setDim(false)}>{t('wake')}</button>}
+            {notice && <p key={notice.id} className='notice' role='status'>{notice.text}</p>}
+        </div>
     );
 };
 
