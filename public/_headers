@@ -8,6 +8,10 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Share links open the app with someone's mix; only the pages themselves should be indexed
+/share/*
+  X-Robots-Tag: noindex
+
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

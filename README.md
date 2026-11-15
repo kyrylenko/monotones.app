@@ -24,6 +24,7 @@ npm run preview    # serve the production build
 - `src/utils` – pure helpers (share links, sound catalogue, orbit geometry, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
 - `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
+- `src/seo.ts`, `src/prerender.tsx`, `scripts/prerender.mjs` – the indexable pages (`/`, `/sleep`, `/relax`, `/focus`, `/about`, `/terms`): `npm run build` renders each to static HTML with its own title, description and canonical URL (`build/about.html` is served at `/about`); `public/sitemap.xml` lists them
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
 - `src/types` – shared TypeScript types
 - `src/test` – test helpers; `src/App.test.tsx` covers the app end to end

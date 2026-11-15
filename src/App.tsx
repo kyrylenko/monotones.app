@@ -5,6 +5,7 @@ import Home from './screens/Home';
 import SoundPlayers from './components/SoundPlayers';
 import useSpaceToggle from './hooks/useSpaceToggle';
 import useSleepTimer from './hooks/useSleepTimer';
+import usePageMeta from './hooks/usePageMeta';
 import { categories } from './constants/soundIds';
 import { useAppDispatch } from './store/hooks';
 import { mainActions } from './store/mainSlice';
@@ -37,6 +38,7 @@ const SOUND_PATHS = ['/', ...Object.keys(categories).map(category => `/${categor
 const App = () => {
   useSpaceToggle();
   useSleepTimer();
+  usePageMeta();
   const { pathname } = useLocation();
 
   return (

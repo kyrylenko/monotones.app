@@ -20,6 +20,10 @@ export default defineConfig({
       },
     }),
   ],
+  // The build-time prerender (src/prerender.tsx) bundles its dependencies: some (redux-persist) do not load in Node as they are
+  ssr: {
+    noExternal: true,
+  },
   build: {
     // Same output folder as Create React App had
     outDir: 'build',

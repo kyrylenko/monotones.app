@@ -521,6 +521,13 @@ body.is-dim .stage {
   100% { color: transparent; }
 }
 
+/* The prerendered page (desktop layout) shows on phones until the app starts: no side panel there */
+@media (max-width: 959px) {
+  .mixes-panel {
+    display: none;
+  }
+}
+
 /* DESKTOP */
 @media (min-width: 600px) {
   .logo-wordmark {

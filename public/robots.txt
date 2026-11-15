@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Share links stay crawlable for link previews; their X-Robots-Tag: noindex header (public/_headers) keeps them out of search results
+
+Sitemap: https://monotones.app/sitemap.xml

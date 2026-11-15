@@ -649,6 +649,18 @@ describe('App', () => {
             expect(await screen.findByRole('heading', { name: 'Privacy Policy' })).toBeInTheDocument();
         });
 
+        it('sets the page title for each page and language', async () => {
+            await renderApp({ path: '/sleep' });
+            expect(document.title).toBe('Sleep sounds and white noise for babies – Monotones');
+
+            openMenu();
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
+            await waitFor(() => expect(document.title).toBe('Звуки для сну та білий шум для немовлят – Monotones'));
+
+            fireEvent.click(screen.getByRole('link', { name: 'Про нас' }));
+            await waitFor(() => expect(document.title).toBe('Про Monotones'));
+        });
+
         it('switches the language', async () => {
             await renderApp();
             openMenu();
