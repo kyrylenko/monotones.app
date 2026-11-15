@@ -128,6 +128,22 @@
   background: radial-gradient(closest-side, rgba(230, 220, 195, 0.12), rgba(230, 220, 195, 0));
   pointer-events: none;
 }
+/* The moonlight breathes while sound plays: 5 s in, 5 s out */
+.is-playing .moon-button::before {
+  animation: moon-breath 10s ease-in-out infinite;
+}
+@keyframes moon-breath {
+  50% { transform: scale(1.18); }
+}
+/* The living sky (src/sky): behind everything, under the night gradient of the page */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .moon {
   position: relative;
   overflow: visible;

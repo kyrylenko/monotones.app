@@ -20,6 +20,7 @@ npm run preview    # serve the production build
 - `src/index.css` – design tokens (colours, fonts, spacing) of the single dark theme; fonts are self-hosted with Fontsource
 - `src/hooks` – mobile layout, space key shortcut, sleep timer
 - `src/store` – Redux Toolkit slices, selectors and thunks; state is saved to localStorage with redux-persist
+- `src/sky` – the living night sky behind the orbit: star, ripple and wave physics (`sky.ts`, unit tested), canvas drawing (`draw.ts`), pointer, tilt and screen-turn input (`Sky.tsx`)
 - `src/utils` – pure helpers (share links, sound catalogue, orbit geometry, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
 - `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
