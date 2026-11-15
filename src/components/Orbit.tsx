@@ -7,6 +7,7 @@ import { setGlobalPlay } from '../store/thunks';
 import { selectActiveSounds, selectIsGlobalPlay, selectTimer } from '../store/selectors';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { orbitGeometry, timerFraction, type OrbitGeometry } from '../utils/orbit';
+import { requestMotionPermission } from '../sky/motion';
 
 // Craters of the moon: x, y and radius as parts of the moon radius
 const CRATERS = [[-0.3, -0.27, 0.2], [0.27, 0.13, 0.27], [-0.2, 0.4, 0.13], [0.4, -0.4, 0.1]];
@@ -48,10 +49,17 @@ const Orbit = ({ onNotice }: { onNotice: (text: string) => void }) => {
     const max = defaultValues.maxSounds;
     const hint = count === 0 ? t('hint_empty') : count === 1 ? t('hint_one') : count >= max ? t('hint_full', { max }) : '';
 
-    const togglePlay = () => count === 0 ? onNotice(t('add_sound_first')) : dispatch(setGlobalPlay(!isGlobalPlay));
+    const togglePlay = () => {
+        if (count === 0) {
+            onNotice(t('add_sound_first'));
+            return;
+        }
+        requestMotionPermission();
+        dispatch(setGlobalPlay(!isGlobalPlay));
+    };
 
     return (
-        <div className='stage' ref={stageRef}>
+        <div className='stage' ref={stageRef} data-moon={geo.moonRadius} data-ring={geo.rMax}>
             <svg className='rings' width='100%' height='100%' aria-hidden='true'>
                 <circle cx={geo.cx} cy={geo.cy} r={geo.rMin} className='ring' />
                 <circle cx={geo.cx} cy={geo.cy} r={(geo.rMin + geo.rMax) / 2} className='ring ring-faint' />

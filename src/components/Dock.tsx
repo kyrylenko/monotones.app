@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import Share from './Share';
 import { setGlobalPlay } from '../store/thunks';
+import { requestMotionPermission } from '../sky/motion';
 import { selectActiveSounds, selectIsGlobalPlay, selectTimer } from '../store/selectors';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
@@ -31,7 +32,15 @@ const Dock = ({ onMixesClick, onTimerClick, onDimClick, onNotice }: DockProps) =
     const { timerRun, interval } = useAppSelector(selectTimer);
     const isPlaying = isGlobalPlay && hasSounds;
 
-    const togglePlay = () => hasSounds ? dispatch(setGlobalPlay(!isGlobalPlay)) : onNotice(t('add_sound_first'));
+    const togglePlay = () => {
+        if (!hasSounds) {
+            onNotice(t('add_sound_first'));
+            return;
+        }
+        // The first play is a tap: the moment iOS allows asking for the tilt sensor of the sky
+        requestMotionPermission();
+        dispatch(setGlobalPlay(!isGlobalPlay));
+    };
 
     return (
         <nav className='dock' aria-label={t('playback')}>

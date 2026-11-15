@@ -7,6 +7,7 @@ import Dialog from '../components/Dialog';
 import MixesPanel from '../components/MixesPanel';
 import TimerPanel from '../components/TimerPanel';
 import SharedMixBanner from '../components/SharedMixBanner';
+import Sky from '../sky/Sky';
 import useIsMobile from '../hooks/useIsMobile';
 import { selectActiveSounds, selectIsGlobalPlay } from '../store/selectors';
 import { useAppSelector } from '../store/hooks';
@@ -51,6 +52,7 @@ const Home = () => {
 
     return (
         <div className={`home${isPlaying ? ' is-playing' : ''}`}>
+            <Sky isPlaying={isPlaying} isDim={isDim} />
             <SharedMixBanner />
             <Orbit onNotice={onNotice} />
             <SoundTray onNotice={onNotice} />

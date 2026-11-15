@@ -14,6 +14,9 @@ window.matchMedia = vi.fn().mockImplementation((query: string) => {
     };
 });
 
+//jsdom has no canvas: the sky is not drawn
+HTMLCanvasElement.prototype.getContext = () => null;
+
 //jsdom cannot play media: record what is playing instead
 window.__playing = new Set();
 Object.defineProperty(HTMLMediaElement.prototype, 'paused', {
