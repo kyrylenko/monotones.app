@@ -7,20 +7,23 @@ const setMeta = (selector: string, attribute: string, value: string) => {
     document.head.querySelector(selector)?.setAttribute(attribute, value);
 };
 
-// Keeps the title, description and canonical URL in the head in step with the page and the language.
-// The prerendered HTML already has them in English (scripts/prerender.mjs).
+// Keeps the title, description, canonical URL and language links in the head in step with the page and the language.
+// The prerendered HTML already has them for its page and language (scripts/prerender.mjs).
 const usePageMeta = () => {
     const { pathname } = useLocation();
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-        const { title, description, canonical } = pageMeta(pathname, t);
+        const { title, description, canonical, alternates } = pageMeta(pathname, t);
         document.title = title;
         setMeta('meta[name="description"]', 'content', description);
         setMeta('link[rel="canonical"]', 'href', canonical);
         setMeta('meta[property="og:title"]', 'content', title);
         setMeta('meta[property="og:description"]', 'content', description);
         setMeta('meta[property="og:url"]', 'content', canonical);
+        setMeta('link[hreflang="en"]', 'href', alternates.en);
+        setMeta('link[hreflang="x-default"]', 'href', alternates.en);
+        setMeta('link[hreflang="uk"]', 'href', alternates.uk);
     }, [pathname, t, i18n.language]);
 };
 

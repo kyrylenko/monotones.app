@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Dialog from './Dialog';
 import Logo from './Logo';
 import LanguagePicker from './LanguagePicker';
+import { useLocalizedPath } from '../hooks/useUrlLanguage';
 import constants from '../constants/defaultValues';
 import { activeMixName } from '../utils/mixName';
 import { selectActiveSounds } from '../store/selectors';
@@ -23,11 +24,12 @@ const MixTitle = () => {
 const Header = ({ showMixTitle }: { showMixTitle: boolean }) => {
     const { t } = useTranslation();
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const page = useLocalizedPath();
     const close = () => setMenuOpen(false);
 
     return (
         <header className='app-header'>
-            <Link to='/' className='home-link' aria-label={constants.appName}>
+            <Link to={page('/')} className='home-link' aria-label={constants.appName}>
                 <Logo />
             </Link>
             {showMixTitle ? <MixTitle /> : <span />}
@@ -44,8 +46,8 @@ const Header = ({ showMixTitle }: { showMixTitle: boolean }) => {
                 <label className='list-title' htmlFor='i18nextLng'>{t('language')}</label>
                 <LanguagePicker />
                 <nav className='menu-links'>
-                    <NavLink to='/about' onClick={close}>{t('about')}</NavLink>
-                    <NavLink to='/terms' onClick={close}>{t('terms')}</NavLink>
+                    <NavLink to={page('/about')} onClick={close}>{t('about')}</NavLink>
+                    <NavLink to={page('/terms')} onClick={close}>{t('terms')}</NavLink>
                     <a href='mailto:contact@monotones.app' target='_blank' rel='noopener noreferrer'>{t('contact')}</a>
                     <a href={DONATE_URL} target='_blank' rel='noopener noreferrer' title={t('buy_us_coffee')}>{t('donate')}</a>
                 </nav>

@@ -650,8 +650,9 @@ describe('App', () => {
         });
 
         it('sets the page language', async () => {
-            await renderApp({ language: 'uk-UA' });
-            expect(document.documentElement).toHaveAttribute('lang', 'uk');
+            const { unmount } = await renderApp({ language: 'uk-UA' });
+            await waitFor(() => expect(document.documentElement).toHaveAttribute('lang', 'uk'));
+            unmount();
 
             await renderApp({ language: 'en-US' });
             expect(document.documentElement).toHaveAttribute('lang', 'en');
@@ -698,6 +699,35 @@ describe('App', () => {
 
             fireEvent.click(screen.getByRole('link', { name: 'Про нас' }));
             await waitFor(() => expect(document.title).toBe('Про Monotones'));
+        });
+
+        it('a /uk URL shows the page in Ukrainian whatever the saved language', async () => {
+            await renderApp({ path: '/uk/mix/deep-work', language: 'en-US' });
+
+            await waitFor(() => expect(document.title).toBe('Глибока робота – гроза й глибокий космос для зосередження – Monotones'));
+            expect(document.documentElement).toHaveAttribute('lang', 'uk');
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Глибока робота');
+        });
+
+        it('sends a Ukrainian visitor to the Ukrainian URL on the first page', async () => {
+            await renderApp({ path: '/about', language: 'uk-UA' });
+
+            await waitFor(() => expect(document.title).toBe('Про Monotones'));
+            fireEvent.click(screen.getByRole('button', { name: 'Меню' }));
+            expect(screen.getByRole('link', { name: 'Умови' })).toHaveAttribute('href', '/uk/terms');
+            expect(screen.getByRole('link', { name: 'Monotones' })).toHaveAttribute('href', '/uk');
+        });
+
+        it('switching the language on a mix page opens the same mix page in the other language', async () => {
+            const { store } = await renderApp({ path: '/mix/rainy-evening' });
+            await waitFor(() => expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']));
+
+            openMenu();
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
+
+            await waitFor(() => expect(document.title).toBe('Дощовий вечір – дощ, багаття й тріск вінілу для відпочинку – Monotones'));
+            expect(store.getState().main.activeStarterMix).toBe('rainy_evening');
+            expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']);
         });
 
         it('switches the language', async () => {

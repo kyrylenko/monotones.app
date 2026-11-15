@@ -1,4 +1,5 @@
-// Writes the indexable pages into the build as static HTML: build/index.html, build/mix/rainy-evening.html, build/about.html, ...
+// Writes the indexable pages into the build as static HTML, in both languages: build/index.html, build/mix/rainy-evening.html,
+// build/about.html, build/uk.html, build/uk/mix/rainy-evening.html, ...
 // Cloudflare serves /about from about.html and /mix/rainy-evening from mix/rainy-evening.html. Every page keeps the app's scripts, which take over in the browser.
 // Run after `vite build` and `vite build --ssr src/prerender.tsx --outDir build-ssr` (see "build" in package.json).
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -6,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
-const { PAGES, renderPage } = await import(pathToFileURL(resolve(root, 'build-ssr/prerender.js')).href);
+const { PAGES, pathLanguage, renderPage } = await import(pathToFileURL(resolve(root, 'build-ssr/prerender.js')).href);
 const template = await readFile(resolve(root, 'build/index.html'), 'utf8');
 
 const escape = text => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -21,9 +22,14 @@ const replaceOnce = (html, pattern, replacement) => {
 };
 
 for (const path of PAGES) {
-    const { html, title, description, canonical } = await renderPage(path);
+    const { html, title, description, canonical, alternates } = await renderPage(path);
     let page = template;
-    page = replaceOnce(page, /<title>[^<]*<\/title>/, `<title>${escape(title)}</title>\n  <link rel="canonical" href="${canonical}">`);
+    page = replaceOnce(page, /<html lang="en">/, `<html lang="${pathLanguage(path)}">`);
+    page = replaceOnce(page, /<title>[^<]*<\/title>/, `<title>${escape(title)}</title>
+  <link rel="canonical" href="${canonical}">
+  <link rel="alternate" hreflang="en" href="${alternates.en}">
+  <link rel="alternate" hreflang="uk" href="${alternates.uk}">
+  <link rel="alternate" hreflang="x-default" href="${alternates.en}">`);
     page = replaceOnce(page, /<meta name="description" content="[^"]*">/, `<meta name="description" content="${escape(description)}">`);
     page = replaceOnce(page, /<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${escape(title)}">`);
     page = replaceOnce(page, /<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${escape(description)}">`);
