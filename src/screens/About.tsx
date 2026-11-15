@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 const About = () => {
     const { t } = useTranslation();
 
-    return <div style={{ textAlign: 'left' }} className='container about-text violet-headers'>
+    return <div className='text-page'>
         <section>
             <h3>{t('your_subtle_companion')}</h3>
             <p>{t('your_subtle_companion_content')}</p>

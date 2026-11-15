@@ -16,8 +16,8 @@ const SharedMixBanner = ({ onSave }: { onSave: () => void }) => {
     return (
         <div className='shared-mix' role='status'>
             <span>{t('shared_with_you', { name })}</span>
-            <button type='button' className='btn btn-primary btn-sm' onClick={onSave}>{t('save_mixture')}</button>
-            <button type='button' className='btn-close' aria-label={t('close')} onClick={() => dispatch(mainActions.setSharedMixName(null))} />
+            <button type='button' className='button button-primary' onClick={onSave}>{t('save_mixture')}</button>
+            <button type='button' className='icon-button' aria-label={t('close')} onClick={() => dispatch(mainActions.setSharedMixName(null))}>×</button>
         </div>
     );
 };

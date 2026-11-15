@@ -12,9 +12,9 @@ const PlayingNowPanel = ({ onSaveClick }: { onSaveClick: () => void }) => {
 
     return (
         <>
-            <div className='pb-2 caption'>{t('playing_now')}</div>
+            <div className='caption'>{t('playing_now')}</div>
             <div className='flex-container'>
-                <div className='mixture-block me-2' style={{ overflow: 'hidden', width: '100%' }}>
+                <div className='mixture-block'>
                     <ActiveSoundIcons className='flex-container' />
                 </div>
                 <div className='flex-container mixture-actions'>

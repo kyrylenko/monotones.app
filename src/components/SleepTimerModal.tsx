@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Slider from 'rc-slider';
+import { useTranslation } from 'react-i18next';
+import Dialog from './Dialog';
+import Slider from './Slider';
 import { secToMin } from '../utils/time';
 import { timerActions } from '../store/timerSlice';
 import { selectTimer } from '../store/selectors';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { sliderStyles, sliderValue } from './sliderStyles';
 import type { ModalProps } from './modalProps';
 
 const DEFAULT_DURATION = 300; // seconds
 
 const SleepTimerModal = ({ isOpen, onClose }: ModalProps) => {
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const { timerRun, interval: timeLeft } = useAppSelector(selectTimer);
     const [duration, setDuration] = useState(DEFAULT_DURATION);
@@ -28,26 +28,22 @@ const SleepTimerModal = ({ isOpen, onClose }: ModalProps) => {
     };
 
     return (
-        <Modal show={isOpen} onHide={onClose} size='sm' autoFocus={false} centered={true}>
-            <Modal.Header closeButton className='py-2'></Modal.Header>
-            <Modal.Body>
-                <h5 className='text-center mb-3'>{`Pause in ${minutes}:${seconds} min`}</h5>
-                {!timerRun && <Slider
-                    className='mx-auto'
-                    min={30}
-                    max={3600}
-                    step={30}
-                    onChange={(value) => setDuration(sliderValue(value))}
-                    value={duration}
-                    styles={sliderStyles}
-                    style={{ width: '90%' }} />}
-            </Modal.Body>
-            <Modal.Footer className='d-flex justify-content-center'>
+        <Dialog isOpen={isOpen} onClose={onClose} title={t('sleep_timer')}>
+            <p className='timer-value'>{`Pause in ${minutes}:${seconds} min`}</p>
+            {!timerRun && <Slider
+                min={30}
+                max={3600}
+                step={30}
+                label={t('sleep_timer')}
+                valueText={`${minutes}:${seconds}`}
+                onChange={setDuration}
+                value={duration} />}
+            <div className='dialog-actions'>
                 {timerRun
-                    ? <Button variant='secondary' size='lg' onClick={stop}>Cancel Timer</Button>
-                    : <Button variant='primary' size='lg' onClick={start}>Start</Button>}
-            </Modal.Footer>
-        </Modal>
+                    ? <button type='button' className='button' onClick={stop}>Cancel Timer</button>
+                    : <button type='button' className='button button-primary' onClick={start}>Start</button>}
+            </div>
+        </Dialog>
     );
 };
 
