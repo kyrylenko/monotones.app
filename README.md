@@ -25,6 +25,7 @@ npm run preview    # serve the production build
 - `src/i18n` – translations (English, Ukrainian)
 - `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
 - `src/seo.ts`, `src/prerender.tsx`, `scripts/prerender.mjs` – the indexable pages: `/`, one page per starter mix (`/mix/rainy-evening`, …), `/about`, `/terms`. `npm run build` renders each to static HTML with its own title, description and canonical URL (`build/mix/rainy-evening.html` is served at `/mix/rainy-evening`); `public/sitemap.xml` lists them. The former `/sleep`, `/relax`, `/focus` redirect to a mix page (`public/_redirects`)
+- Languages: English pages have no prefix, Ukrainian ones live under `/uk` (`/uk`, `/uk/mix/rainy-evening`, `/uk/about`). The URL sets the language (`src/hooks/useUrlLanguage.ts`); on the first page of a visit a Ukrainian visitor is sent to the `/uk` URL; the language picker switches between the two versions of a page. Prerendered pages carry `hreflang` links to each other
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
 - `src/types` – shared TypeScript types
 - `src/test` – test helpers; `src/App.test.tsx` covers the app end to end

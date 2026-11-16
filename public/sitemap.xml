@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The indexable pages, the same list as PAGES in src/seo.ts -->
+<!-- The indexable pages, the same list as LOCALIZED_PAGES in src/seo.ts: English, then Ukrainian -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://monotones.app/</loc></url>
   <url><loc>https://monotones.app/mix/babys-first-night</loc></url>
@@ -10,4 +10,13 @@
   <url><loc>https://monotones.app/mix/night-train</loc></url>
   <url><loc>https://monotones.app/about</loc></url>
   <url><loc>https://monotones.app/terms</loc></url>
+  <url><loc>https://monotones.app/uk</loc></url>
+  <url><loc>https://monotones.app/uk/mix/babys-first-night</loc></url>
+  <url><loc>https://monotones.app/uk/mix/starry-night</loc></url>
+  <url><loc>https://monotones.app/uk/mix/rainy-evening</loc></url>
+  <url><loc>https://monotones.app/uk/mix/summer-meadow</loc></url>
+  <url><loc>https://monotones.app/uk/mix/deep-work</loc></url>
+  <url><loc>https://monotones.app/uk/mix/night-train</loc></url>
+  <url><loc>https://monotones.app/uk/about</loc></url>
+  <url><loc>https://monotones.app/uk/terms</loc></url>
 </urlset>

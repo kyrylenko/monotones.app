@@ -6,8 +6,9 @@ import SoundPlayers from './components/SoundPlayers';
 import useSpaceToggle from './hooks/useSpaceToggle';
 import useSleepTimer from './hooks/useSleepTimer';
 import usePageMeta from './hooks/usePageMeta';
+import useUrlLanguage, { useLocalizedPath } from './hooks/useUrlLanguage';
 import { mixPath, starterMixBySlug } from './constants/starterMixes';
-import { LEGACY_PAGES } from './seo';
+import { LEGACY_PAGES, stripLanguage } from './seo';
 import { selectActiveStarterMix } from './store/selectors';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { mainActions } from './store/mainSlice';
@@ -42,6 +43,7 @@ const MixRoute = () => {
   const mix = starterMixBySlug(useParams().slug);
   const activeStarterMix = useAppSelector(selectActiveStarterMix);
   const wasOpened = useRef(false);
+  const home = useLocalizedPath()('/');
 
   useEffect(() => {
     if (mix) {
@@ -53,18 +55,22 @@ const MixRoute = () => {
     if (mix && activeStarterMix === mix.id) {
       wasOpened.current = true;
     } else if (wasOpened.current) {
-      navigate('/', { replace: true });
+      navigate(home, { replace: true });
     }
-  }, [mix, activeStarterMix, navigate]);
+  }, [mix, activeStarterMix, navigate, home]);
 
-  return mix ? <Home /> : <Navigate to='/' replace />;
+  return mix ? <Home /> : <Navigate to={home} replace />;
 };
 
-const isSoundScreen = (pathname: string) => pathname === '/' || pathname.startsWith('/mix/');
+const isSoundScreen = (pathname: string) => {
+  const page = stripLanguage(pathname);
+  return page === '/' || page.startsWith('/mix/');
+};
 
 const App = () => {
   useSpaceToggle();
   useSleepTimer();
+  useUrlLanguage();
   usePageMeta();
   const { pathname } = useLocation();
 
@@ -72,11 +78,12 @@ const App = () => {
     <Layout isSoundScreen={isSoundScreen(pathname)}>
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/mix/:slug' element={<MixRoute />} />
+          {/* Every page also exists under /uk in Ukrainian (see useUrlLanguage) */}
+          <Route path='/uk?' element={<Home />} />
+          <Route path='/uk?/mix/:slug' element={<MixRoute />} />
           {Object.entries(LEGACY_PAGES).map(([path, id]) => <Route key={path} path={path} element={<Navigate to={mixPath(id)} replace />} />)}
-          <Route path='/about' element={<About />} />
-          <Route path='/terms' element={<Terms />} />
+          <Route path='/uk?/about' element={<About />} />
+          <Route path='/uk?/terms' element={<Terms />} />
           <Route path='/share/:sounds?' element={<ShareRoute />} />
         </Routes>
       </Suspense>
