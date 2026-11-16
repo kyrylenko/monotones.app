@@ -6,6 +6,7 @@ import SoundPlayers from './components/SoundPlayers';
 import useSpaceToggle from './hooks/useSpaceToggle';
 import useSleepTimer from './hooks/useSleepTimer';
 import usePageMeta from './hooks/usePageMeta';
+import useMediaSession from './hooks/useMediaSession';
 import useUrlLanguage, { useLocalizedPath } from './hooks/useUrlLanguage';
 import { mixPath, starterMixBySlug } from './constants/starterMixes';
 import { LEGACY_PAGES, stripLanguage } from './seo';
@@ -72,6 +73,7 @@ const App = () => {
   useSleepTimer();
   useUrlLanguage();
   usePageMeta();
+  useMediaSession();
   const { pathname } = useLocation();
 
   return (

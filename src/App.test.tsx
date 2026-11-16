@@ -620,6 +620,45 @@ describe('App', () => {
         });
     });
 
+    describe('lock screen', () => {
+        class FakeMediaMetadata {
+            constructor(public init: MediaMetadataInit) { }
+        }
+        const handlers = new Map<string, (() => void) | null>();
+        const mediaSession = {
+            metadata: null as FakeMediaMetadata | null,
+            playbackState: 'none',
+            setActionHandler: (action: string, handler: (() => void) | null) => handlers.set(action, handler),
+        };
+
+        beforeEach(() => {
+            handlers.clear();
+            Object.defineProperty(navigator, 'mediaSession', { value: mediaSession, configurable: true });
+            vi.stubGlobal('MediaMetadata', FakeMediaMetadata);
+        });
+        afterEach(() => {
+            delete (navigator as { mediaSession?: unknown }).mediaSession;
+            vi.unstubAllGlobals();
+        });
+
+        it('shows the mix name and plays or pauses from the lock screen controls', async () => {
+            await renderApp();
+            fireEvent.click(mixButton('Rainy evening'));
+            await waitFor(() => expect(playingSounds()).toHaveLength(3));
+
+            expect(mediaSession.metadata?.init).toMatchObject({ title: 'Rainy evening', artist: 'Monotones' });
+            expect(mediaSession.playbackState).toBe('playing');
+
+            act(() => handlers.get('pause')!());
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            expect(mediaSession.playbackState).toBe('paused');
+
+            act(() => handlers.get('play')!());
+            await waitFor(() => expect(playingSounds()).toHaveLength(3));
+            expect(playButton()).toHaveAttribute('aria-label', 'Pause');
+        });
+    });
+
     describe('accessibility', () => {
         it('keeps the focus inside an open dialog', async () => {
             await renderApp();

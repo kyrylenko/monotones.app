@@ -1,4 +1,4 @@
-import { createGainVolumeControl } from './volumeControl';
+import { createGainVolumeControl, requestPlaybackSession } from './volumeControl';
 
 // Minimal Web Audio graph recording what the volume control does
 const fakeAudioContext = () => {
@@ -119,5 +119,24 @@ describe('volumeControl', () => {
 
             expect(gain.value).toBeCloseTo(0.3);
         });
+    });
+});
+
+describe('requestPlaybackSession', () => {
+    afterEach(() => {
+        delete (navigator as { audioSession?: unknown }).audioSession;
+    });
+
+    it('asks Safari for media playback, which keeps playing with the screen locked', () => {
+        const audioSession = { type: 'auto' };
+        Object.defineProperty(navigator, 'audioSession', { value: audioSession, configurable: true });
+
+        requestPlaybackSession();
+
+        expect(audioSession.type).toBe('playback');
+    });
+
+    it('does nothing in browsers without the Audio Session API', () => {
+        expect(() => requestPlaybackSession()).not.toThrow();
     });
 });

@@ -10,9 +10,26 @@ export interface VolumeControl {
 const FADE_RAMP_MS = 1000;
 const FADE_STEP_MS = 50;
 
+// Safari plays Web Audio as "ambient" sound by default, which iOS stops when the screen locks.
+// The "playback" type of the Audio Session API (Safari only) makes it media playback: it goes on with the screen locked,
+// ignores the silent switch and pauses other apps' audio, like a music app.
+// https://developer.mozilla.org/docs/Web/API/AudioSession/type
+export const requestPlaybackSession = () => {
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+    if (session) {
+        session.type = 'playback';
+    }
+};
+
 // One context for all sounds; created on the first play because iOS only allows it in a user gesture
 let sharedContext: AudioContext | undefined;
-export const getAudioContext = (): AudioContext => (sharedContext ??= new AudioContext());
+export const getAudioContext = (): AudioContext => {
+    if (!sharedContext) {
+        requestPlaybackSession();
+        sharedContext = new AudioContext();
+    }
+    return sharedContext;
+};
 
 /** Volume of a sound played with Web Audio; createSource is called once, on the first play */
 export const createGainVolumeControl = (
