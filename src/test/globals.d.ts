@@ -3,8 +3,8 @@ declare global {
     interface Window {
         /** Switches useIsMobile to the mobile layout */
         __isMobile?: boolean;
-        /** <audio> elements currently playing (jsdom cannot play media) */
-        __playing: Set<HTMLMediaElement>;
+        /** Web Audio sources currently playing (faked in src/setupTests.ts): the decoded file url and the volume */
+        __playing: Set<{ buffer?: { url?: string }; loop: boolean; loopStart: number; loopEnd: number; volume: number }>;
     }
 }
 

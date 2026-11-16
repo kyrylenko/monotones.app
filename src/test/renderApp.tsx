@@ -27,9 +27,10 @@ export const readPersistedState = (): SavedState => {
     return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, JSON.parse(v)])) as unknown as SavedState;
 };
 
-//Sound ids currently playing through the mocked <audio> elements
+//Ids of the mp3 sounds currently playing through the faked Web Audio (generated sounds have no file)
 export const playingSounds = () => [...window.__playing]
-    .map(a => a.src.match(/\/([a-z_]+)(?:-[\w-]+)?\.mp3/)?.[1])
+    .map(source => source.buffer?.url?.match(/\/([a-z_]+)(?:-[\w-]+)?\.mp3/)?.[1])
+    .filter(id => id !== undefined)
     .sort();
 
 //Renders the whole application the same way src/index.tsx does

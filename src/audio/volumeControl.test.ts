@@ -1,154 +1,133 @@
-import { createVolumeControl, supportsElementVolume } from './volumeControl';
+import { createGainVolumeControl, masterGain, requestPlaybackSession, scheduleSleepFade } from './volumeControl';
+import { FADE_OUT_SECONDS, fadeOutLevel } from './fadeOut';
+import { FakeAudioParam } from '../test/fakeAudioParam';
 
-// Minimal Web Audio graph recording what the volume control does
+// Minimal Web Audio graph recording what the volume control does; its clock is set by the test
 const fakeAudioContext = () => {
-    const gain = { gain: { value: 1 }, connect: vi.fn((node) => node) };
-    const source = { connect: vi.fn(() => gain) };
+    let time = 0;
+    const nodes: { gain: FakeAudioParam; connect: ReturnType<typeof vi.fn> }[] = [];
+    const source = { connect: vi.fn((node) => node) };
     const context = {
         state: 'suspended' as AudioContextState,
         destination: {},
-        createGain: vi.fn(() => gain),
-        createMediaElementSource: vi.fn(() => source),
+        get currentTime() { return time; },
+        createGain: vi.fn(() => {
+            const node = { gain: new FakeAudioParam(1, () => time), connect: vi.fn((next) => next) };
+            nodes.push(node);
+            return node;
+        }),
         resume: vi.fn(() => Promise.resolve()),
     };
-    return { context, gain, source, getContext: () => context as unknown as AudioContext };
+    return {
+        context, nodes, source,
+        setTime: (seconds: number) => { time = seconds; },
+        getContext: () => context as unknown as AudioContext,
+    };
 };
 
 describe('volumeControl', () => {
-    afterEach(() => vi.useRealTimers());
-
-    it('detects that the browser supports element volume (desktop browsers, jsdom)', () => {
-        expect(supportsElementVolume()).toBe(true);
-    });
-
-    it('sets the element volume where it is supported', () => {
-        const audio = new Audio();
-        const control = createVolumeControl(audio, { useElementVolume: true });
+    it('routes the source through its gain node and the master gain, created on the first play', () => {
+        const { context, nodes, source, getContext } = fakeAudioContext();
+        const createSource = vi.fn(() => source as unknown as AudioNode);
+        const control = createGainVolumeControl(createSource, getContext);
 
         control.setVolume(0.4);
+        expect(context.createGain).not.toHaveBeenCalled();
+
         control.beforePlay();
 
-        expect(audio.volume).toBe(0.4);
+        const [gain, master] = nodes;
+        expect(createSource).toHaveBeenCalledWith(context);
+        expect(source.connect).toHaveBeenCalledWith(gain);
+        expect(gain.connect).toHaveBeenCalledWith(master);
+        expect(master.connect).toHaveBeenCalledWith(context.destination);
+        expect(gain.gain.value).toBe(0.4);
+        expect(context.resume).toHaveBeenCalled();
     });
 
-    describe('without element volume (iOS Safari)', () => {
-        it('routes the audio through a gain node created on the first play', () => {
-            const audio = new Audio();
-            const { context, gain, source, getContext } = fakeAudioContext();
-            const control = createVolumeControl(audio, { useElementVolume: false, getContext });
+    it('changes the gain afterwards and connects the source only once', () => {
+        const { context, nodes, source, getContext } = fakeAudioContext();
+        const createSource = vi.fn(() => source as unknown as AudioNode);
+        const control = createGainVolumeControl(createSource, getContext);
 
-            control.setVolume(0.4);
-            expect(context.createGain).not.toHaveBeenCalled();
+        control.beforePlay();
+        context.state = 'running';
+        control.setVolume(0.8);
+        control.beforePlay();
 
-            control.beforePlay();
-
-            expect(context.createMediaElementSource).toHaveBeenCalledWith(audio);
-            expect(source.connect).toHaveBeenCalledWith(gain);
-            expect(gain.connect).toHaveBeenCalledWith(context.destination);
-            expect(gain.gain.value).toBe(0.4);
-            expect(context.resume).toHaveBeenCalled();
-        });
-
-        it('changes the gain afterwards and connects the element only once', () => {
-            const audio = new Audio();
-            const { context, gain, getContext } = fakeAudioContext();
-            const control = createVolumeControl(audio, { useElementVolume: false, getContext });
-
-            control.beforePlay();
-            context.state = 'running';
-            control.setVolume(0.8);
-            control.beforePlay();
-
-            expect(gain.gain.value).toBe(0.8);
-            expect(context.createMediaElementSource).toHaveBeenCalledTimes(1);
-            expect(context.resume).toHaveBeenCalledTimes(1);
-        });
-
-        it('fades the gain without changing the volume', () => {
-            vi.useFakeTimers();
-            const { gain, getContext } = fakeAudioContext();
-            const control = createVolumeControl(new Audio(), { useElementVolume: false, getContext });
-            control.setVolume(0.4);
-            control.beforePlay();
-
-            control.setFade(0.5);
-            vi.advanceTimersByTime(1000);
-            expect(gain.gain.value).toBeCloseTo(0.2);
-
-            control.setVolume(0.8);
-            expect(gain.gain.value).toBeCloseTo(0.4);
-        });
+        expect(nodes[0].gain.value).toBe(0.8);
+        expect(createSource).toHaveBeenCalledTimes(1);
+        expect(context.resume).toHaveBeenCalledTimes(1);
     });
 
-    describe('fade', () => {
-        beforeEach(() => vi.useFakeTimers());
+    it('shares one master gain between all sounds of a context', () => {
+        const { context, getContext } = fakeAudioContext();
+        const master = masterGain(getContext());
+        expect(masterGain(getContext())).toBe(master);
+        expect(context.createGain).toHaveBeenCalledTimes(1);
+    });
+});
 
-        const playingAt = (volume: number) => {
-            const audio = new Audio();
-            const control = createVolumeControl(audio, { useElementVolume: true });
-            control.setVolume(volume);
-            return { audio, control };
-        };
+describe('scheduleSleepFade', () => {
+    // The fade runs on the audio clock, which keeps going while iOS pauses the page with the screen locked
+    it('keeps full volume, then fades out along fadeOutLevel during the last seconds', () => {
+        const { getContext, setTime } = fakeAudioContext();
+        const master = masterGain(getContext());
+        scheduleSleepFade(120, getContext());
 
-        it('ramps the volume smoothly to the new level over a second', () => {
-            const { audio, control } = playingAt(0.8);
+        setTime(60);
+        expect(master.gain.value).toBe(1);
+        setTime(120 - FADE_OUT_SECONDS / 2);
+        expect(master.gain.value).toBeCloseTo(fadeOutLevel(FADE_OUT_SECONDS / 2), 1);
+        setTime(119.5);
+        expect(master.gain.value).toBeLessThan(0.01);
+        setTime(500);
+        expect(master.gain.value).toBe(0);
+    });
 
-            control.setFade(0.5);
-            expect(audio.volume).toBe(0.8);
+    it('starts inside the fade when less time is left', () => {
+        const { getContext, setTime } = fakeAudioContext();
+        const master = masterGain(getContext());
+        scheduleSleepFade(10, getContext());
 
-            vi.advanceTimersByTime(500);
-            expect(audio.volume).toBeCloseTo(0.6);
+        setTime(0.02);
+        expect(master.gain.value).toBeCloseTo(fadeOutLevel(10), 1);
+        setTime(10.1);
+        expect(master.gain.value).toBe(0);
+    });
 
-            vi.advanceTimersByTime(500);
-            expect(audio.volume).toBeCloseTo(0.4);
+    it('comes back to full volume over a second when cancelled', () => {
+        const { getContext, setTime } = fakeAudioContext();
+        const master = masterGain(getContext());
+        scheduleSleepFade(20, getContext());
+        setTime(10);
+        const faded = master.gain.value;
+        expect(faded).toBeLessThan(0.5);
 
-            vi.advanceTimersByTime(5000);
-            expect(audio.volume).toBeCloseTo(0.4);
-        });
+        scheduleSleepFade(null, getContext());
+        setTime(10.5);
+        expect(master.gain.value).toBeGreaterThan(faded);
+        expect(master.gain.value).toBeLessThan(1);
+        setTime(11);
+        expect(master.gain.value).toBe(1);
+    });
+});
 
-        it('fades out to silence step by step', () => {
-            const { audio, control } = playingAt(1);
+describe('requestPlaybackSession', () => {
+    afterEach(() => {
+        delete (navigator as { audioSession?: unknown }).audioSession;
+    });
 
-            for (const level of [0.75, 0.5, 0.25, 0]) {
-                control.setFade(level);
-                vi.advanceTimersByTime(1000);
-                expect(audio.volume).toBeCloseTo(level);
-            }
-            expect(audio.volume).toBe(0);
-        });
+    it('asks Safari for media playback, which keeps playing with the screen locked', () => {
+        const audioSession = { type: 'auto' };
+        Object.defineProperty(navigator, 'audioSession', { value: audioSession, configurable: true });
 
-        it('continues from the current level when the target changes mid-ramp', () => {
-            const { audio, control } = playingAt(1);
+        requestPlaybackSession();
 
-            control.setFade(0);
-            vi.advanceTimersByTime(500);
-            control.setFade(1);
-            vi.advanceTimersByTime(500);
+        expect(audioSession.type).toBe('playback');
+    });
 
-            expect(audio.volume).toBeCloseTo(0.75);
-            vi.advanceTimersByTime(500);
-            expect(audio.volume).toBe(1);
-        });
-
-        it('restores the full volume when the fade is cancelled', () => {
-            const { audio, control } = playingAt(0.3);
-
-            control.setFade(0.1);
-            vi.advanceTimersByTime(1000);
-            control.setFade(1);
-            vi.advanceTimersByTime(1000);
-
-            expect(audio.volume).toBe(0.3);
-        });
-
-        it('keeps volume changes during the fade', () => {
-            const { audio, control } = playingAt(0.8);
-
-            control.setFade(0.5);
-            vi.advanceTimersByTime(1000);
-            control.setVolume(0.6);
-
-            expect(audio.volume).toBeCloseTo(0.3);
-        });
+    it('does nothing in browsers without the Audio Session API', () => {
+        expect(() => requestPlaybackSession()).not.toThrow();
     });
 });

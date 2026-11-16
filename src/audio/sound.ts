@@ -1,7 +1,8 @@
 import { soundUrl } from '../assets';
 import type { SoundId } from '../constants/soundIds';
 import { createBrownNoiseBuffer } from './brownNoise';
-import { createGainVolumeControl, createVolumeControl, getAudioContext } from './volumeControl';
+import { prepareLoop, wholeLoop, type Loop } from './loop';
+import { createGainVolumeControl, getAudioContext } from './volumeControl';
 
 /** One playable sound, either an mp3 file or generated in the browser */
 export interface Sound {
@@ -9,80 +10,77 @@ export interface Sound {
     play(): Promise<void>;
     pause(): void;
     setVolume(volume: number): void;
-    /** Sleep timer fade-out, multiplies the volume */
-    setFade(level: number): void;
 }
 
-// Firefox-only global, used to detect the browser
-declare const InstallTrigger: unknown;
-const isFirefox = typeof InstallTrigger !== 'undefined';
-// Seconds before the end to jump back to the start: avoids an audible gap where `loop` is not seamless
-const LOOP_BUFFER = 0.44;
+interface LoopSoundOptions {
+    /** Drop the loop on pause and load it again on the next play: decoded files take ~350 KB per second */
+    release?: boolean;
+    getContext?: () => AudioContext;
+}
 
-// Plays an mp3 with an invisible <audio>
-export const createMediaSound = (url: string): Sound => {
-    const audio = new Audio(url);
-    audio.crossOrigin = 'anonymous';
-    audio.loop = isFirefox;
-    audio.preload = 'none';
-
-    audio.addEventListener('timeupdate', () => {
-        if (!isFirefox && audio.currentTime > audio.duration - LOOP_BUFFER) {
-            audio.currentTime = 0;
-            audio.play();
-        }
-    });
-
-    const volume = createVolumeControl(audio);
-    return {
-        play() {
-            volume.beforePlay();
-            return audio.play();
-        },
-        pause() {
-            if (!audio.paused) {
-                audio.pause();
-            }
-        },
-        setVolume: volume.setVolume,
-        setFade: volume.setFade,
-    };
-};
-
-// Loops a buffer generated with Web Audio: seamless, nothing to download, works offline
-export const createGeneratedSound = (
-    generate: (context: BaseAudioContext) => AudioBuffer,
-    getContext: () => AudioContext = getAudioContext,
+// Loops a buffer with Web Audio: sample-accurate, so the repetition has no gap
+export const createLoopSound = (
+    load: (context: AudioContext) => Promise<Loop>,
+    { release = false, getContext = getAudioContext }: LoopSoundOptions = {},
 ): Sound => {
     // A buffer source plays only once, so every play starts a new one into this node, which stays connected
     let input: GainNode | undefined;
-    let buffer: AudioBuffer | undefined;
+    let loading: Promise<Loop> | undefined;
     let source: AudioBufferSourceNode | undefined;
+    let isPlaying = false;
     const volume = createGainVolumeControl(context => (input = context.createGain()), getContext);
+
+    const startSource = (context: AudioContext, { buffer, start, loopStart, loopEnd }: Loop) => {
+        source = context.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+        source.loopStart = loopStart;
+        source.loopEnd = loopEnd;
+        source.connect(input!);
+        source.start(0, start);
+    };
 
     return {
         play() {
             volume.beforePlay();
             const context = getContext();
-            if (!source) {
-                buffer ??= generate(context);
-                source = context.createBufferSource();
-                source.buffer = buffer;
-                source.loop = true;
-                source.connect(input!);
-                source.start();
+            isPlaying = true;
+            if (!loading) {
+                const current = load(context);
+                loading = current;
+                current.catch(() => { if (loading === current) loading = undefined; });
             }
+            const current = loading;
+            const started = current.then(loop => {
+                // Paused while loading, or already playing after an earlier play()
+                if (isPlaying && !source && current === loading) {
+                    startSource(context, loop);
+                }
+            });
             // A context created outside a user gesture stays suspended until the browser allows audio
-            return context.state === 'running' ? Promise.resolve() : context.resume();
+            const resumed = context.state === 'running' ? Promise.resolve() : context.resume();
+            return Promise.all([started, resumed]).then(() => undefined);
         },
         pause() {
+            isPlaying = false;
             source?.stop();
             source?.disconnect();
             source = undefined;
+            if (release) {
+                loading = undefined;
+            }
         },
         setVolume: volume.setVolume,
-        setFade: volume.setFade,
     };
+};
+
+// Downloads (or takes from the service worker cache) and decodes an mp3, ready to loop
+const loadFile = (url: string) => async (context: AudioContext): Promise<Loop> => {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`${response.status} ${url}`);
+    }
+    return prepareLoop(await context.decodeAudioData(await response.arrayBuffer()));
 };
 
 const generators: Partial<Record<SoundId, (context: BaseAudioContext) => AudioBuffer>> = {
@@ -91,5 +89,8 @@ const generators: Partial<Record<SoundId, (context: BaseAudioContext) => AudioBu
 
 export const createSound = (id: SoundId): Sound => {
     const generate = generators[id];
-    return generate ? createGeneratedSound(generate) : createMediaSound(soundUrl(id));
+    return generate
+        // Generated loops are small (8 s) and kept
+        ? createLoopSound(async context => wholeLoop(generate(context)))
+        : createLoopSound(loadFile(soundUrl(id)), { release: true });
 };

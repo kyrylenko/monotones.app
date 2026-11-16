@@ -31,7 +31,7 @@ const persistConfig: PersistConfig<RootState> = {
     stateReconciler: autoMergeLevel2,
     transforms: [
         createBlacklistFilter('main', ['isGlobalPlay']),
-        createBlacklistFilter('timer', ['timerRun', 'interval']),
+        createBlacklistFilter('timer', ['timerRun', 'interval', 'endsAt']),
         createBlacklistFilter('loading', ['isCaching']),
     ],
 };

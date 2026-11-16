@@ -23,7 +23,7 @@ npm run preview    # serve the production build
 - `src/sky` – the living night sky behind the orbit: star, ripple and wave physics (`sky.ts`, unit tested), canvas drawing (`draw.ts`), pointer, tilt and screen-turn input (`Sky.tsx`)
 - `src/utils` – pure helpers (share links, sound catalogue, orbit geometry, time formatting)
 - `src/i18n` – translations (English, Ukrainian)
-- `src/audio` – sound players (mp3 files and sounds generated with Web Audio, like brown noise), volume handling (Web Audio fallback for iOS), sleep timer fade-out
+- `src/audio` – sound players: every sound (mp3 files and generated ones, like brown noise) loops seamlessly with Web Audio; loop preparation (silence trimming and crossfade at the loop point), volume, sleep timer fade-out
 - `src/seo.ts`, `src/prerender.tsx`, `scripts/prerender.mjs` – the indexable pages: `/`, one page per starter mix (`/mix/rainy-evening`, …), `/about`, `/terms`. `npm run build` renders each to static HTML with its own title, description and canonical URL (`build/mix/rainy-evening.html` is served at `/mix/rainy-evening`); `public/sitemap.xml` lists them. The former `/sleep`, `/relax`, `/focus` redirect to a mix page (`public/_redirects`)
 - Languages: English pages have no prefix, Ukrainian ones live under `/uk` (`/uk`, `/uk/mix/rainy-evening`, `/uk/about`). The URL sets the language (`src/hooks/useUrlLanguage.ts`); on the first page of a visit a Ukrainian visitor is sent to the `/uk` URL; the language picker switches between the two versions of a page. Prerendered pages carry `hreflang` links to each other
 - `src/service-worker.ts` – offline cache; serves audio byte ranges, which Safari requires
@@ -32,6 +32,8 @@ npm run preview    # serve the production build
 
 ### Browser notes
 
-- Safari plays media from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
-- iOS ignores `audio.volume`, so there the volume goes through a Web Audio gain node (`src/audio/volumeControl.ts`).
+- Sounds are decoded to PCM to loop without a gap: about 350 KB per second of audio while a sound plays (a 2 minute sound takes ~40 MB).
+  The decoded audio is dropped on pause and decoded again on the next play.
+- Volume goes through Web Audio gain nodes (`src/audio/volumeControl.ts`); `audio.volume` would not work on iOS anyway.
   Web Audio on iOS may pause when the screen locks or the app goes to the background.
+- Safari plays media elements from the service worker only with `206 Partial Content` responses, see `src/service-worker.ts`.
