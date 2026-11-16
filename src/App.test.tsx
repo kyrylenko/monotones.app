@@ -349,7 +349,7 @@ describe('App', () => {
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
 
             openTimer();
-            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
             fireEvent.click(within(screen.getByRole('dialog', { name: 'Sleep timer' })).getByRole('button', { name: '15 min' }));
             expect(screen.queryByRole('dialog')).toBeNull();
 
@@ -380,7 +380,7 @@ describe('App', () => {
             fireEvent.click(screen.getByRole('button', { name: '30 min' }));
 
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
-            expect(store.getState().timer).toEqual({ timerRun: true, interval: 1800 });
+            expect(store.getState().timer).toMatchObject({ timerRun: true, interval: 1800 });
         });
 
         it('fades the sounds out during the last seconds and restores the volume for the next play', async () => {
@@ -391,7 +391,7 @@ describe('App', () => {
             const volume = store.getState().main.sounds.campfire!.volume;
             expect(audio.volume).toBeCloseTo(volume);
 
-            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
             act(() => store.dispatch(timerActions.timerStart(60)));
 
             tick(30);
@@ -412,6 +412,31 @@ describe('App', () => {
             expect(store.getState().main.sounds.campfire!.volume).toBe(volume);
         });
 
+        it('fades out with the screen locked and stops as soon as the screen is unlocked', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            const [audio] = window.__playing;
+            const volume = audio.volume;
+
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
+            act(() => store.dispatch(timerActions.timerStart(5 * 60)));
+
+            // Screen locked: iOS pauses the page's timers, only the clock and the audio go on
+            vi.setSystemTime(Date.now() + 5 * 60 * 1000 - 10_000);
+            expect(audio.volume).toBeGreaterThan(0);
+            expect(audio.volume).toBeLessThan(volume / 2);
+            vi.setSystemTime(Date.now() + 20_000);
+            expect(audio.volume).toBe(0);
+            expect(store.getState().timer.interval).toBe(5 * 60);
+
+            // Unlocked: the page shows again and the timer catches up at once
+            act(() => { document.dispatchEvent(new Event('visibilitychange')); });
+            expect(store.getState().timer.timerRun).toBe(false);
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
+        });
+
         it('restores the full volume when cancelled during the fade', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
@@ -419,7 +444,7 @@ describe('App', () => {
             const [audio] = window.__playing;
             const volume = audio.volume;
 
-            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
             act(() => store.dispatch(timerActions.timerStart(20)));
             tick(2);
             expect(audio.volume).toBeLessThan(volume);
@@ -646,12 +671,19 @@ describe('App', () => {
             fireEvent.click(mixButton('Rainy evening'));
             await waitFor(() => expect(playingSounds()).toHaveLength(3));
 
-            expect(mediaSession.metadata?.init).toMatchObject({ title: 'Rainy evening', artist: 'Monotones' });
+            expect(mediaSession.metadata?.init).toMatchObject({
+                title: 'Rainy evening',
+                artist: 'Monotones',
+                artwork: [{ src: 'http://localhost:3000/logo-192.png' }, { src: 'http://localhost:3000/logo.png' }],
+            });
             expect(mediaSession.playbackState).toBe('playing');
+            // iOS shows the lock screen info only while a media element plays: the silent companion
+            expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
 
             act(() => handlers.get('pause')!());
             await waitFor(() => expect(playingSounds()).toEqual([]));
             expect(mediaSession.playbackState).toBe('paused');
+            expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
 
             act(() => handlers.get('play')!());
             await waitFor(() => expect(playingSounds()).toHaveLength(3));
@@ -792,7 +824,7 @@ describe('App', () => {
             expect(playingSounds()).toEqual([]);
             //fields that are not saved get their defaults back
             expect(store.getState().main.isGlobalPlay).toBe(false);
-            expect(store.getState().timer).toEqual({ timerRun: false, interval: 1 });
+            expect(store.getState().timer).toEqual({ timerRun: false, interval: 1, endsAt: null });
         });
 
         it('loads saved mixes with more than 6 sounds whole', async () => {
@@ -868,7 +900,7 @@ describe('App', () => {
             toggleSound('campfire');
             openTimer();
 
-            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
             fireEvent.click(screen.getByRole('button', { name: '15 min' }));
             openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
@@ -882,9 +914,9 @@ describe('App', () => {
             const { store } = await renderApp();
             toggleSound('campfire');
             openTimer();
-            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+            vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval', 'Date'] });
             fireEvent.click(screen.getByRole('button', { name: '15 min' }));
-            act(() => store.dispatch({ type: 'timer/timerStart', payload: 1 }));
+            act(() => store.dispatch(timerActions.timerStart(1)));
             act(() => vi.advanceTimersByTime(1000));
             await waitFor(() => expect(playingSounds()).toEqual([]));
             //waitFor polls with setInterval: real timers again, as starting a sound changes nothing on the page to wake it

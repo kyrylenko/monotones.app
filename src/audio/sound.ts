@@ -10,8 +10,6 @@ export interface Sound {
     play(): Promise<void>;
     pause(): void;
     setVolume(volume: number): void;
-    /** Sleep timer fade-out, multiplies the volume */
-    setFade(level: number): void;
 }
 
 interface LoopSoundOptions {
@@ -73,7 +71,6 @@ export const createLoopSound = (
             }
         },
         setVolume: volume.setVolume,
-        setFade: volume.setFade,
     };
 };
 

@@ -1,3 +1,4 @@
+import { FakeAudioParam } from './test/fakeAudioParam';
 //ref: https://vitest.dev/config/#setupfiles
 import '@testing-library/jest-dom/vitest';
 
@@ -14,10 +15,21 @@ window.matchMedia = vi.fn().mockImplementation((query: string) => {
     };
 });
 
+//jsdom cannot play media: the silent companion element of the lock screen (audio/companion.ts) only records its state
+HTMLMediaElement.prototype.play = vi.fn(function (this: HTMLMediaElement) {
+    Object.defineProperty(this, 'paused', { value: false, configurable: true });
+    return Promise.resolve();
+});
+HTMLMediaElement.prototype.pause = vi.fn(function (this: HTMLMediaElement) {
+    Object.defineProperty(this, 'paused', { value: true, configurable: true });
+});
+
 //jsdom has no canvas: the sky is not drawn
 HTMLCanvasElement.prototype.getContext = () => null;
 
-//jsdom has no Web Audio and cannot fetch or decode mp3 files: record which sounds play and how loud
+//jsdom has no Web Audio and cannot fetch or decode mp3 files: record which sounds play and how loud.
+//The audio clock follows Date.now(), so tests that fake Date also move scheduled volume changes (the sleep timer fade).
+const audioClock = () => Date.now() / 1000;
 class FakeNode {
     next?: FakeNode;
     gain?: { value: number };
@@ -55,7 +67,8 @@ class FakeAudioContext {
     sampleRate = 1000;
     destination = new FakeNode();
     resume = () => Promise.resolve();
-    createGain = () => Object.assign(new FakeNode(), { gain: { value: 1 } });
+    get currentTime() { return audioClock(); }
+    createGain = () => Object.assign(new FakeNode(), { gain: new FakeAudioParam(1, audioClock) });
     createBufferSource = () => new FakeBufferSource();
     createBuffer = (channels: number, length: number, sampleRate: number) => fakeAudioBuffer(channels, length, sampleRate);
     // Decoded files remember their url, so tests can tell which sound plays

@@ -1,4 +1,5 @@
 import { createLoopSound } from './sound';
+import { masterGain } from './volumeControl';
 import type { Loop } from './loop';
 
 interface FakeSource {
@@ -21,9 +22,11 @@ const fakeAudioContext = () => {
         state: 'suspended' as AudioContextState,
         destination: {},
         // The volume gain is created first, then the input node in front of it
+        // then the master gain shared by all sounds
         createGain: vi.fn()
             .mockReturnValueOnce(gain)
-            .mockReturnValueOnce(input),
+            .mockReturnValueOnce(input)
+            .mockReturnValue({ gain: { value: 1 }, connect: vi.fn() }),
         createBufferSource: vi.fn(() => {
             const source = { loop: false, loopStart: 0, loopEnd: 0, connect: vi.fn(), start: vi.fn(), stop: vi.fn(), disconnect: vi.fn() };
             sources.push(source);
@@ -63,7 +66,7 @@ describe('createLoopSound', () => {
         expect(sources[0].start).toHaveBeenCalledWith(0, 0.04);
         expect(sources[0].connect).toHaveBeenCalledWith(input);
         expect(input.connect).toHaveBeenCalledWith(gain);
-        expect(gain.connect).toHaveBeenCalledWith(context.destination);
+        expect(gain.connect).toHaveBeenCalledWith(masterGain(getContext()));
         expect(gain.gain.value).toBe(0.4);
         expect(context.resume).toHaveBeenCalled();
     });
@@ -85,7 +88,8 @@ describe('createLoopSound', () => {
         await sound.play();
         expect(sources).toHaveLength(2);
         expect(load).toHaveBeenCalledTimes(1);
-        expect(context.createGain).toHaveBeenCalledTimes(2);
+        // the volume gain, the input node and the master gain, created once
+        expect(context.createGain).toHaveBeenCalledTimes(3);
     });
 
     it('releases the loop on pause and loads it again, to keep memory low', async () => {
@@ -128,18 +132,5 @@ describe('createLoopSound', () => {
         await sound.play();
 
         expect(sources).toHaveLength(1);
-    });
-
-    it('fades the volume for the sleep timer', () => {
-        vi.useFakeTimers();
-        const { gain, getContext } = fakeAudioContext();
-        const sound = createLoopSound(() => Promise.resolve(loop), { getContext });
-        sound.setVolume(0.8);
-        void sound.play();
-
-        sound.setFade(0.5);
-        vi.advanceTimersByTime(1000);
-
-        expect(gain.gain.value).toBeCloseTo(0.4);
     });
 });

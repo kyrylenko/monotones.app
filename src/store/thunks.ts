@@ -3,15 +3,17 @@ import { timerActions } from './timerSlice';
 import { selectIsGlobalPlay } from './selectors';
 import type { AppThunk } from './index';
 
-// One second of the sleep timer: pauses all sounds when the time is up
-export const timerTick = (): AppThunk => (dispatch, getState) => {
-    const { timerRun, interval } = getState().timer;
-    if (!timerRun) {
+// Counts the sleep timer down from its end time; pauses all sounds when the time is up
+export const timerTick = (now: number = Date.now()): AppThunk => (dispatch, getState) => {
+    const { timerRun, endsAt } = getState().timer;
+    if (!timerRun || endsAt === null) {
         return;
     }
 
-    dispatch(timerActions.timerStart(interval - 1));
-    if (interval - 1 <= 0) {
+    const secondsLeft = Math.max(0, Math.ceil((endsAt - now) / 1000));
+    dispatch(timerActions.timerLeft(secondsLeft));
+    if (secondsLeft <= 0) {
+        dispatch(timerActions.timerStop());
         dispatch(mainActions.globalPlayPause(false));
     }
 };
