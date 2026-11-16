@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import defaultValues from '../constants/defaultValues';
-import { pauseCompanion, playCompanion } from '../audio/companion';
+import { pauseCompanion, playCompanion, setCompanionPlayingHandler } from '../audio/companion';
 import { activeMixName } from '../utils/mixName';
 import { setGlobalPlay } from '../store/thunks';
 import { selectActiveSounds, selectIsGlobalPlay } from '../store/selectors';
@@ -14,7 +14,7 @@ const artwork = (): MediaImage[] => [
 ];
 
 // Lock screen and notification controls (Media Session API): the mix name, play and pause.
-// On iOS they need a playing media element, the silent companion (audio/companion.ts).
+// They need a playing media element of at least 5 seconds (Chrome on Android), the silent companion (audio/companion.ts).
 // https://developer.mozilla.org/docs/Web/API/Media_Session_API
 const useMediaSession = () => {
     const { t } = useTranslation();
@@ -32,13 +32,19 @@ const useMediaSession = () => {
         }
     }, [hasSounds, isGlobalPlay]);
 
+    // Set now, and again once the companion element really plays: iOS ignores info set before its media starts
     useEffect(() => {
         if (!('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') {
             return;
         }
-        const session = navigator.mediaSession;
-        session.metadata = hasSounds ? new MediaMetadata({ title: name, artist: defaultValues.appName, artwork: artwork() }) : null;
-        session.playbackState = hasSounds ? (isGlobalPlay ? 'playing' : 'paused') : 'none';
+        const apply = () => {
+            const session = navigator.mediaSession;
+            session.metadata = hasSounds ? new MediaMetadata({ title: name, artist: defaultValues.appName, artwork: artwork() }) : null;
+            session.playbackState = hasSounds ? (isGlobalPlay ? 'playing' : 'paused') : 'none';
+        };
+        apply();
+        setCompanionPlayingHandler(apply);
+        return () => setCompanionPlayingHandler(undefined);
     }, [name, hasSounds, isGlobalPlay]);
 
     useEffect(() => {
