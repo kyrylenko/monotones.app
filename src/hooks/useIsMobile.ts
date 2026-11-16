@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
-const MOBILE_QUERY = '(max-width: 768px)';
+// Below this width the mixes open in a sheet; above it they stay in a side panel
+const MOBILE_QUERY = '(max-width: 959px)';
 
 const subscribe = (onChange: () => void) => {
     const mediaQuery = window.matchMedia(MOBILE_QUERY);
@@ -10,6 +11,9 @@ const subscribe = (onChange: () => void) => {
 
 const getSnapshot = () => window.matchMedia(MOBILE_QUERY).matches;
 
-const useIsMobile = () => useSyncExternalStore(subscribe, getSnapshot);
+// The build-time prerender has no screen: it renders the desktop layout, which lists every sound and mix
+const getServerSnapshot = () => false;
+
+const useIsMobile = () => useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
 export default useIsMobile;

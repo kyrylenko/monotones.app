@@ -1,4 +1,10 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+// Self-hosted fonts (latin and cyrillic for Ukrainian), precached by the service worker for offline use
+import '@fontsource/golos-text/latin-400.css';
+import '@fontsource/golos-text/cyrillic-400.css';
+import '@fontsource/golos-text/latin-500.css';
+import '@fontsource/golos-text/cyrillic-500.css';
+import '@fontsource/cormorant/latin-500-italic.css';
+import '@fontsource/cormorant/cyrillic-500-italic.css';
 import './index.css';
 import './i18n';
 import { StrictMode } from 'react';

@@ -1,20 +1,176 @@
-/* Page colors, Bootstrap components follow data-bs-theme on <html> (see src/hooks/useTheme.ts) */
+/* Night Orbit design tokens: one dark theme, used at night, so everything stays dim and calm.
+   Text colours keep WCAG AA contrast (4.5:1) on --sky and --panel. */
 :root {
-  --page-bg: #ffffff;
-  --page-text: #4A4A4A;
+  /* Colours */
+  --sky: #090b18;
+  --sky-2: #13162c;
+  --panel: #161a31;
+  --moon: #e6dcc3;
+  --ink: #cfccdb;
+  --ink-dim: #8a88a0;
+  --line: rgba(207, 204, 219, 0.14);
+  --scrim: rgba(5, 6, 14, 0.6);
+
+  /* Type */
+  --font-display: 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.875rem;
+
+  /* Space, shape, touch */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --radius-sm: 12px;
+  --radius: 22px;
+  --tap: 44px;
+  --gutter-left: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-right: max(16px, env(safe-area-inset-right, 0px));
+
+  color-scheme: dark;
 }
-[data-bs-theme=dark] {
-  --page-bg: #111418;
-  --page-text: #b0b5bb;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
-  background-color: var(--page-bg);
-  color: var(--page-text);
   margin: 0;
+  background: radial-gradient(120% 80% at 50% 30%, var(--sky-2), var(--sky) 70%) fixed var(--sky);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--moon);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-xl); }
+h2 { font-size: var(--text-lg); }
+h3 { font-size: 1.125rem; }
+
+a {
+  color: var(--moon);
+}
+
+img {
+  max-width: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--moon);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Buttons */
+.button {
+  min-height: var(--tap);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--tap) / 2);
+  background: none;
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+
+.button:hover {
+  border-color: var(--ink-dim);
+}
+
+.button-primary {
+  background: var(--moon);
+  border-color: transparent;
+  color: var(--sky);
+}
+
+.button-primary:hover {
+  border-color: transparent;
+  filter: brightness(1.06);
+}
+
+.icon-button {
+  width: var(--tap);
+  height: var(--tap);
+  display: inline-grid;
+  place-items: center;
   padding: 0;
-  font-family: 'Comfortaa', sans-serif;
-  /* font-family: 'Titillium Web', sans-serif; */
-  /* font-family: 'Mali', sans-serif; */
-  text-align: center;  
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-dim);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.icon-button:hover {
+  color: var(--ink);
+}
+
+/* Text field */
+.text-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--sky);
+  color: var(--ink);
+  font-size: var(--text-md); /* 16px keeps iOS from zooming into the field */
+}
+
+.text-input::placeholder {
+  color: var(--ink-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

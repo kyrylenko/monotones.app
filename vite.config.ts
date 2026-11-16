@@ -15,11 +15,15 @@ export default defineConfig({
       // public/manifest.json is used as is
       manifest: false,
       injectManifest: {
-        globPatterns: ['**/*.{html,js,css,mp3,gif,svg,webp,png,ico}'],
+        globPatterns: ['**/*.{html,js,css,mp3,gif,svg,webp,png,ico,woff2}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
     }),
   ],
+  // The build-time prerender (src/prerender.tsx) bundles its dependencies: some (redux-persist) do not load in Node as they are
+  ssr: {
+    noExternal: true,
+  },
   build: {
     // Same output folder as Create React App had
     outDir: 'build',

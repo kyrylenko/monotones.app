@@ -1,5 +1,6 @@
 import { mainReducer as reducer, mainActions as actions, type MainState } from './mainSlice';
-import type { SoundId } from '../constants/soundIds';
+import { all, type SoundId } from '../constants/soundIds';
+import defaultValues from '../constants/defaultValues';
 import type { Mixture, SharedSound, SoundSetting, Sounds } from '../types';
 
 const deepFreeze = <T extends object>(obj: T): T => {
@@ -65,6 +66,39 @@ describe('mainReducer', () => {
             const next = reducer(state, actions.playPauseVolume(sound('campfire')));
 
             expect(next.mixtures.map(m => m.isActive)).toEqual([false, false]);
+        });
+    });
+
+    describe('setVolume', () => {
+        it('changes the volume without starting playback and deactivates the mixture', () => {
+            const state = { ...baseState, sounds: { campfire: sound('campfire') }, mixtures: [mixture('A', {}, true)] };
+            const next = reducer(state, actions.setVolume({ id: 'campfire', volume: 0.6 }));
+            expect(next.sounds.campfire).toEqual(sound('campfire', { volume: 0.6 }));
+            expect(next.isGlobalPlay).toBe(false);
+            expect(next.mixtures[0].isActive).toBe(false);
+        });
+
+        it('ignores sounds that are not in the mix', () => {
+            expect(reducer(baseState, actions.setVolume({ id: 'campfire', volume: 0.6 })).sounds).toEqual({});
+        });
+    });
+
+    describe('mix limit', () => {
+        const playing = (count: number) => Object.fromEntries(Object.values(all).slice(0, count)
+            .map(id => [id, { id, isPlay: true, volume: 0.3 }]));
+
+        it('does not add a sound to a full mix but still changes the volume of a sound in it', () => {
+            const state = { ...baseState, sounds: playing(defaultValues.maxSounds) };
+            const [first] = Object.keys(state.sounds) as SoundId[];
+            const extra = Object.values(all)[defaultValues.maxSounds];
+
+            expect(reducer(state, actions.playPauseVolume({ id: extra, isPlay: true, volume: 0.3 }))).toBe(state);
+            expect(reducer(state, actions.playPauseVolume({ id: first, isPlay: true, volume: 0.9 })).sounds[first]?.volume).toBe(0.9);
+        });
+
+        it('loads shared mixes with more sounds whole', () => {
+            const codes = Object.keys(all).slice(0, 8).map(code => ({ code, volume: 0.3 }));
+            expect(Object.keys(reducer(undefined, actions.setSounds(codes)).sounds)).toHaveLength(8);
         });
     });
 
@@ -253,6 +287,23 @@ describe('mainReducer', () => {
         it('does nothing for an unknown mixture', () => {
             const state = { ...baseState, mixtures: [mixture('A', sA)] };
             expect(reducer(state, actions.switchMixture('X'))).toEqual(state);
+        });
+    });
+
+    describe('openStarterMix', () => {
+        it('loads the mix with its volumes and activates it without playing', () => {
+            const state = { ...baseState, isGlobalPlay: true, sounds: { farm: sound('farm') }, mixtures: [mixture('A', {}, true)] };
+            const next = reducer(state, actions.openStarterMix('rainy_evening'));
+            expect(Object.keys(next.sounds)).toEqual(['october_rain', 'campfire', 'vinyl_cracks']);
+            expect(next.sounds.october_rain?.volume).toBe(0.4);
+            expect(next.activeStarterMix).toBe('rainy_evening');
+            expect(next.mixtures[0].isActive).toBe(false);
+            expect(next.isGlobalPlay).toBe(false);
+        });
+
+        it('keeps an active mix playing', () => {
+            const playing = reducer({ ...baseState, isGlobalPlay: true }, actions.playStarterMix('deep_work'));
+            expect(reducer(playing, actions.openStarterMix('deep_work'))).toBe(playing);
         });
     });
 

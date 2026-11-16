@@ -57,4 +57,12 @@ export type ShareCode = keyof typeof all;
 export type SoundId = (typeof all)[ShareCode];
 export type Category = keyof typeof categories;
 
+// Order of the sound tray: the sleep sounds first, the main use case
+export const trayOrder: SoundId[] = [
+    ...Object.values(sleep).filter(id => id === 'white_noise' || id === 'brown_noise'),
+    ...Object.values(sleep).filter(id => id !== 'white_noise' && id !== 'brown_noise'),
+    ...Object.values(relax),
+    ...Object.values(focus),
+];
+
 export const isShareCode = (code: string): code is ShareCode => code in all;

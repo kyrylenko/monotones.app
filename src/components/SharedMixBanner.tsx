@@ -3,8 +3,8 @@ import { mainActions } from '../store/mainSlice';
 import { selectSharedMixName } from '../store/selectors';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-// Name of a mix opened from a share link, with a button to save it as an own mixture
-const SharedMixBanner = ({ onSave }: { onSave: () => void }) => {
+// Name of a mix opened from a share link, with a button that saves it under that name as an own mixture
+const SharedMixBanner = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const name = useAppSelector(selectSharedMixName);
@@ -16,8 +16,8 @@ const SharedMixBanner = ({ onSave }: { onSave: () => void }) => {
     return (
         <div className='shared-mix' role='status'>
             <span>{t('shared_with_you', { name })}</span>
-            <button type='button' className='btn btn-primary btn-sm' onClick={onSave}>{t('save_mixture')}</button>
-            <button type='button' className='btn-close' aria-label={t('close')} onClick={() => dispatch(mainActions.setSharedMixName(null))} />
+            <button type='button' className='button button-primary' onClick={() => dispatch(mainActions.addMixture(name))}>{t('save_mixture')}</button>
+            <button type='button' className='icon-button' aria-label={t('close')} onClick={() => dispatch(mainActions.setSharedMixName(null))}>×</button>
         </div>
     );
 };

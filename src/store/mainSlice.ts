@@ -1,6 +1,7 @@
 import { createSlice, current, type PayloadAction } from '@reduxjs/toolkit';
 import { all, isShareCode, type ShareCode, type SoundId } from '../constants/soundIds';
 import { starterMixes, type StarterMixId } from '../constants/starterMixes';
+import defaultValues from '../constants/defaultValues';
 import type { Mixture, SharedSound, SoundSetting, Sounds } from '../types';
 
 // State shape is persisted to localStorage (see store/index.ts), keep it backward compatible.
@@ -28,6 +29,8 @@ const clearUnsavedMix = (state: MainState) => {
     state.sharedMixName = null;
 };
 
+export const countPlaying = (sounds: Sounds): number => Object.values(sounds).filter(s => s?.isPlay).length;
+
 const deactivateAll = (state: MainState) => {
     state.mixtures = state.mixtures.map(m => ({ ...m, isActive: false }));
     clearUnsavedMix(state);
@@ -40,12 +43,25 @@ const mainSlice = createSlice({
         globalPlayPause(state, { payload: isGlobalPlay }: PayloadAction<boolean>) {
             state.isGlobalPlay = isGlobalPlay;
         },
-        // Toggles a sound or changes its volume; any manual change detaches from the active mixture
+        // Toggles a sound or changes its volume; any manual change detaches from the active mixture.
+        // Adding a sound to a full mix is ignored (mixes saved or shared with more sounds still load whole).
         playPauseVolume(state, { payload: sound }: PayloadAction<SoundSetting>) {
+            const isAdded = sound.isPlay && !state.sounds[sound.id]?.isPlay;
+            if (isAdded && countPlaying(state.sounds) >= defaultValues.maxSounds) {
+                return;
+            }
             state.sounds[sound.id] = sound;
             deactivateAll(state);
             if (sound.isPlay) {
                 state.isGlobalPlay = true;
+            }
+        },
+        // Volume of a sound in the mix, without starting playback; detaches from the active mixture like any change
+        setVolume(state, { payload: { id, volume } }: PayloadAction<{ id: SoundId; volume: number }>) {
+            const sound = state.sounds[id];
+            if (sound) {
+                sound.volume = volume;
+                deactivateAll(state);
             }
         },
         pauseSound(state, { payload: id }: PayloadAction<SoundId>) {
@@ -111,6 +127,20 @@ const mainSlice = createSlice({
 
             deactivateAll(state);
             state.isGlobalPlay = true;
+            state.sounds = Object.fromEntries(Object.entries(mix.volumes)
+                .map(([soundId, volume]) => [soundId, { id: soundId as SoundId, isPlay: true, volume }]));
+            state.activeStarterMix = id;
+        },
+        // A starter mix page (/mix/...): loads the mix like playStarterMix, paused until the user presses play.
+        // Browsers start audio only after a tap. A mix that is already active keeps playing.
+        openStarterMix(state, { payload: id }: PayloadAction<StarterMixId>) {
+            const mix = starterMixes.find(m => m.id === id);
+            if (!mix || state.activeStarterMix === id) {
+                return;
+            }
+
+            deactivateAll(state);
+            state.isGlobalPlay = false;
             state.sounds = Object.fromEntries(Object.entries(mix.volumes)
                 .map(([soundId, volume]) => [soundId, { id: soundId as SoundId, isPlay: true, volume }]));
             state.activeStarterMix = id;

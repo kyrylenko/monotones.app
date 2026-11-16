@@ -28,4 +28,14 @@ i18n
     },
   });
 
+// Screen readers and hyphenation follow the language of the page
+const setPageLanguage = (language: string) => {
+  // Not in the build-time prerender (Node), which has no document
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('lang', language.startsWith('uk') ? 'uk' : 'en');
+  }
+};
+setPageLanguage(i18n.resolvedLanguage ?? 'en');
+i18n.on('languageChanged', setPageLanguage);
+
 export default i18n;

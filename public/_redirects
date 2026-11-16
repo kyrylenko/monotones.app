@@ -1,0 +1,4 @@
+# The former category pages lead to the closest starter mix (the same map as LEGACY_PAGES in src/seo.ts)
+/sleep /mix/babys-first-night 301
+/relax /mix/rainy-evening 301
+/focus /mix/deep-work 301

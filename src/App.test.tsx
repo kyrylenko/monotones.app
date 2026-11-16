@@ -2,69 +2,77 @@ import { screen, fireEvent, waitFor, within, act } from '@testing-library/react'
 import { renderApp, seedPersistedState, readPersistedState, playingSounds } from './test/renderApp';
 import { $ } from './test/dom';
 import { timerActions } from './store/timerSlice';
+import { idToTitle } from './utils/sounds';
 import type { SoundId } from './constants/soundIds';
 
-const soundIcons = () => document.querySelectorAll('img.sound-icon');
-const soundIcon = (id: SoundId) => $(`img.sound-icon[alt=${id}]`);
-const globalButton = () => document.querySelector('.play-div img');
-const clickGlobalButton = () => fireEvent.click($('.play-div img'));
-const playingNow = () => [...document.querySelectorAll('.mixture-block img')].map(i => i.id);
+const tray = () => screen.getByRole('group', { name: 'Sounds' });
+const chips = () => within(tray()).getAllByRole('button');
+const chip = (id: SoundId) => within(tray()).getByRole('button', { name: idToTitle(id) });
+const toggleSound = (id: SoundId) => fireEvent.click(chip(id));
+/** Sounds in the orbit, in their order around the moon */
+const orbit = () => [...document.querySelectorAll<HTMLElement>('.orb')].map(orb => orb.dataset.sound);
+const orb = (id: SoundId) => screen.getByRole('slider', { name: `${idToTitle(id)} volume` });
+const playButton = () => $('.play-button');
+const clickPlayButton = () => fireEvent.click(playButton());
+const dock = () => screen.getByRole('navigation', { name: 'Playback' });
+const openTimer = () => fireEvent.click(within(dock()).getByRole('button', { name: /Timer|min$/ }));
 
-const toggleSound = (id: SoundId) => fireEvent.click(soundIcon(id));
+const mixButton = (name: string) => {
+    const button = [...document.querySelectorAll<HTMLElement>('.mix-pick')].find(b => b.querySelector('.mix-name')?.textContent === name);
+    if (!button) {
+        throw new Error(`Mix not found: ${name}`);
+    }
+    return button;
+};
+const mixtureNames = () => [...document.querySelectorAll('.saved-mixes .mix-name')].map(s => s.textContent);
 
 const saveMixture = async (name: string) => {
-    fireEvent.click(screen.getByAltText('Save mixture'));
-    const input = await screen.findByPlaceholderText('Mixture name');
+    const input = screen.getByPlaceholderText('Mixture name');
     fireEvent.change(input, { target: { value: name } });
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() => expect(screen.queryByPlaceholderText('Mixture name')).not.toBeInTheDocument());
+    await waitFor(() => expect(mixtureNames()).toContain(name));
 };
 
-const mixtureNames = () => [...document.querySelectorAll('.mixtures .list-group-item span')].map(s => s.textContent);
+const openMenu = () => fireEvent.click(screen.getByRole('button', { name: 'Menu' }));
 
 describe('App', () => {
     describe('sounds', () => {
-        it('shows all 28 sounds on the home page', async () => {
+        it('shows all 28 sounds in the tray, the sleep sounds first', async () => {
             await renderApp();
 
-            expect(soundIcons()).toHaveLength(28);
-            expect(globalButton()).toBeNull();
+            expect(chips()).toHaveLength(28);
+            expect(chips().slice(0, 3).map(c => c.textContent)).toEqual(['White noise', 'Brown noise', 'Summer night']);
+            expect(orbit()).toEqual([]);
+            expect(screen.getByText('Tap a sound to place it in the sky')).toBeInTheDocument();
         });
 
         it.each([
-            ['/sleep', 8, 'summer_night'],
-            ['/relax', 12, 'summer_day'],
-            ['/focus', 8, 'thunderstorm'],
-        ])('shows only the %s category', async (path, count, firstId) => {
+            ['/sleep', 'Baby\'s first night', ['brown_noise', 'heartbeat']],
+            ['/relax', 'Rainy evening', ['october_rain', 'campfire', 'vinyl_cracks']],
+            ['/focus', 'Deep work', ['deep_space', 'thunderstorm']],
+        ])('the former category page %s opens the closest starter mix', async (path, name, sounds) => {
             await renderApp({ path });
 
-            expect(soundIcons()).toHaveLength(count);
-            expect(soundIcons()[0]).toHaveAttribute('alt', firstId);
+            await waitFor(() => expect(orbit()).toEqual(sounds));
+            expect(chips()).toHaveLength(28);
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(name);
+            expect(screen.queryByRole('link', { name: 'Sleep' })).toBeNull();
         });
 
-        it('category links toggle between the category and all sounds', async () => {
-            await renderApp();
-
-            fireEvent.click(screen.getByRole('link', { name: 'Sleep' }));
-            expect(soundIcons()).toHaveLength(8);
-            expect(screen.getByRole('link', { name: 'Sleep' })).toHaveClass('active');
-
-            fireEvent.click(screen.getByRole('link', { name: 'Sleep' }));
-            expect(soundIcons()).toHaveLength(28);
-        });
-
-        it('clicking a sound plays it and shows the global pause button', async () => {
+        it('a tap places a sound in the orbit and plays it', async () => {
             const { store } = await renderApp();
 
             toggleSound('campfire');
 
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
-            expect(globalButton()).toHaveAttribute('alt', 'Pause');
-            expect(playingNow()).toEqual(['campfire']);
+            expect(orbit()).toEqual(['campfire']);
+            expect(chip('campfire')).toHaveAttribute('aria-pressed', 'true');
+            expect(playButton()).toHaveAttribute('aria-label', 'Pause');
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Your mix');
             expect(store.getState().main.sounds.campfire).toEqual({ id: 'campfire', isPlay: true, volume: 0.3, isLoaded: true });
         });
 
-        it('clicking a playing sound stops it', async () => {
+        it('a second tap takes the sound out', async () => {
             await renderApp();
 
             toggleSound('campfire');
@@ -73,8 +81,7 @@ describe('App', () => {
 
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['farm']));
-            //the icon leaves "Playing now" after its exit animation
-            await waitFor(() => expect(playingNow()).toEqual(['farm']));
+            expect(orbit()).toEqual(['farm']);
         });
 
         it('loops mp3 files seamlessly with Web Audio and frees the decoded audio on pause', async () => {
@@ -87,40 +94,89 @@ describe('App', () => {
             expect(source).toMatchObject({ loop: true, loopEnd: 1 });
             expect(source.loopStart).toBeGreaterThan(0);
 
-            clickGlobalButton();
+            clickPlayButton();
             await waitFor(() => expect(playingSounds()).toEqual([]));
-            clickGlobalButton();
+            clickPlayButton();
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
             expect(fetch).toHaveBeenCalledTimes(2);
         });
 
-        it('the volume slider changes the audio volume', async () => {
-            const { store } = await renderApp();
-            toggleSound('campfire');
+        it('takes up to 6 sounds', async () => {
+            await renderApp();
+            const six: SoundId[] = ['campfire', 'farm', 'heartbeat', 'white_noise', 'subway', 'keyboard'];
+            six.forEach(toggleSound);
 
-            const slider = $('[role=slider]', soundIcon('campfire').parentElement!);
-            fireEvent.keyDown(slider, { key: 'ArrowRight', keyCode: 39 });
+            toggleSound('october_rain');
 
-            await waitFor(() => expect(store.getState().main.sounds.campfire?.volume).toBeCloseTo(0.31));
-            const audio = [...window.__playing][0];
-            expect(audio.volume).toBeCloseTo(0.31);
+            expect(orbit()).toEqual(six);
+            expect(chip('october_rain')).toHaveAttribute('aria-pressed', 'false');
+            expect(screen.getByRole('status')).toHaveTextContent('Up to 6 sounds. Remove one to add October rain.');
+            expect(screen.getByText('6 of 6 sounds. Drag one out to make room.')).toBeInTheDocument();
         });
 
-        it('the global button pauses and resumes all sounds', async () => {
+        it('the arrow keys change the volume of a sound in the orbit, Delete removes it', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            const [audio] = window.__playing;
+
+            // volume 0.3 sits at 55% of the dial (volume = position²)
+            expect(orb('campfire')).toHaveAttribute('aria-valuenow', '55');
+            fireEvent.keyDown(orb('campfire'), { key: 'ArrowUp' });
+
+            await waitFor(() => expect(store.getState().main.sounds.campfire?.volume).toBeCloseTo(0.357, 3));
+            expect(audio.volume).toBeCloseTo(0.357, 3);
+            expect(orb('campfire')).toHaveAttribute('aria-valuenow', '60');
+
+            fireEvent.keyDown(orb('campfire'), { key: 'Delete' });
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+            expect(orbit()).toEqual([]);
+        });
+
+        it('dragging a sound toward the moon makes it louder, past the outer ring removes it', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            const target = orb('campfire');
+            // jsdom has no layout: the stage counts as 360 × 480, the moon at (180, 234), the outer ring at 134 px
+            fireEvent.pointerDown(target, { clientX: 180, clientY: 120 });
+            fireEvent.pointerMove(target, { clientX: 180, clientY: 150 });
+            fireEvent.pointerUp(target);
+            expect(store.getState().main.sounds.campfire?.volume).toBeGreaterThan(0.5);
+            expect(store.getState().main.isGlobalPlay).toBe(true);
+
+            fireEvent.pointerDown(target, { clientX: 180, clientY: 150 });
+            fireEvent.pointerMove(target, { clientX: 180, clientY: 20 });
+            expect(target).toHaveTextContent('Release to remove');
+            fireEvent.pointerUp(target);
+
+            await waitFor(() => expect(orbit()).toEqual([]));
+            expect(store.getState().main.sounds.campfire?.isPlay).toBe(false);
+        });
+
+        it('the play button and the moon pause and resume all sounds', async () => {
             await renderApp();
             toggleSound('campfire');
             toggleSound('farm');
             await waitFor(() => expect(playingSounds()).toHaveLength(2));
 
-            clickGlobalButton();
+            clickPlayButton();
             await waitFor(() => expect(playingSounds()).toEqual([]));
-            expect(globalButton()).toHaveAttribute('alt', 'Play');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
 
-            clickGlobalButton();
+            fireEvent.click($('.moon-button'));
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'farm']));
+            expect($('.moon-button')).toHaveAttribute('aria-label', 'Pause');
         });
 
-        it('the space key toggles global play, except while typing', async () => {
+        it('pressing play with an empty sky asks for a sound', async () => {
+            await renderApp();
+
+            clickPlayButton();
+
+            expect(screen.getByRole('status')).toHaveTextContent('Tap a sound to start');
+        });
+
+        it('the space key toggles global play, except on controls and while typing', async () => {
             await renderApp();
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
@@ -131,33 +187,43 @@ describe('App', () => {
             fireEvent.keyDown(document, { key: ' ', code: 'Space', keyCode: 32 });
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
 
-            const input = document.createElement('input');
-            document.body.appendChild(input);
-            fireEvent.keyDown(input, { key: ' ', code: 'Space', keyCode: 32 });
+            // a focused button is pressed with space, that must not toggle playback as well
+            fireEvent.keyDown(chip('farm'), { key: ' ', code: 'Space', keyCode: 32 });
+            fireEvent.keyDown(screen.getByPlaceholderText('Mixture name'), { key: ' ', code: 'Space', keyCode: 32 });
             expect(playingSounds()).toEqual(['campfire']);
-            input.remove();
+        });
+    });
+
+    describe('mix pages', () => {
+        it('a starter mix page puts the mix in the orbit, paused until play', async () => {
+            const { store } = await renderApp({ path: '/mix/rainy-evening' });
+
+            await waitFor(() => expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']));
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Rainy evening');
+            expect(document.title).toBe('Rainy evening – rain, campfire and vinyl crackle to relax – Monotones');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
+            expect(playingSounds()).toEqual([]);
+
+            clickPlayButton();
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
+            expect(store.getState().main.activeStarterMix).toBe('rainy_evening');
         });
 
-        it('pausing a sound in "Playing now" stops it', async () => {
-            await renderApp();
+        it('changing the mix leaves the mix page for the home page', async () => {
+            await renderApp({ path: '/mix/deep-work' });
+            await waitFor(() => expect(orbit()).toEqual(['deep_space', 'thunderstorm']));
+
             toggleSound('campfire');
-            toggleSound('farm');
 
-            fireEvent.click($('.mixture-block img#campfire'));
-
-            await waitFor(() => expect(playingSounds()).toEqual(['farm']));
+            await waitFor(() => expect(document.title).toBe('Monotones – calm sounds for sleep, relaxing and focus'));
+            expect(orbit()).toEqual(['deep_space', 'thunderstorm', 'campfire']);
         });
 
-        it('"Reset all" removes every sound', async () => {
-            const { store } = await renderApp();
-            toggleSound('campfire');
-            await waitFor(() => expect(store.getState().main.sounds.campfire?.isLoaded).toBe(true));
+        it('an unknown mix page goes home', async () => {
+            await renderApp({ path: '/mix/unknown' });
 
-            fireEvent.click(screen.getByAltText('Reset all'));
-
-            await waitFor(() => expect(playingSounds()).toEqual([]));
-            expect(store.getState().main.sounds).toEqual({});
-            expect(globalButton()).toBeNull();
+            await waitFor(() => expect(document.title).toBe('Monotones – calm sounds for sleep, relaxing and focus'));
+            expect(orbit()).toEqual([]);
         });
     });
 
@@ -168,6 +234,7 @@ describe('App', () => {
             toggleSound('campfire');
             await saveMixture('Evening');
             expect(mixtureNames()).toEqual(['Evening']);
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Evening');
 
             toggleSound('campfire');
             toggleSound('farm');
@@ -175,16 +242,15 @@ describe('App', () => {
             expect(mixtureNames()).toEqual(['Morning', 'Evening']);
             await waitFor(() => expect(playingSounds()).toEqual(['farm']));
 
-            fireEvent.click(screen.getByText('Evening'));
+            fireEvent.click(mixButton('Evening'));
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
-            expect(screen.getByText('Evening').parentElement).toHaveClass('active');
+            expect(mixButton('Evening')).toHaveAttribute('aria-pressed', 'true');
 
             //clicking the active mixture pauses everything
-            fireEvent.click(screen.getByText('Evening'));
+            fireEvent.click(mixButton('Evening'));
             await waitFor(() => expect(playingSounds()).toEqual([]));
 
-            const morning = screen.getByText('Morning').parentElement!;
-            fireEvent.click(within(morning).getByAltText('Delete mixture'));
+            fireEvent.click(screen.getByRole('button', { name: 'Delete Morning' }));
             await waitFor(() => expect(mixtureNames()).toEqual(['Evening']));
         });
 
@@ -192,104 +258,129 @@ describe('App', () => {
             await renderApp();
             toggleSound('campfire');
 
-            fireEvent.click(screen.getByAltText('Save mixture'));
-            await screen.findByPlaceholderText('Mixture name');
             fireEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-            await waitFor(() => expect(screen.queryByPlaceholderText('Mixture name')).not.toBeInTheDocument());
-            expect(document.querySelector('.mixtures')).toBeNull();
+            expect(mixtureNames()).toEqual([]);
         });
 
         it('saves with the Enter key', async () => {
             await renderApp();
             toggleSound('campfire');
 
-            fireEvent.click(screen.getByAltText('Save mixture'));
-            const input = await screen.findByPlaceholderText('Mixture name');
+            const input = screen.getByPlaceholderText('Mixture name');
             fireEvent.change(input, { target: { value: 'Night' } });
-            fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', keyCode: 13 });
-            fireEvent.keyPress(input, { key: 'Enter', code: 'Enter', charCode: 13 });
+            //Enter in a form field submits the form
+            fireEvent.submit(input);
 
             await waitFor(() => expect(mixtureNames()).toEqual(['Night']));
+        });
+
+        it('opens in a sheet on phones and closes when a mix is picked', async () => {
+            window.__isMobile = true;
+            await renderApp();
+            expect(screen.queryByRole('complementary', { name: 'Mixes' })).toBeNull();
+
+            fireEvent.click(within(dock()).getByRole('button', { name: 'Mixes' }));
+            const sheet = screen.getByRole('dialog', { name: 'Mixes' });
+            fireEvent.click(within(sheet).getByRole('button', { name: /^Rainy evening/ }));
+
+            expect(screen.queryByRole('dialog', { name: 'Mixes' })).toBeNull();
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
         });
     });
 
     describe('starter mixes', () => {
-        const starterMix = (name: string) => screen.getByRole('button', { name });
-        const starterMixNames = () => within(screen.getByRole('group', { name: 'Starter mixes' })).getAllByRole('button').map(b => b.textContent);
+        const starterMixNames = () => [...document.querySelectorAll('.starter-mixes .mix-name')].map(s => s.textContent);
 
-        it('shows all mixes on the home page and the matching ones on a category page', async () => {
+        it('lists all six with their sounds', async () => {
             await renderApp();
-            expect(starterMixNames()).toEqual(['Baby\'s first night', 'Starry night', 'Rainy evening', 'Summer meadow', 'Deep work', 'Night train']);
-            expect(soundIcons()).toHaveLength(28);
 
-            fireEvent.click(screen.getByRole('link', { name: 'Focus' }));
-            expect(starterMixNames()).toEqual(['Deep work', 'Night train']);
+            expect(starterMixNames()).toEqual(['Baby\'s first night', 'Starry night', 'Rainy evening', 'Summer meadow', 'Deep work', 'Night train']);
+            expect(mixButton('Rainy evening')).toHaveTextContent('October rain, Campfire, Vinyl cracks');
         });
 
         it('a tap plays the mix with its volumes like a saved mixture, a second tap pauses it', async () => {
             const { store } = await renderApp();
 
-            fireEvent.click(starterMix('Rainy evening'));
+            fireEvent.click(mixButton('Rainy evening'));
 
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
-            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'true');
+            expect(mixButton('Rainy evening')).toHaveAttribute('aria-pressed', 'true');
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Rainy evening');
             expect(store.getState().main.sounds.october_rain?.volume).toBe(0.4);
-            expect(globalButton()).toHaveAttribute('alt', 'Pause');
+            expect(playButton()).toHaveAttribute('aria-label', 'Pause');
 
-            fireEvent.click(starterMix('Night train'));
+            fireEvent.click(mixButton('Night train'));
             await waitFor(() => expect(playingSounds()).toEqual(['inside_train', 'october_rain']));
-            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'false');
+            expect(mixButton('Rainy evening')).toHaveAttribute('aria-pressed', 'false');
 
-            fireEvent.click(starterMix('Night train'));
+            fireEvent.click(mixButton('Night train'));
             await waitFor(() => expect(playingSounds()).toEqual([]));
-            expect(starterMix('Night train')).toHaveAttribute('aria-pressed', 'false');
+            expect(mixButton('Night train')).toHaveAttribute('aria-pressed', 'false');
         });
 
         it('can be saved as an own mixture and changed', async () => {
             await renderApp();
-            fireEvent.click(starterMix('Rainy evening'));
+            fireEvent.click(mixButton('Rainy evening'));
 
-            fireEvent.click(screen.getByAltText('Save mixture'));
-            expect(await screen.findByPlaceholderText('Mixture name')).toHaveValue('Rainy evening');
+            expect(screen.getByPlaceholderText('Mixture name')).toHaveValue('Rainy evening');
             fireEvent.click(screen.getByRole('button', { name: 'Save' }));
             await waitFor(() => expect(mixtureNames()).toEqual(['Rainy evening']));
-            expect(screen.getByText('Rainy evening', { selector: '.mixtures span' }).parentElement).toHaveClass('active');
-            expect(starterMix('Rainy evening')).toHaveAttribute('aria-pressed', 'false');
+            expect(within($('.saved-mixes')).getByRole('button', { name: /^Rainy evening/ })).toHaveAttribute('aria-pressed', 'true');
+            expect(within($('.starter-mixes')).getByRole('button', { name: /^Rainy evening/ })).toHaveAttribute('aria-pressed', 'false');
 
             //changing a sound detaches from the mix, saving under the same name updates the own mixture
             toggleSound('vinyl_cracks');
             await saveMixture('Rainy evening');
             expect(mixtureNames()).toEqual(['Rainy evening']);
-            fireEvent.click(starterMix('Deep work'));
-            fireEvent.click(screen.getByText('Rainy evening', { selector: '.mixtures span' }));
+            fireEvent.click(mixButton('Deep work'));
+            fireEvent.click(within($('.saved-mixes')).getByRole('button', { name: /^Rainy evening/ }));
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain']));
         });
     });
 
     describe('sleep timer', () => {
         afterEach(() => vi.useRealTimers());
+        const tick = (seconds: number) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
 
-        it('counts down and pauses all sounds at the end', async () => {
-            await renderApp();
+        it('counts down from the chosen duration and pauses all sounds at the end', async () => {
+            const { store } = await renderApp();
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
 
-            fireEvent.click(screen.getByAltText('Timer'));
-            expect(await screen.findByText('Pause in 05:00 min')).toBeInTheDocument();
-
+            openTimer();
             vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
-            fireEvent.click(screen.getByRole('button', { name: 'Start' }));
+            fireEvent.click(within(screen.getByRole('dialog', { name: 'Sleep timer' })).getByRole('button', { name: '15 min' }));
+            expect(screen.queryByRole('dialog')).toBeNull();
 
-            //one act() per second: the app re-renders between ticks like in a browser
-            const tick = (seconds: number) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
+            tick(61);
+            expect(store.getState().timer.interval).toBe(839);
+            expect(within(dock()).getByRole('button', { name: '14 min' })).toBeInTheDocument();
+            expect($('.timer-arc')).toBeInTheDocument();
+
+            openTimer();
+            expect(screen.getByText('13:59 left')).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: '15 min' })).toHaveAttribute('aria-pressed', 'true');
+            fireEvent.keyDown(document, { key: 'Escape' });
+
+            act(() => store.dispatch(timerActions.timerStart(2)));
             tick(2);
-            expect(document.querySelector('.timer .clock')).toHaveTextContent('04:58');
-
-            tick(298);
             await waitFor(() => expect(playingSounds()).toEqual([]));
-            expect(globalButton()).toHaveAttribute('alt', 'Play');
-            expect(document.querySelector('.timer-div')).toBeNull();
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
+            expect(document.querySelector('.timer-arc')).toBeNull();
+        });
+
+        it('starts playback when it is set while paused', async () => {
+            const { store } = await renderApp();
+            toggleSound('campfire');
+            clickPlayButton();
+            await waitFor(() => expect(playingSounds()).toEqual([]));
+
+            openTimer();
+            fireEvent.click(screen.getByRole('button', { name: '30 min' }));
+
+            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            expect(store.getState().timer).toEqual({ timerRun: true, interval: 1800 });
         });
 
         it('fades the sounds out during the last seconds and restores the volume for the next play', async () => {
@@ -302,7 +393,6 @@ describe('App', () => {
 
             vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
             act(() => store.dispatch(timerActions.timerStart(60)));
-            const tick = (seconds: number) => { for (let i = 0; i < seconds; i++) act(() => vi.advanceTimersByTime(1000)); };
 
             tick(30);
             expect(audio.volume).toBeCloseTo(volume);
@@ -331,121 +421,85 @@ describe('App', () => {
 
             vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
             act(() => store.dispatch(timerActions.timerStart(20)));
-            for (let i = 0; i < 2; i++) act(() => vi.advanceTimersByTime(1000));
+            tick(2);
             expect(audio.volume).toBeLessThan(volume);
 
             act(() => store.dispatch(timerActions.timerStop()));
-            act(() => vi.advanceTimersByTime(1000));
+            tick(1);
 
             expect(audio.volume).toBeCloseTo(volume);
             expect(playingSounds()).toEqual(['campfire']);
         });
 
-        it('can be cancelled', async () => {
+        it('can be turned off', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
-
-            fireEvent.click(screen.getByAltText('Timer'));
-            fireEvent.click(await screen.findByRole('button', { name: 'Start' }));
+            openTimer();
+            fireEvent.click(screen.getByRole('button', { name: '45 min' }));
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(true));
 
-            fireEvent.click($('.timer'));
-            fireEvent.click(await screen.findByRole('button', { name: 'Cancel Timer' }));
+            openTimer();
+            fireEvent.click(screen.getByRole('button', { name: 'Off' }));
 
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(false));
             expect(playingSounds()).toEqual(['campfire']);
         });
 
-        it('is stopped when the global pause button is clicked', async () => {
+        it('is stopped when playback is paused', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
-            fireEvent.click(screen.getByAltText('Timer'));
-            fireEvent.click(await screen.findByRole('button', { name: 'Start' }));
+            openTimer();
+            fireEvent.click(screen.getByRole('button', { name: '15 min' }));
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(true));
 
-            clickGlobalButton();
+            clickPlayButton();
 
             expect(store.getState().timer.timerRun).toBe(false);
         });
     });
 
     describe('night mode', () => {
-        const theme = () => document.documentElement.getAttribute('data-bs-theme');
-        const logo = () => $<HTMLImageElement>('header img[alt=Monotones]').src;
-
-        it('follows the system theme', async () => {
-            window.__prefersDark = true;
+        it('has one dark theme and no theme switch', async () => {
             await renderApp();
 
-            expect(theme()).toBe('dark');
-            expect(logo()).toContain('logo-dark');
-            expect(screen.getByRole('button', { name: 'Light theme' })).toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: /theme/i })).toBeNull();
+            expect(document.documentElement).not.toHaveAttribute('data-bs-theme');
+            expect(within(screen.getByRole('link', { name: 'Monotones' })).getByText('monotones')).toBeInTheDocument();
         });
 
-        it('can be toggled, the choice is remembered and wins over the system theme', async () => {
-            const { unmount } = await renderApp();
-            expect(theme()).toBe('light');
-
-            fireEvent.click(screen.getByRole('button', { name: 'Dark theme' }));
-
-            expect(theme()).toBe('dark');
-            expect(logo()).toContain('logo-dark');
-            expect(localStorage.getItem('theme')).toBe('dark');
-
-            unmount();
-            document.documentElement.removeAttribute('data-bs-theme');
+        it('dims everything but the sky, a tap anywhere wakes the screen and playback goes on', async () => {
             await renderApp();
-            expect(theme()).toBe('dark');
-
-            fireEvent.click(screen.getByRole('button', { name: 'Light theme' }));
-            unmount();
-            window.__prefersDark = true;
-            await renderApp();
-            expect(theme()).toBe('light');
-        });
-
-        it('the sleep screen shows only play/pause and the timer and closes with one tap', async () => {
-            await renderApp();
-            expect(screen.queryByAltText('Sleep screen')).toBeNull();
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
 
-            fireEvent.click(screen.getByAltText('Sleep screen'));
-            const sleepScreen = screen.getByRole('dialog', { name: 'Sleep screen' });
-            expect([...sleepScreen.querySelectorAll('img')].map(i => i.alt)).toEqual(['Pause', 'Timer']);
+            fireEvent.click(within(dock()).getByRole('button', { name: 'Dim' }));
+            expect(document.body).toHaveClass('is-dim');
 
-            //the controls work and keep the screen open
-            fireEvent.click(within(sleepScreen).getByAltText('Pause'));
-            await waitFor(() => expect(playingSounds()).toEqual([]));
-            fireEvent.click(within(sleepScreen).getByAltText('Play'));
-            await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
-            fireEvent.click(within(sleepScreen).getByAltText('Timer'));
-            expect(await screen.findByText('Pause in 05:00 min')).toBeInTheDocument();
-            expect(screen.getByRole('dialog', { name: 'Sleep screen' })).toBeInTheDocument();
-
-            fireEvent.click(sleepScreen);
-            expect(screen.queryByRole('dialog', { name: 'Sleep screen' })).toBeNull();
+            fireEvent.click(screen.getByRole('button', { name: 'Tap anywhere to wake' }));
+            expect(document.body).not.toHaveClass('is-dim');
             expect(playingSounds()).toEqual(['campfire']);
         });
 
-        it('Escape closes the sleep screen', async () => {
+        it('Escape wakes the dim screen', async () => {
             await renderApp();
-            toggleSound('campfire');
-            fireEvent.click(screen.getByAltText('Sleep screen'));
+            fireEvent.click(within(dock()).getByRole('button', { name: 'Dim' }));
 
             fireEvent.keyDown(document, { key: 'Escape' });
 
-            expect(screen.queryByRole('dialog', { name: 'Sleep screen' })).toBeNull();
+            expect(document.body).not.toHaveClass('is-dim');
+            expect(screen.queryByRole('button', { name: 'Tap anywhere to wake' })).toBeNull();
         });
     });
 
     describe('sharing', () => {
+        const share = () => fireEvent.click(within(dock()).getByRole('button', { name: 'Share' }));
+
         it('builds a share link from the playing sounds', async () => {
             await renderApp();
             toggleSound('keyboard');
             toggleSound('campfire');
 
-            fireEvent.click(screen.getByText('Share'));
+            share();
 
             expect(await screen.findByDisplayValue('https://monotones.app/share/ce6kb6')).toBeInTheDocument();
         });
@@ -455,16 +509,16 @@ describe('App', () => {
             toggleSound('campfire');
             await saveMixture('Evening');
 
-            fireEvent.click(screen.getByText('Share'));
+            share();
 
             expect(await screen.findByDisplayValue('https://monotones.app/share/ce6?name=Evening')).toBeInTheDocument();
         });
 
         it('adds the name of the active starter mix', async () => {
             await renderApp();
-            fireEvent.click(screen.getByRole('button', { name: 'Rainy evening' }));
+            fireEvent.click(mixButton('Rainy evening'));
 
-            fireEvent.click(screen.getByText('Share'));
+            share();
 
             expect(await screen.findByDisplayValue('https://monotones.app/share/ce6on8vs2?name=Rainy%20evening')).toBeInTheDocument();
         });
@@ -477,11 +531,10 @@ describe('App', () => {
                 keyboard: { id: 'keyboard', isPlay: true, volume: 0.1 },
             }));
             expect(await screen.findByRole('status')).toHaveTextContent('"Evening tea" was shared with you');
-            expect(globalButton()).toHaveAttribute('alt', 'Play');
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Evening tea');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
 
             fireEvent.click(within(screen.getByRole('status')).getByRole('button', { name: 'Save mixture' }));
-            expect(await screen.findByPlaceholderText('Mixture name')).toHaveValue('Evening tea');
-            fireEvent.click(screen.getByRole('button', { name: 'Save' }));
 
             await waitFor(() => expect(mixtureNames()).toEqual(['Evening tea']));
             expect(screen.queryByRole('status')).toBeNull();
@@ -495,25 +548,56 @@ describe('App', () => {
             fireEvent.click(screen.getByRole('button', { name: 'Close' }));
 
             expect(screen.queryByRole('status')).toBeNull();
-            expect(playingNow()).toEqual(['campfire']);
+            expect(orbit()).toEqual(['campfire']);
         });
 
         it('shares the home page when nothing plays', async () => {
             await renderApp();
 
-            fireEvent.click(screen.getByText('Share'));
+            share();
 
             expect(await screen.findByDisplayValue('https://monotones.app')).toBeInTheDocument();
+        });
+
+        it('uses the system share sheet where there is one', async () => {
+            const shareSheet = vi.fn().mockResolvedValue(undefined);
+            Object.defineProperty(navigator, 'share', { value: shareSheet, configurable: true });
+            try {
+                await renderApp();
+                toggleSound('campfire');
+
+                share();
+
+                await waitFor(() => expect(shareSheet).toHaveBeenCalledWith({ title: 'Monotones', url: 'https://monotones.app/share/ce6' }));
+                expect(screen.queryByRole('dialog')).toBeNull();
+            } finally {
+                delete (navigator as { share?: unknown }).share;
+            }
+        });
+
+        it('copies the link when there is no share sheet', async () => {
+            const writeText = vi.fn().mockResolvedValue(undefined);
+            Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+            await renderApp();
+            toggleSound('campfire');
+
+            share();
+            fireEvent.click(await screen.findByRole('button', { name: 'Copy' }));
+
+            expect(writeText).toHaveBeenCalledWith('https://monotones.app/share/ce6');
+            expect(await screen.findByText('Link copied')).toBeInTheDocument();
+            fireEvent.keyDown(document, { key: 'Escape' });
+            expect(screen.queryByRole('dialog')).toBeNull();
         });
 
         it('opening a share link applies its sounds and redirects home', async () => {
             const { store } = await renderApp({ path: '/share/kbcezz' });
 
             await waitFor(() => expect(Object.keys(store.getState().main.sounds)).toEqual(['keyboard', 'campfire']));
-            await waitFor(() => expect(soundIcons()).toHaveLength(28));
-            expect(playingNow()).toEqual(['keyboard', 'campfire']);
+            await waitFor(() => expect(chips()).toHaveLength(28));
+            expect(orbit()).toEqual(['keyboard', 'campfire']);
             //shared sounds wait for the user to press play
-            expect(globalButton()).toHaveAttribute('alt', 'Play');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
         });
     });
 
@@ -526,57 +610,124 @@ describe('App', () => {
             await waitFor(() => expect(store.getState().main.sounds.brown_noise?.isLoaded).toBe(true));
             expect(window.__playing.size).toBe(1);
             expect(playingSounds()).toEqual([]);
-            expect(playingNow()).toEqual(['brown_noise']);
+            expect(orbit()).toEqual(['brown_noise']);
 
-            fireEvent.click(screen.getByText('Share'));
+            fireEvent.click(within(dock()).getByRole('button', { name: 'Share' }));
             expect(await screen.findByDisplayValue('https://monotones.app/share/bn6')).toBeInTheDocument();
 
-            clickGlobalButton();
+            clickPlayButton();
             await waitFor(() => expect(window.__playing.size).toBe(0));
         });
     });
 
+    describe('accessibility', () => {
+        it('keeps the focus inside an open dialog', async () => {
+            await renderApp();
+            openMenu();
+            const dialog = screen.getByRole('dialog', { name: 'How it works' });
+            const close = within(dialog).getByRole('button', { name: 'Close' });
+            const donate = within(dialog).getByRole('link', { name: 'Donate' });
+
+            donate.focus();
+            fireEvent.keyDown(document, { key: 'Tab' });
+            expect(close).toHaveFocus();
+
+            fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+            expect(donate).toHaveFocus();
+        });
+
+        it('sets the page language', async () => {
+            const { unmount } = await renderApp({ language: 'uk-UA' });
+            await waitFor(() => expect(document.documentElement).toHaveAttribute('lang', 'uk'));
+            unmount();
+
+            await renderApp({ language: 'en-US' });
+            expect(document.documentElement).toHaveAttribute('lang', 'en');
+        });
+
+        it('offers a 5 minute timer and Off only while one runs', async () => {
+            await renderApp();
+            toggleSound('campfire');
+            openTimer();
+            expect(screen.queryByRole('button', { name: 'Off' })).toBeNull();
+
+            fireEvent.click(screen.getByRole('button', { name: '5 min' }));
+            openTimer();
+
+            const dialog = screen.getByRole('dialog', { name: 'Sleep timer' });
+            expect(within(dialog).getByRole('button', { name: '5 min' })).toHaveAttribute('aria-pressed', 'true');
+            expect(within(dialog).getByRole('button', { name: 'Off' })).toBeInTheDocument();
+            expect(within(dock()).getByRole('button', { name: '5 min' })).toBeInTheDocument();
+        });
+    });
+
     describe('pages and language', () => {
-        it('opens About and Terms from the footer', async () => {
+        it('opens About and Terms from the menu', async () => {
             await renderApp();
 
+            openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
             expect(await screen.findByRole('heading', { name: 'Your subtle companion' })).toBeInTheDocument();
-            expect(soundIcons()).toHaveLength(0);
+            expect(screen.queryByRole('group', { name: 'Sounds' })).toBeNull();
+            expect(screen.queryByRole('dialog')).toBeNull();
 
+            openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'Terms' }));
             expect(await screen.findByRole('heading', { name: 'Privacy Policy' })).toBeInTheDocument();
         });
 
+        it('sets the page title for each page and language', async () => {
+            await renderApp({ path: '/mix/night-train' });
+            expect(document.title).toBe('Night train – train and rain sounds for focus – Monotones');
+
+            openMenu();
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
+            await waitFor(() => expect(document.title).toBe('Нічний потяг – звуки потяга й дощу для зосередження – Monotones'));
+
+            fireEvent.click(screen.getByRole('link', { name: 'Про нас' }));
+            await waitFor(() => expect(document.title).toBe('Про Monotones'));
+        });
+
+        it('a /uk URL shows the page in Ukrainian whatever the saved language', async () => {
+            await renderApp({ path: '/uk/mix/deep-work', language: 'en-US' });
+
+            await waitFor(() => expect(document.title).toBe('Глибока робота – гроза й глибокий космос для зосередження – Monotones'));
+            expect(document.documentElement).toHaveAttribute('lang', 'uk');
+            expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Глибока робота');
+        });
+
+        it('sends a Ukrainian visitor to the Ukrainian URL on the first page', async () => {
+            await renderApp({ path: '/about', language: 'uk-UA' });
+
+            await waitFor(() => expect(document.title).toBe('Про Monotones'));
+            fireEvent.click(screen.getByRole('button', { name: 'Меню' }));
+            expect(screen.getByRole('link', { name: 'Умови' })).toHaveAttribute('href', '/uk/terms');
+            expect(screen.getByRole('link', { name: 'Monotones' })).toHaveAttribute('href', '/uk');
+        });
+
+        it('switching the language on a mix page opens the same mix page in the other language', async () => {
+            const { store } = await renderApp({ path: '/mix/rainy-evening' });
+            await waitFor(() => expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']));
+
+            openMenu();
+            fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
+
+            await waitFor(() => expect(document.title).toBe('Дощовий вечір – дощ, багаття й тріск вінілу для відпочинку – Monotones'));
+            expect(store.getState().main.activeStarterMix).toBe('rainy_evening');
+            expect(orbit()).toEqual(['october_rain', 'campfire', 'vinyl_cracks']);
+        });
+
         it('switches the language', async () => {
             await renderApp();
+            openMenu();
 
             fireEvent.change($('#i18nextLng'), { target: { value: 'uk-UA' } });
             expect(await screen.findByRole('link', { name: 'Про нас' })).toBeInTheDocument();
-            expect(screen.getByRole('link', { name: 'Сон' })).toBeInTheDocument();
+            expect(screen.getByRole('group', { name: 'Звуки' })).toHaveTextContent('Білий шум');
             expect(document.querySelector('#i18nextLng')).toHaveValue('uk-UA');
 
             fireEvent.change($('#i18nextLng'), { target: { value: 'en-US' } });
             expect(await screen.findByRole('link', { name: 'About' })).toBeInTheDocument();
-        });
-    });
-
-    describe('mobile layout', () => {
-        it('uses the mobile header, category bar and "playing now" bar', async () => {
-            window.__isMobile = true;
-            await renderApp();
-
-            expect(document.querySelector('header .app-logo')).toBeNull();
-            expect(document.querySelectorAll('.nav-pills .flex-fill')).toHaveLength(3);
-            expect(document.querySelector('.fixed-controlls')).toBeNull();
-            expect(document.querySelector('.fixed-bottom')).toBeNull();
-
-            toggleSound('campfire');
-
-            const bar = $('.fixed-bottom');
-            expect([...bar.querySelectorAll('img')].map(i => i.id)).toEqual(['campfire']);
-            fireEvent.click($('img#campfire', bar));
-            await waitFor(() => expect(document.querySelector('.fixed-bottom')).toBeNull());
         });
     });
 
@@ -596,14 +747,25 @@ describe('App', () => {
             const { store } = await renderApp();
 
             expect(mixtureNames()).toEqual(['Evening']);
-            expect(playingNow()).toEqual(['campfire']);
+            expect(orbit()).toEqual(['campfire']);
             //play state is not persisted: the user has to press play
-            expect(globalButton()).toHaveAttribute('alt', 'Play');
+            expect(playButton()).toHaveAttribute('aria-label', 'Play');
             expect(playingSounds()).toEqual([]);
             //fields that are not saved get their defaults back
             expect(store.getState().main.isGlobalPlay).toBe(false);
             expect(store.getState().timer).toEqual({ timerRun: false, interval: 1 });
-            expect(document.querySelector('.timer-div')).toBeNull();
+        });
+
+        it('loads saved mixes with more than 6 sounds whole', async () => {
+            const ids: SoundId[] = ['campfire', 'farm', 'heartbeat', 'white_noise', 'subway', 'keyboard', 'october_rain'];
+            const sounds = Object.fromEntries(ids.map(id => [id, { id, isPlay: true, volume: 0.3 }]));
+            seedPersistedState({ main: { sounds, mixtures: [{ id: 'Big', sounds, isActive: false }] }, timer: {}, loading: {} });
+
+            await renderApp();
+            fireEvent.click(mixButton('Big'));
+
+            await waitFor(() => expect(playingSounds()).toHaveLength(7));
+            expect(orbit()).toHaveLength(7);
         });
 
         it('replaces the removed pink noise with brown noise in saved sounds and mixtures', async () => {
@@ -623,16 +785,16 @@ describe('App', () => {
             const brownNoise = { id: 'brown_noise', isPlay: true, volume: 0.7, isLoaded: false };
             expect(store.getState().main.sounds).toEqual({ campfire, brown_noise: brownNoise });
             expect(store.getState().main.mixtures[0].sounds).toEqual({ brown_noise: brownNoise });
-            expect(playingNow()).toEqual(['campfire', 'brown_noise']);
-            expect(document.querySelector('img.sound-icon[alt=pink_noise]')).toBeNull();
+            expect(orbit()).toEqual(['campfire', 'brown_noise']);
+            expect(within(tray()).queryByRole('button', { name: 'Pink noise' })).toBeNull();
         });
 
         it('saves sounds and mixtures but not the play and timer state', async () => {
             const { persistor, store } = await renderApp();
             toggleSound('campfire');
             await saveMixture('Evening');
-            fireEvent.click(screen.getByAltText('Timer'));
-            fireEvent.click(await screen.findByRole('button', { name: 'Start' }));
+            openTimer();
+            fireEvent.click(screen.getByRole('button', { name: '15 min' }));
             await waitFor(() => expect(store.getState().timer.timerRun).toBe(true));
 
             await persistor.flush();
@@ -650,15 +812,14 @@ describe('App', () => {
     describe('fixed bugs', () => {
         afterEach(() => vi.useRealTimers());
 
-        it('"Reset all" while a sound is still loading does not break the app', async () => {
+        it('taking a sound out while it is still loading does not break the app', async () => {
             const { store } = await renderApp();
 
             toggleSound('campfire');
-            fireEvent.click(screen.getByAltText('Reset all'));
+            toggleSound('campfire');
             await act(() => Promise.resolve());
 
-            expect(store.getState().main.sounds).toEqual({});
-            expect(soundIcons()).toHaveLength(28);
+            expect(store.getState().main.sounds.campfire?.isPlay).toBe(false);
             toggleSound('campfire');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
         });
@@ -666,58 +827,58 @@ describe('App', () => {
         it('the sleep timer keeps counting on other pages', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
-            fireEvent.click(screen.getByAltText('Timer'));
-            await screen.findByRole('button', { name: 'Start' });
+            openTimer();
 
             vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
-            fireEvent.click(screen.getByRole('button', { name: 'Start' }));
+            fireEvent.click(screen.getByRole('button', { name: '15 min' }));
+            openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
             await screen.findByRole('heading', { name: 'Your subtle companion' });
 
             for (let i = 0; i < 3; i++) act(() => vi.advanceTimersByTime(1000));
-            expect(store.getState().timer.interval).toBe(297);
+            expect(store.getState().timer.interval).toBe(897);
         });
 
         it('coming back home after the timer finished does not pause playback again', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
-            fireEvent.click(screen.getByAltText('Timer'));
-            await screen.findByRole('button', { name: 'Start' });
+            openTimer();
             vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
-            fireEvent.click(screen.getByRole('button', { name: 'Start' }));
+            fireEvent.click(screen.getByRole('button', { name: '15 min' }));
             act(() => store.dispatch({ type: 'timer/timerStart', payload: 1 }));
             act(() => vi.advanceTimersByTime(1000));
             await waitFor(() => expect(playingSounds()).toEqual([]));
+            //waitFor polls with setInterval: real timers again, as starting a sound changes nothing on the page to wake it
+            vi.useRealTimers();
 
-            clickGlobalButton();
+            clickPlayButton();
             await waitFor(() => expect(playingSounds()).toEqual(['campfire']));
+            openMenu();
             fireEvent.click(screen.getByRole('link', { name: 'About' }));
             await screen.findByRole('heading', { name: 'Your subtle companion' });
-            fireEvent.click($('header a[href="/"]'));
-            await waitFor(() => expect(soundIcons()).toHaveLength(28));
+            fireEvent.click(screen.getByRole('link', { name: 'Monotones' }));
+            await waitFor(() => expect(chips()).toHaveLength(28));
 
             expect(playingSounds()).toEqual(['campfire']);
         });
 
-        it('the save dialog does not reuse the previous name', async () => {
+        it('the save field does not reuse the previous name', async () => {
             const { store } = await renderApp();
             toggleSound('campfire');
             await saveMixture('Evening');
             toggleSound('farm');
 
             //saving without a name used to silently overwrite "Evening" with the current sounds
-            fireEvent.click(screen.getByAltText('Save mixture'));
-            const input = await screen.findByPlaceholderText('Mixture name');
-            expect(input).toHaveValue('');
+            expect(screen.getByPlaceholderText('Mixture name')).toHaveValue('');
             fireEvent.click(screen.getByRole('button', { name: 'Save' }));
 
-            await waitFor(() => expect(screen.queryByPlaceholderText('Mixture name')).not.toBeInTheDocument());
             expect(mixtureNames()).toEqual(['Evening']);
             expect(Object.keys(store.getState().main.mixtures[0].sounds)).toEqual(['campfire']);
         });
 
         it('the language picker shows English for any English variant', async () => {
             await renderApp({ language: 'en-GB' });
+            openMenu();
 
             expect(document.querySelector('#i18nextLng')).toHaveValue('en-US');
         });
@@ -732,11 +893,10 @@ describe('App', () => {
             await saveMixture('B');
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'farm']));
 
-            const active = screen.getByText('B').parentElement!;
-            fireEvent.click(within(active).getByAltText('Delete mixture'));
+            fireEvent.click(screen.getByRole('button', { name: 'Delete B' }));
 
             await waitFor(() => expect(mixtureNames()).toEqual(['A']));
-            expect(document.querySelector('.mixtures .active')).toBeNull();
+            expect(document.querySelector('.saved-mixes [aria-pressed=true]')).toBeNull();
             await waitFor(() => expect(playingSounds()).toEqual([]));
         });
     });

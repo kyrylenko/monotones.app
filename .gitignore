@@ -24,3 +24,6 @@ state.json
 
 # Cloudflare Wrangler local state
 /.wrangler
+
+# Build-time prerender bundle (scripts/prerender.mjs), removed after the build
+/build-ssr
