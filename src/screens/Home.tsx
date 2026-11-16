@@ -15,7 +15,7 @@ import { useAppSelector } from '../store/hooks';
 const NOTICE_MS = 2600;
 
 // The sound screen: the orbit, the sound tray and the dock; the mixes in a side panel on desktop, in a sheet on phones
-const Home = () => {
+const Home = ({ intro }: { intro?: string }) => {
     const { t } = useTranslation();
     const isMobile = useIsMobile();
     const isGlobalPlay = useAppSelector(selectIsGlobalPlay);
@@ -55,6 +55,8 @@ const Home = () => {
             <Sky isPlaying={isPlaying} isDim={isDim} />
             <SharedMixBanner />
             <Orbit onNotice={onNotice} />
+            {/* A starter mix page (/mix/...) describes its mix in its own row, so the orbit fits above it */}
+            {intro && <p className='mix-intro'>{intro}</p>}
             {/* The dock comes right after the orbit in the tab order; the grid places it at the bottom */}
             <Dock
                 onMixesClick={isMobile ? () => setSheet('mixes') : undefined}

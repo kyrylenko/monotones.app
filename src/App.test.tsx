@@ -186,6 +186,7 @@ describe('App', () => {
             expect(document.title).toBe('Rainy evening – rain, campfire and vinyl crackle to relax – Monotones');
             expect(playButton()).toHaveAttribute('aria-label', 'Play');
             expect(playingSounds()).toEqual([]);
+            expect(screen.getByText(/^October rain on the window, a campfire crackling nearby/)).toBeInTheDocument();
 
             clickPlayButton();
             await waitFor(() => expect(playingSounds()).toEqual(['campfire', 'october_rain', 'vinyl_cracks']));
@@ -200,6 +201,7 @@ describe('App', () => {
 
             await waitFor(() => expect(document.title).toBe('Monotones – calm sounds for sleep, relaxing and focus'));
             expect(orbit()).toEqual(['deep_space', 'thunderstorm', 'campfire']);
+            expect(screen.queryByText(/^A steady thunderstorm over the low drone/)).toBeNull();
         });
 
         it('an unknown mix page goes home', async () => {

@@ -1,4 +1,5 @@
 import { Suspense, lazy, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Navigate, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './screens/Home';
@@ -44,6 +45,7 @@ const MixRoute = () => {
   const activeStarterMix = useAppSelector(selectActiveStarterMix);
   const wasOpened = useRef(false);
   const home = useLocalizedPath()('/');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (mix) {
@@ -59,7 +61,8 @@ const MixRoute = () => {
     }
   }, [mix, activeStarterMix, navigate, home]);
 
-  return mix ? <Home /> : <Navigate to={home} replace />;
+  // The page describes its mix until the user changes it (then the home page takes over)
+  return mix ? <Home intro={activeStarterMix === mix.id ? t(`mix_intro_${mix.id}`) : undefined} /> : <Navigate to={home} replace />;
 };
 
 const isSoundScreen = (pathname: string) => {

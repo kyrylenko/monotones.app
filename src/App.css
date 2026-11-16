@@ -73,8 +73,19 @@
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr) auto auto;
-  grid-template-areas: 'stage' 'tray' 'dock';
+  grid-template-areas: 'stage' 'intro' 'tray' 'dock';
+  grid-template-rows: minmax(0, 1fr) auto auto auto;
+}
+.mix-intro {
+  grid-area: intro;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-1) var(--gutter-right) 0 var(--gutter-left);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
 }
 .panel-title {
   display: none;
@@ -483,7 +494,7 @@
 }
 
 /* DIM SCREEN: only the sky stays */
-body.is-dim :is(.app-header, .tray, .dock, .stage-hint, .orb-label, .shared-mix, .mixes-panel) {
+body.is-dim :is(.app-header, .tray, .dock, .stage-hint, .orb-label, .shared-mix, .mixes-panel, .mix-intro) {
   opacity: 0;
   pointer-events: none;
 }
@@ -543,8 +554,8 @@ body.is-dim .stage {
   }
   .home {
     grid-template-columns: 330px minmax(0, 1fr) 340px;
-    grid-template-rows: minmax(0, 1fr) auto;
-    grid-template-areas: 'tray stage mixes' 'tray dock mixes';
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    grid-template-areas: 'tray stage mixes' 'tray intro mixes' 'tray dock mixes';
   }
   .panel-title {
     display: block;
